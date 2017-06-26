@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ObfuscationSettings.cs" />
+    <Compile Include="KrangPlugin.cs" />
     <Compile Include="Tsw1050Adapter.cs" />
     <Compile Include="Settings\Tsw1050AdapterSettings.cs" />
     <Compile Include="Tsw1052Adapter.cs" />
