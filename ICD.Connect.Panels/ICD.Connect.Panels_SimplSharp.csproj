@@ -76,6 +76,7 @@
     <Compile Include="IPanelDevice.cs" />
     <Compile Include="ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
+    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="SigCallbackManager.cs" />
     <Compile Include="SigCollections\IDeviceSigCollections.cs" />
     <Compile Include="SigCollections\ISigCollectionBase.cs" />
