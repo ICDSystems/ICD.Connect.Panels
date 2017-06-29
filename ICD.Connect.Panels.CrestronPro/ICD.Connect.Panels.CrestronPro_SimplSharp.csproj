@@ -8,7 +8,7 @@
     <ProjectGuid>{8B2F1E99-BB66-4120-8B2C-EB4A2222AF5B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ICD.Connect.Panels.CrestronPro_SimplSharp</RootNamespace>
+    <RootNamespace>ICD.Connect.Panels.CrestronPro</RootNamespace>
     <AssemblyName>ICD.Connect.Panels.CrestronPro_SimplSharp</AssemblyName>
     <ProjectTypeGuids>{0B4745B0-194B-4BB6-8E21-E9057CA92300};{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>WindowsCE</PlatformFamilyName>
