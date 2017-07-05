@@ -8,6 +8,7 @@ namespace ICD.Connect.Panels.Extensions
 		/// <summary>
 		/// Lazy-loads the panel with the given id.
 		/// </summary>
+		/// <param name="factory"></param>
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[PublicAPI]

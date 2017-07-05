@@ -26,7 +26,7 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		protected static void ParseXml(AbstractTriListAdapterSettings instance, string xml)
 		{
 			instance.Ipid = XmlUtils.ReadChildElementContentAsByte(xml, IPID_ELEMENT);
-			AbstractPanelDeviceSettings.ParseXml(instance, xml);
+			ParseXml((AbstractPanelDeviceSettings)instance, xml);
 		}
 	}
 }
