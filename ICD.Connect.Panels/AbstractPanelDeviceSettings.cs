@@ -5,7 +5,7 @@ namespace ICD.Connect.Settings
 	/// <summary>
 	/// Base class for panel settings.
 	/// </summary>
-	public abstract class AbstractPanelDeviceSettings : AbstractDeviceBaseSettings
+	public abstract class AbstractPanelDeviceSettings : AbstractDeviceBaseSettings, IPanelDeviceSettings
 	{
 		public const string PANEL_ELEMENT = "Panel";
 

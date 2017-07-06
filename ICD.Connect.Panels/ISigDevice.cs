@@ -2,7 +2,7 @@
 
 namespace ICD.Connect.Panels
 {
-	public interface ISigDevice : IDevice, ISigInputOutput
+	public interface ISigDevice : IDeviceBase, ISigInputOutput
 	{
 	}
 }

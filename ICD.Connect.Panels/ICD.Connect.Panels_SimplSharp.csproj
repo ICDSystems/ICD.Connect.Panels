@@ -69,11 +69,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbstractPanelDeviceSettings.cs" />
+    <Compile Include="AbstractSigDevice.cs" />
     <Compile Include="Extensions\CoreExtensions.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="AbstractPanelDevice.cs" />
-    <Compile Include="AbstractSigDevice.cs" />
+    <Compile Include="AbstractSigDeviceBase.cs" />
     <Compile Include="IPanelDevice.cs" />
+    <Compile Include="IPanelDeviceSettings.cs" />
     <Compile Include="ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
     <None Include="ObfuscationSettings.cs" />

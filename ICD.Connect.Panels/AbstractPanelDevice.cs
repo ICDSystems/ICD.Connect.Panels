@@ -5,8 +5,8 @@ using ICD.Connect.Settings;
 
 namespace ICD.Connect.Panels
 {
-	public abstract class AbstractPanelDevice<T> : AbstractSigDevice<T>, IPanelDevice
-		where T : ISettings, new()
+	public abstract class AbstractPanelDevice<T> : AbstractSigDeviceBase<T>, IPanelDevice
+		where T : IPanelDeviceSettings, new()
 	{
 		#region Properties
 
