@@ -1,4 +1,5 @@
-﻿using ICD.Common.Properties;
+﻿using System;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Settings;
 using ICD.Connect.Settings.Attributes.Factories;
@@ -17,6 +18,11 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public override string FactoryName { get { return FACTORY_NAME; } }
 
+		public override Type OriginatorType
+		{
+			get { return typeof(PanelServerDevice); }
+		}
+
 		public ushort Port { get; set; }
 
 		/// <summary>
@@ -28,18 +34,6 @@ namespace ICD.Connect.Panels.Server
 			base.WriteElements(writer);
 
 			writer.WriteElementString(PORT_ELEMENT, IcdXmlConvert.ToString(Port));
-		}
-
-		/// <summary>
-		/// Creates a new originator instance from the settings.
-		/// </summary>
-		/// <param name="factory"></param>
-		/// <returns></returns>
-		public override IOriginator ToOriginator(IDeviceFactory factory)
-		{
-			PanelServerDevice output = new PanelServerDevice();
-			output.ApplySettings(this, factory);
-			return output;
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace ICD.Connect.Panels.Server
 	/// <summary>
 	/// The PanelServerDevice wraps a TCPServer to emulate how existing Crestron panels work.
 	/// </summary>
-	public sealed class PanelServerDevice : AbstractDevice<PanelServerDeviceSettings>, IPanelDevice
+	public sealed class PanelServerDevice : AbstractDeviceBase<PanelServerDeviceSettings>, IPanelDevice
 	{
 		public event EventHandler OnAnyOutput;
 
