@@ -4,12 +4,15 @@ using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
+using ICD.Common.Utils;
+using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
 using ICD.Connect.Panels;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Settings.Core;
+using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 
 namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 {
@@ -23,7 +26,7 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		private IDeviceBooleanInputCollection m_BooleanInput;
 		private IDeviceUShortInputCollection m_UShortInput;
 		private IDeviceStringInputCollection m_StringInput;
-		private ISmartObjectCollection m_SmartObjects;
+		private readonly SmartObjectCollectionAdapter m_SmartObjects;
 
 		#region Properties
 
@@ -31,9 +34,35 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		/// Gets the wrapped panel instance.
 		/// </summary>
 		[PublicAPI]
-		public TPanel Device { get; private set; }
+		    public TPanel Device { get; private set; }
 
-		/// <summary>
+	    protected AbstractTriListAdapter()
+	    {
+	        m_SmartObjects = new SmartObjectCollectionAdapter();
+	        m_SmartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+	        m_SmartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+	    }
+
+        /// <summary>
+        /// Subscribes to SmartObject Touch Events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="smartObject"></param>
+	    private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+	    {
+	        smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
+	    }
+        /// <summary>
+        /// Unsubscribes from SmartObject Touch Events
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="smartObject"></param>
+        private void SmartObjectsOnSmartObjectUnsubscribe(object sender, ISmartObject smartObject)
+        {
+            smartObject.OnAnyOutput -= SmartObjectOnAnyOutput;
+        }
+
+	    /// <summary>
 		/// Collection of Boolean Inputs sent to the device.
 		/// </summary>
 		protected override IDeviceBooleanInputCollection BooleanInput
@@ -62,7 +91,13 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		/// </summary>
 		public override ISmartObjectCollection SmartObjects
 		{
-			get { return m_SmartObjects ?? (m_SmartObjects = new SmartObjectCollectionAdapter(Device.SmartObjects)); }
+            // TODO - subscribe to smart object collection
+
+		    get
+		    {   
+                return m_SmartObjects;
+		        //return m_SmartObjects;
+		    }
 		}
 
 		#endregion
@@ -103,15 +138,12 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 				}
 			}
 
-			m_BooleanInput = null;
+		    m_BooleanInput = null;
 			m_UShortInput = null;
 			m_StringInput = null;
-			m_SmartObjects = null;
 
-			if (m_SmartObjects != null)
-				m_SmartObjects.Clear();
-
-			Device = device;
+		    Device = device;
+            m_SmartObjects.SetSmartObjects(Device == null ? null : Device.SmartObjects);
 
 			if (Device != null && !Device.Registered)
 			{
@@ -188,9 +220,6 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 
 			device.SigChange += TriListOnSigChange;
 			device.OnlineStatusChange += DeviceOnLineStatusChange;
-
-			foreach (var item in SmartObjects.Select(p => p.Value))
-				item.OnAnyOutput += SmartObjectOnAnyOutput;
 		}
 
 		/// <summary>
@@ -204,13 +233,6 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 
 			device.SigChange -= TriListOnSigChange;
 			device.OnlineStatusChange += DeviceOnLineStatusChange;
-
-			// Don't bother generating smart object wrappers just to unsubscribe from them.
-			if (m_SmartObjects == null)
-				return;
-
-			foreach (var item in m_SmartObjects.Select(p => p.Value))
-				item.OnAnyOutput -= SmartObjectOnAnyOutput;
 		}
 
 		/// <summary>
@@ -231,6 +253,7 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		private void TriListOnSigChange(BasicTriList currentDevice, SigEventArgs args)
 		{
 			RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
+            RaiseOnAnyOutput();
 		}
 
 		/// <summary>

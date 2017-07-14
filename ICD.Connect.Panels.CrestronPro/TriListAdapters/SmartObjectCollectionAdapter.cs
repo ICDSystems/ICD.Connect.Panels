@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Crestron.SimplSharpPro;
@@ -8,12 +9,16 @@ using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 {
+
 	public sealed class SmartObjectCollectionAdapter : ISmartObjectCollection
 	{
-		private readonly SmartObjectCollection m_Collection;
+		private SmartObjectCollection m_Collection;
 
 		private readonly Dictionary<uint, ISmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
+
+        public event AddSmartObject OnSmartObjectSubscribe;
+        public event RemoveSmartObject OnSmartObjectUnsubscribe;
 
 		/// <summary>
 		/// Get the object at the specified number.
@@ -44,28 +49,51 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="collection"></param>
-		public SmartObjectCollectionAdapter(SmartObjectCollection collection)
+		public SmartObjectCollectionAdapter()
 		{
 			m_SmartObjects = new Dictionary<uint, ISmartObject>();
 			m_SmartObjectsSection = new SafeCriticalSection();
-
-			m_Collection = collection;
 		}
 
 		#region Methods
 
-		/// <summary>
+        /// <summary>
+        /// Initializes smart objects
+        /// </summary>
+        /// <param name="collection"></param>
+	    public void SetSmartObjects(SmartObjectCollection collection)
+	    {
+	        if (collection == m_Collection)
+	        {
+	            return;
+	        }
+	        m_Collection = collection;
+            Clear();
+	    }
+
+	    /// <summary>
 		/// Clears the cached smart objects.
 		/// </summary>
 		public void Clear()
 		{
 			m_SmartObjectsSection.Enter();
 
-			try
-			{
-				m_SmartObjects.Clear();
-			}
+	        try
+	        {
+	            foreach (var item in m_SmartObjects)
+	            {
+	                if (OnSmartObjectUnsubscribe != null)
+	                {
+	                    OnSmartObjectUnsubscribe(this, item.Value);
+	                }
+	            }
+	            m_SmartObjects.Clear();
+
+	        }
+	        catch (Exception ex)
+	        {
+	            IcdConsole.PrintLine("Exception occurred: {0} - {1}", ex.Message, ex.InnerException.Message);
+	        }
 			finally
 			{
 				m_SmartObjectsSection.Leave();
@@ -74,6 +102,9 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 
 		public IEnumerator<KeyValuePair<uint, ISmartObject>> GetEnumerator()
 		{
+            if (m_Collection == null)
+                throw new InvalidOperationException("No internal collection");
+
 			m_SmartObjectsSection.Enter();
 
 			try
@@ -97,18 +128,28 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 			return GetEnumerator();
 		}
 
-		/// <summary>
-		/// Gets the smart object wrapper for the given key.
-		/// </summary>
-		/// <param name="key"></param>
-		/// <returns></returns>
-		private ISmartObject LazyLoadSmartObject(uint key)
-		{
-			if (!m_SmartObjects.ContainsKey(key))
-				m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
-			return m_SmartObjects[key];
-		}
+	    /// <summary>
+	    /// Gets the smart object wrapper for the given key.
+	    /// </summary>
+	    /// <param name="key"></param>
+	    /// <returns></returns>
+	    private ISmartObject LazyLoadSmartObject(uint key)
+	    {
+            if (m_Collection == null)
+                throw new InvalidOperationException("No internal collection");
 
-		#endregion
+	        if (!m_SmartObjects.ContainsKey(key))
+	        {
+	            m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
+	            if (OnSmartObjectSubscribe != null)
+	            {
+	                OnSmartObjectSubscribe(this, m_SmartObjects[key]);
+	            }
+	        }
+
+	        return m_SmartObjects[key];
+	    }
+
+	    #endregion
 	}
 }
