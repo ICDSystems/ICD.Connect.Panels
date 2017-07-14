@@ -91,12 +91,9 @@ namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
 		/// </summary>
 		public override ISmartObjectCollection SmartObjects
 		{
-            // TODO - subscribe to smart object collection
-
 		    get
 		    {   
                 return m_SmartObjects;
-		        //return m_SmartObjects;
 		    }
 		}
 
