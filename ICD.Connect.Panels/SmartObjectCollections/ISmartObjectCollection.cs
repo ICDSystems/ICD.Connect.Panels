@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels.SmartObjectCollections
