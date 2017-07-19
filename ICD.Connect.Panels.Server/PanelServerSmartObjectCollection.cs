@@ -14,7 +14,10 @@ namespace ICD.Connect.Panels.Server
 		private readonly Dictionary<uint, PanelServerSmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
 
-		/// <summary>
+	    public event AddSmartObject OnSmartObjectSubscribe;
+	    public event RemoveSmartObject OnSmartObjectUnsubscribe;
+
+	    /// <summary>
 		/// Get the object at the specified number.
 		/// </summary>
 		/// <param name="paramKey">the key of the value to get.</param>
