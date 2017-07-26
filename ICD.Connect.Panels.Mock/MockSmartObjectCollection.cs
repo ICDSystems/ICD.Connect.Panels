@@ -27,6 +27,9 @@ namespace ICD.Connect.Panels.Mock
 			return GetEnumerator();
 		}
 
+		public event AddSmartObject OnSmartObjectSubscribe;
+		public event RemoveSmartObject OnSmartObjectUnsubscribe;
+
 		/// <summary>
 		/// Get the object at the specified number.
 		/// 
