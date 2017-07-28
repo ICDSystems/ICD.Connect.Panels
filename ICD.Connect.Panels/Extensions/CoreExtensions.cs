@@ -19,7 +19,7 @@ namespace ICD.Connect.Panels.Extensions
 	{
 		public static CorePanelCollection GetPanels(this ICore core)
 		{
-			return new CorePanelCollection(core.Originators.OfType<IPanelDevice>());
+			return new CorePanelCollection(core.Originators.GetChildren<IPanelDevice>());
 		}
 	}
 }
