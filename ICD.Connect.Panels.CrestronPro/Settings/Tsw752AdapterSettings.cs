@@ -1,9 +1,9 @@
 using System;
 using ICD.Common.Properties;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters;
 using ICD.Connect.Settings.Attributes.Factories;
-using ICD.SimplSharp.Common.UiPro.TriListAdapters;
 
-namespace ICD.SimplSharp.Common.UiPro.Settings
+namespace ICD.Connect.Panels.CrestronPro.Settings
 {
 	public sealed class Tsw752AdapterSettings : AbstractTriListAdapterSettings
 	{

@@ -1,9 +1,9 @@
 ﻿using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
-using ICD.SimplSharp.Common.UiPro.Settings;
-using ICD.SimplSharp.Common.UiPro.TriListAdapters;
+using ICD.Connect.Panels.CrestronPro.Settings;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters;
 
-namespace ICD.SimplSharp.Common.UiPro
+namespace ICD.Connect.Panels.CrestronPro
 {
 	public sealed class Tsw1060Adapter : AbstractTriListAdapter<Tsw1060, Tsw1060AdapterSettings>
 	{

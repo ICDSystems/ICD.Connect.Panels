@@ -3,14 +3,13 @@ using Crestron.SimplSharpPro;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.Sigs;
-using ICD.Connect.Panels;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
 using eSigType = ICD.Connect.Protocol.Sigs.eSigType;
 
-namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public sealed class SmartObjectAdapter : AbstractSmartObject, IDisposable
 	{

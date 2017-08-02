@@ -5,13 +5,12 @@ using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
 using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
-using ICD.Connect.Panels;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Settings.Core;
 using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 
-namespace ICD.SimplSharp.Common.UiPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	/// <summary>
 	/// TriListAdapter wraps a TriList to provide IPanelDevice features.
