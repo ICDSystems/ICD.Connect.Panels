@@ -29,37 +29,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <summary>
 		/// Gets the wrapped panel instance.
 		/// </summary>
-		[PublicAPI]
-		    public TPanel Device { get; private set; }
+		[PublicAPI] public TPanel Device { get; private set; }
 
-	    protected AbstractTriListAdapter()
-	    {
-	        m_SmartObjects = new SmartObjectCollectionAdapter();
-	        m_SmartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
-	        m_SmartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
-	    }
-
-        /// <summary>
-        /// Subscribes to SmartObject Touch Events
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="smartObject"></param>
-	    private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
-	    {
-	        smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
-	    }
-        /// <summary>
-        /// Unsubscribes from SmartObject Touch Events
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="smartObject"></param>
-        private void SmartObjectsOnSmartObjectUnsubscribe(object sender, ISmartObject smartObject)
-        {
-            smartObject.OnAnyOutput -= SmartObjectOnAnyOutput;
-        }
-
-	    /// <summary>
-		/// Collection of Boolean Inputs sent to the device.
+		/// <summary>
+		/// Collection of Boolean Inputs sent to the panel.
 		/// </summary>
 		protected override IDeviceBooleanInputCollection BooleanInput
 		{
@@ -67,7 +40,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
-		/// Collection of Integer Inputs sent to the device.
+		/// Collection of Integer Inputs sent to the panel.
 		/// </summary>
 		protected override IDeviceUShortInputCollection UShortInput
 		{
@@ -75,7 +48,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
-		/// Collection of String Inputs sent to the device.
+		/// Collection of String Inputs sent to the panel.
 		/// </summary>
 		protected override IDeviceStringInputCollection StringInput
 		{
@@ -83,17 +56,18 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
-		/// Collection containing the loaded SmartObjects of this device.
+		/// Collection containing the loaded SmartObjects of this panel.
 		/// </summary>
-		public override ISmartObjectCollection SmartObjects
-		{
-		    get
-		    {   
-                return m_SmartObjects;
-		    }
-		}
+		public override ISmartObjectCollection SmartObjects { get { return m_SmartObjects; } }
 
 		#endregion
+
+		protected AbstractTriListAdapter()
+		{
+			m_SmartObjects = new SmartObjectCollectionAdapter();
+			m_SmartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+			m_SmartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+		}
 
 		#region Methods
 
@@ -109,7 +83,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
-		/// Sets the wrapped panel device.
+		/// Sets the wrapped panel panel.
 		/// </summary>
 		/// <param name="device"></param>
 		[PublicAPI]
@@ -150,6 +124,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			Subscribe(Device);
 			UpdateCachedOnlineStatus();
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Gets the current online status of the panel.
+		/// </summary>
+		/// <returns></returns>
+		protected override bool GetIsOnlineStatus()
+		{
+			return Device != null && Device.IsOnline;
 		}
 
 		#endregion
@@ -200,40 +187,40 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		#endregion
 
-		#region Private Methods
+		#region Panel Callbacks
 
 		/// <summary>
-		/// Subscribe to the device events.
+		/// Subscribe to the panel events.
 		/// </summary>
-		/// <param name="device"></param>
-		private void Subscribe(TPanel device)
+		/// <param name="panel"></param>
+		private void Subscribe(TPanel panel)
 		{
-			if (device == null)
+			if (panel == null)
 				return;
 
-			device.SigChange += TriListOnSigChange;
-			device.OnlineStatusChange += DeviceOnLineStatusChange;
+			panel.SigChange += PanelOnSigChange;
+			panel.OnlineStatusChange += PanelOnlineStatusChange;
 		}
 
 		/// <summary>
 		/// Subscribe to the TriList events.
 		/// </summary>
-		/// <param name="device"></param>
-		private void Unsubscribe(TPanel device)
+		/// <param name="panel"></param>
+		private void Unsubscribe(TPanel panel)
 		{
-			if (device == null)
+			if (panel == null)
 				return;
 
-			device.SigChange -= TriListOnSigChange;
-			device.OnlineStatusChange -= DeviceOnLineStatusChange;
+			panel.SigChange -= PanelOnSigChange;
+			panel.OnlineStatusChange -= PanelOnlineStatusChange;
 		}
 
 		/// <summary>
-		/// Called when the device goes online/offline.
+		/// Called when the panel goes online/offline.
 		/// </summary>
 		/// <param name="currentDevice"></param>
 		/// <param name="args"></param>
-		private void DeviceOnLineStatusChange(GenericBase currentDevice, OnlineOfflineEventArgs args)
+		private void PanelOnlineStatusChange(GenericBase currentDevice, OnlineOfflineEventArgs args)
 		{
 			UpdateCachedOnlineStatus();
 		}
@@ -243,10 +230,33 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="currentDevice"></param>
 		/// <param name="args"></param>
-		private void TriListOnSigChange(BasicTriList currentDevice, SigEventArgs args)
+		private void PanelOnSigChange(BasicTriList currentDevice, SigEventArgs args)
 		{
 			RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
-            RaiseOnAnyOutput();
+			RaiseOnAnyOutput();
+		}
+
+		#endregion
+
+		#region SmartObject Callbacks
+
+		/// <summary>
+		/// Subscribes to SmartObject Touch Events
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="smartObject"></param>
+		private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+		{
+			smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
+		}
+		/// <summary>
+		/// Unsubscribes from SmartObject Touch Events
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="smartObject"></param>
+		private void SmartObjectsOnSmartObjectUnsubscribe(object sender, ISmartObject smartObject)
+		{
+			smartObject.OnAnyOutput -= SmartObjectOnAnyOutput;
 		}
 
 		/// <summary>
@@ -257,15 +267,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private void SmartObjectOnAnyOutput(object sender, EventArgs eventArgs)
 		{
 			RaiseOnAnyOutput();
-		}
-
-		/// <summary>
-		/// Gets the current online status of the device.
-		/// </summary>
-		/// <returns></returns>
-		protected override bool GetIsOnlineStatus()
-		{
-			return Device != null && Device.IsOnline;
 		}
 
 		#endregion
