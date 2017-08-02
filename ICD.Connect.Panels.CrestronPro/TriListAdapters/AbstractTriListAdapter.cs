@@ -225,7 +225,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 				return;
 
 			device.SigChange -= TriListOnSigChange;
-			device.OnlineStatusChange += DeviceOnLineStatusChange;
+			device.OnlineStatusChange -= DeviceOnLineStatusChange;
 		}
 
 		/// <summary>
