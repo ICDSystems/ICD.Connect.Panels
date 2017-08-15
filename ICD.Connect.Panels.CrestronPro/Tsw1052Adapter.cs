@@ -1,11 +1,14 @@
-﻿using Crestron.SimplSharpPro;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
+#endif
 using ICD.Connect.Panels.CrestronPro.Settings;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters;
 
 namespace ICD.Connect.Panels.CrestronPro
 {
-	public sealed class Tsw1052Adapter : AbstractTriListAdapter<Tsw1052, Tsw1052AdapterSettings>
+#if SIMPLSHARP
+    public sealed class Tsw1052Adapter : AbstractTriListAdapter<Tsw1052, Tsw1052AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -18,4 +21,9 @@ namespace ICD.Connect.Panels.CrestronPro
 			return new Tsw1052(ipid, controlSystem);
 		}
 	}
+#else
+    public sealed class Tsw1052Adapter : AbstractTriListAdapter<Tsw1052AdapterSettings>
+    {
+    }
+#endif
 }

@@ -1,10 +1,12 @@
 ﻿using System;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Connect.Misc.CrestronPro.Sigs;
+#endif
 using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
 using ICD.Connect.Misc.CrestronPro;
-using ICD.Connect.Misc.CrestronPro.Sigs;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Settings.Core;
@@ -12,39 +14,61 @@ using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
-	/// <summary>
-	/// TriListAdapter wraps a TriList to provide IPanelDevice features.
-	/// </summary>
+    /// <summary>
+    /// TriListAdapter wraps a TriList to provide IPanelDevice features.
+    /// </summary>
+#if SIMPLSHARP
 	public abstract class AbstractTriListAdapter<TPanel, TSettings> : AbstractPanelDevice<TSettings>
 		where TPanel : BasicTriListWithSmartObject
-		where TSettings : AbstractTriListAdapterSettings, new()
+#else
+    public abstract class AbstractTriListAdapter<TSettings> : AbstractPanelDevice<TSettings>
+#endif
+        where TSettings : AbstractTriListAdapterSettings, new()
 	{
 		private IDeviceBooleanInputCollection m_BooleanInput;
 		private IDeviceUShortInputCollection m_UShortInput;
 		private IDeviceStringInputCollection m_StringInput;
-		private readonly SmartObjectCollectionAdapter m_SmartObjects;
+#if SIMPLSHARP
+        private readonly SmartObjectCollectionAdapter m_SmartObjects;
+#endif
 
-		#region Properties
+#region Properties
 
-		/// <summary>
-		/// Gets the wrapped panel instance.
-		/// </summary>
-		[PublicAPI] public TPanel Device { get; private set; }
+#if SIMPLSHARP
+        /// <summary>
+        /// Gets the wrapped panel instance.
+        /// </summary>
+        [PublicAPI] public TPanel Device { get; private set; }
+#endif
 
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the panel.
 		/// </summary>
 		protected override IDeviceBooleanInputCollection BooleanInput
 		{
-			get { return m_BooleanInput ?? (m_BooleanInput = new DeviceBooleanInputCollectionAdapter(Device.BooleanInput)); }
-		}
+			get
+            {
+#if SIMPLSHARP
+                return m_BooleanInput ?? (m_BooleanInput = new DeviceBooleanInputCollectionAdapter(Device.BooleanInput));
+#else
+                throw new NotImplementedException();
+#endif
+            }
+        }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the panel.
 		/// </summary>
 		protected override IDeviceUShortInputCollection UShortInput
 		{
-			get { return m_UShortInput ?? (m_UShortInput = new DeviceUShortInputCollectionAdapter(Device.UShortInput)); }
+			get
+            {
+#if SIMPLSHARP
+                return m_UShortInput ?? (m_UShortInput = new DeviceUShortInputCollectionAdapter(Device.UShortInput));
+#else
+                throw new NotImplementedException();
+#endif
+            }
 		}
 
 		/// <summary>
@@ -52,24 +76,43 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		protected override IDeviceStringInputCollection StringInput
 		{
-			get { return m_StringInput ?? (m_StringInput = new DeviceStringInputCollectionAdapter(Device.StringInput)); }
-		}
+			get
+            {
+#if SIMPLSHARP
+                return m_StringInput ?? (m_StringInput = new DeviceStringInputCollectionAdapter(Device.StringInput));
+#else
+                throw new NotImplementedException();
+#endif
+            }
+        }
 
-		/// <summary>
-		/// Collection containing the loaded SmartObjects of this panel.
-		/// </summary>
-		public override ISmartObjectCollection SmartObjects { get { return m_SmartObjects; } }
+        /// <summary>
+        /// Collection containing the loaded SmartObjects of this panel.
+        /// </summary>
+        public override ISmartObjectCollection SmartObjects
+        {
+            get
+            {
+#if SIMPLSHARP
+                return m_SmartObjects;
+#else
+                throw new NotImplementedException();
+#endif
+            }
+        }
 
-		#endregion
+#endregion
 
 		protected AbstractTriListAdapter()
 		{
-			m_SmartObjects = new SmartObjectCollectionAdapter();
+#if SIMPLSHARP
+            m_SmartObjects = new SmartObjectCollectionAdapter();
 			m_SmartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
 			m_SmartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+#endif
 		}
 
-		#region Methods
+#region Methods
 
 		/// <summary>
 		/// Release resources.
@@ -78,10 +121,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.DisposeFinal(disposing);
 
-			// Unsubscribe and unregister
-			SetDevice(null);
+#if SIMPLSHARP
+            // Unsubscribe and unregister
+            SetDevice(null);
+#endif
 		}
 
+#if SIMPLSHARP
 		/// <summary>
 		/// Sets the wrapped panel panel.
 		/// </summary>
@@ -125,10 +171,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Subscribe(Device);
 			UpdateCachedOnlineStatus();
 		}
+#endif
 
-		#endregion
+#endregion
 
-		#region Private Methods
+#region Private Methods
 
 		/// <summary>
 		/// Gets the current online status of the panel.
@@ -136,12 +183,16 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <returns></returns>
 		protected override bool GetIsOnlineStatus()
 		{
-			return Device != null && Device.IsOnline;
-		}
+#if SIMPLSHARP
+            return Device != null && Device.IsOnline;
+#else
+            return false;
+#endif
+        }
 
-		#endregion
+#endregion
 
-		#region Settings
+#region Settings
 
 		/// <summary>
 		/// Override to clear the instance settings.
@@ -150,7 +201,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.ClearSettingsFinal();
 
-			SetDevice(null);
+#if SIMPLSHARP
+            SetDevice(null);
+#endif
 		}
 
 		/// <summary>
@@ -161,8 +214,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.CopySettingsFinal(settings);
 
-			settings.Ipid = (byte)Device.ID;
-		}
+#if SIMPLSHARP
+            settings.Ipid = (byte)Device.ID;
+#else
+            settings.Ipid = 0;
+#endif
+        }
 
 		/// <summary>
 		/// Override to apply settings to the instance.
@@ -173,27 +230,34 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-			TPanel triList = InstantiateTriList(settings.Ipid, ProgramInfo.ControlSystem);
+#if SIMPLSHARP
+            TPanel triList = InstantiateTriList(settings.Ipid, ProgramInfo.ControlSystem);
 			SetDevice(triList);
-		}
+#else
+            throw new NotImplementedException();
+#endif
+        }
 
-		/// <summary>
-		/// Creates an instance of the wrapped trilist.
-		/// </summary>
-		/// <param name="ipid"></param>
-		/// <param name="controlSystem"></param>
-		/// <returns></returns>
-		protected abstract TPanel InstantiateTriList(byte ipid, CrestronControlSystem controlSystem);
+#if SIMPLSHARP
+        /// <summary>
+        /// Creates an instance of the wrapped trilist.
+        /// </summary>
+        /// <param name="ipid"></param>
+        /// <param name="controlSystem"></param>
+        /// <returns></returns>
+        protected abstract TPanel InstantiateTriList(byte ipid, CrestronControlSystem controlSystem);
+#endif
 
-		#endregion
+#endregion
 
-		#region Panel Callbacks
+#region Panel Callbacks
 
-		/// <summary>
-		/// Subscribe to the panel events.
-		/// </summary>
-		/// <param name="panel"></param>
-		private void Subscribe(TPanel panel)
+#if SIMPLSHARP
+        /// <summary>
+        /// Subscribe to the panel events.
+        /// </summary>
+        /// <param name="panel"></param>
+        private void Subscribe(TPanel panel)
 		{
 			if (panel == null)
 				return;
@@ -235,10 +299,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
 			RaiseOnAnyOutput();
 		}
+#endif
 
-		#endregion
+#endregion
 
-		#region SmartObject Callbacks
+#region SmartObject Callbacks
 
 		/// <summary>
 		/// Subscribes to SmartObject Touch Events
@@ -269,6 +334,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			RaiseOnAnyOutput();
 		}
 
-		#endregion
+#endregion
 	}
 }

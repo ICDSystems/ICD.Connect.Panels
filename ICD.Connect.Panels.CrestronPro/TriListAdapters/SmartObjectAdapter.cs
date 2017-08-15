@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using System;
 using Crestron.SimplSharpPro;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.Extensions;
@@ -241,3 +242,4 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		#endregion
 	}
 }
+#endif
