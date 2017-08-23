@@ -38,7 +38,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
         /// <summary>
         /// Gets the wrapped panel instance.
         /// </summary>
-        [PublicAPI] public TPanel Device { get; private set; }
+		[PublicAPI]
+		[CanBeNull]
+        public TPanel Device { get; private set; }
 #endif
 
 		/// <summary>
@@ -239,7 +241,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.CopySettingsFinal(settings);
 
 #if SIMPLSHARP
-            settings.Ipid = (byte)Device.ID;
+            settings.Ipid = Device == null ? (byte)0 : (byte)Device.ID;
 #else
             settings.Ipid = 0;
 #endif
