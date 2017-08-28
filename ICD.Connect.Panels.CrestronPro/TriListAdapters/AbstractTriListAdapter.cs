@@ -322,8 +322,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="args"></param>
 		private void PanelOnSigChange(BasicTriList currentDevice, SigEventArgs args)
 		{
-			RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
-			RaiseOnAnyOutput();
+			try
+			{
+				RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
+				RaiseOnAnyOutput();
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Port panel output sig change exception - {0}", e.Message);
+			}
 		}
 #endif
 
