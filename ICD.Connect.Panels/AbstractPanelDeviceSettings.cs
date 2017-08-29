@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using ICD.Connect.Settings;
 
-namespace ICD.Connect.Settings
+namespace ICD.Connect.Panels
 {
 	/// <summary>
 	/// Base class for panel settings.

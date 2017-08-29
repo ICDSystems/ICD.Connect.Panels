@@ -1,6 +1,5 @@
 ﻿using ICD.Common.Utils;
 using ICD.Common.Utils.Xml;
-using ICD.Connect.Settings;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters

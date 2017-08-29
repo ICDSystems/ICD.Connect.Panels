@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ICD.Connect.Panels.SmartObjectCollections;
-using ICD.Connect.Settings;
 
 namespace ICD.Connect.Panels
 {
