@@ -4,7 +4,7 @@ using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
-	public abstract class AbstractTriListAdapterSettings : AbstractPanelDeviceSettings
+	public abstract class AbstractTriListAdapterSettings : AbstractPanelDeviceSettings, ITriListAdapterSettings
 	{
 		private const string IPID_ELEMENT = "IPID";
 

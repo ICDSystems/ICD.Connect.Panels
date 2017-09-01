@@ -18,127 +18,90 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
     /// TriListAdapter wraps a TriList to provide IPanelDevice features.
     /// </summary>
 #if SIMPLSHARP
-	public abstract class AbstractTriListAdapter<TPanel, TSettings> : AbstractPanelDevice<TSettings>
+	public abstract class AbstractTriListAdapter<TPanel, TSettings> : AbstractPanelDevice<TSettings>, ITriListAdapter
 		where TPanel : BasicTriListWithSmartObject
 #else
     public abstract class AbstractTriListAdapter<TSettings> : AbstractPanelDevice<TSettings>
 #endif
-        where TSettings : AbstractTriListAdapterSettings, new()
+        where TSettings : ITriListAdapterSettings, new()
 	{
-		private IDeviceBooleanInputCollection m_BooleanInput;
-		private IDeviceUShortInputCollection m_UShortInput;
-		private IDeviceStringInputCollection m_StringInput;
-#if SIMPLSHARP
-        private readonly SmartObjectCollectionAdapter m_SmartObjects;
-#endif
-
-#region Properties
-
-#if SIMPLSHARP
-        /// <summary>
-        /// Gets the wrapped panel instance.
-        /// </summary>
-		[PublicAPI]
-		[CanBeNull]
-        public TPanel Device { get; private set; }
-#endif
-
 		/// <summary>
-		/// Collection of Boolean Inputs sent to the panel.
+		/// Raised when the internal wrapped panel changes.
 		/// </summary>
-		protected override IDeviceBooleanInputCollection BooleanInput
-		{
-			get
-            {
-				if (IsDisposed)
-					throw new ObjectDisposedException(GetType().Name);
+	    public event PanelChangeCallback OnPanelChanged;
 
-				if (Device == null)
-					throw new InvalidOperationException("No device assigned");
+	    private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
+		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
+		private readonly DeviceStringInputCollectionAdapter m_StringInput;
+		private readonly SmartObjectCollectionAdapter m_SmartObjects;
 
-#if SIMPLSHARP
-                return m_BooleanInput ?? (m_BooleanInput = new DeviceBooleanInputCollectionAdapter(Device.BooleanInput));
-#else
-                throw new NotImplementedException();
-#endif
-            }
-        }
+	    private TPanel m_Panel;
 
-		/// <summary>
-		/// Collection of Integer Inputs sent to the panel.
-		/// </summary>
-		protected override IDeviceUShortInputCollection UShortInput
-		{
-			get
-            {
-				if (IsDisposed)
-					throw new ObjectDisposedException(GetType().Name);
-
-				if (Device == null)
-					throw new InvalidOperationException("No device assigned");
+	    #region Properties
 
 #if SIMPLSHARP
-                return m_UShortInput ?? (m_UShortInput = new DeviceUShortInputCollectionAdapter(Device.UShortInput));
-#else
-                throw new NotImplementedException();
+	    /// <summary>
+	    /// Gets the wrapped panel instance.
+	    /// </summary>
+	    [PublicAPI]
+	    [CanBeNull]
+	    public TPanel Panel
+	    {
+		    get { return m_Panel; }
+		    private set
+		    {
+			    if (value == m_Panel)
+				    return;
+
+			    m_Panel = value;
+
+			    PanelChangeCallback handler = OnPanelChanged;
+			    if (handler != null)
+				    handler(this, m_Panel);
+		    }
+	    }
+
+	    /// <summary>
+	    /// Gets the internal wrapped panel instance.
+	    /// </summary>
+	    BasicTriListWithSmartObject ITriListAdapter.Panel { get { return Panel; } }
 #endif
-            }
-		}
 
-		/// <summary>
-		/// Collection of String Inputs sent to the panel.
-		/// </summary>
-		protected override IDeviceStringInputCollection StringInput
-		{
-			get
-            {
-				if (IsDisposed)
-					throw new ObjectDisposedException(GetType().Name);
+	    /// <summary>
+	    /// Collection of Boolean Inputs sent to the panel.
+	    /// </summary>
+	    protected override IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
 
-				if (Device == null)
-					throw new InvalidOperationException("No device assigned");
+	    /// <summary>
+	    /// Collection of Integer Inputs sent to the panel.
+	    /// </summary>
+	    protected override IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
 
-#if SIMPLSHARP
-                return m_StringInput ?? (m_StringInput = new DeviceStringInputCollectionAdapter(Device.StringInput));
-#else
-                throw new NotImplementedException();
-#endif
-            }
-        }
+	    /// <summary>
+	    /// Collection of String Inputs sent to the panel.
+	    /// </summary>
+	    protected override IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
 
-        /// <summary>
-        /// Collection containing the loaded SmartObjects of this panel.
-        /// </summary>
-        public override ISmartObjectCollection SmartObjects
-        {
-            get
-            {
-				if (IsDisposed)
-					throw new ObjectDisposedException(GetType().Name);
+	    /// <summary>
+	    /// Collection containing the loaded SmartObjects of this panel.
+	    /// </summary>
+	    public override ISmartObjectCollection SmartObjects { get { return m_SmartObjects; } }
 
-				if (Device == null)
-					throw new InvalidOperationException("No device assigned");
-
-#if SIMPLSHARP
-                return m_SmartObjects;
-#else
-                throw new NotImplementedException();
-#endif
-            }
-        }
-
-#endregion
+	    #endregion
 
 		protected AbstractTriListAdapter()
 		{
 #if SIMPLSHARP
             m_SmartObjects = new SmartObjectCollectionAdapter();
-			m_SmartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
-			m_SmartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+			m_BooleanInput = new DeviceBooleanInputCollectionAdapter();
+			m_UShortInput = new DeviceUShortInputCollectionAdapter();
+			m_StringInput = new DeviceStringInputCollectionAdapter();
+
+			Subscribe(m_SmartObjects);
 #endif
 		}
 
-#region Methods
+	    #region Methods
 
 		/// <summary>
 		/// Release resources.
@@ -149,52 +112,56 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 #if SIMPLSHARP
             // Unsubscribe and unregister
-            SetDevice(null);
+			Unsubscribe(m_SmartObjects);
+            SetPanel(null);
 #endif
 		}
 
 #if SIMPLSHARP
 		/// <summary>
-		/// Sets the wrapped panel panel.
+		/// Sets the wrapped panel device.
 		/// </summary>
-		/// <param name="device"></param>
+		/// <param name="panel"></param>
 		[PublicAPI]
-		public void SetDevice(TPanel device)
+		public void SetPanel(TPanel panel)
 		{
-			Unsubscribe(Device);
+			if (panel == Panel)
+				return;
 
-			if (Device != null)
+			Unsubscribe(Panel);
+
+			if (Panel != null)
 			{
-				if (Device.Registered)
-					Device.UnRegister();
+				if (Panel.Registered)
+					Panel.UnRegister();
 
 				try
 				{
-					Device.Dispose();
+					Panel.Dispose();
 				}
 				catch
 				{
 				}
 			}
 
-		    m_BooleanInput = null;
-			m_UShortInput = null;
-			m_StringInput = null;
+			Panel = panel;
 
-		    Device = device;
-            m_SmartObjects.SetSmartObjects(Device == null ? null : Device.SmartObjects);
+			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
+			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
+			m_StringInput.SetCollection(Panel == null ? null : Panel.StringInput);
+			m_SmartObjects.SetSmartObjects(Panel == null ? null : Panel.SmartObjects);
 
-			if (Device != null && !Device.Registered)
+			if (Panel != null && !Panel.Registered)
 			{
 				if (Name != null)
-					Device.Description = Name;
+					Panel.Description = Name;
 
-				eDeviceRegistrationUnRegistrationResponse result = Device.Register();
+				eDeviceRegistrationUnRegistrationResponse result = Panel.Register();
 				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
-					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Device.GetType().Name, result);
+					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 			}
 
-			Subscribe(Device);
+			Subscribe(Panel);
 			UpdateCachedOnlineStatus();
 		}
 #endif
@@ -210,7 +177,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		protected override bool GetIsOnlineStatus()
 		{
 #if SIMPLSHARP
-            return Device != null && Device.IsOnline;
+			return Panel != null && Panel.IsOnline;
 #else
             return false;
 #endif
@@ -228,7 +195,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.ClearSettingsFinal();
 
 #if SIMPLSHARP
-            SetDevice(null);
+            SetPanel(null);
 #endif
 		}
 
@@ -241,7 +208,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.CopySettingsFinal(settings);
 
 #if SIMPLSHARP
-            settings.Ipid = Device == null ? (byte)0 : (byte)Device.ID;
+			settings.Ipid = Panel == null ? (byte)0 : (byte)Panel.ID;
 #else
             settings.Ipid = 0;
 #endif
@@ -258,7 +225,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 #if SIMPLSHARP
             TPanel triList = InstantiateTriList(settings.Ipid, ProgramInfo.ControlSystem);
-			SetDevice(triList);
+			SetPanel(triList);
 #else
             throw new NotImplementedException();
 #endif
@@ -338,7 +305,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 #region SmartObject Callbacks
 
-		/// <summary>
+		private void Subscribe(ISmartObjectCollection smartObjects)
+	    {
+		    smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+		    smartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+	    }
+
+	    private void Unsubscribe(ISmartObjectCollection smartObjects)
+	    {
+		    smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+		    smartObjects.OnSmartObjectUnsubscribe -= SmartObjectsOnSmartObjectUnsubscribe;
+	    }
+
+	    /// <summary>
 		/// Subscribes to SmartObject Touch Events
 		/// </summary>
 		/// <param name="sender"></param>

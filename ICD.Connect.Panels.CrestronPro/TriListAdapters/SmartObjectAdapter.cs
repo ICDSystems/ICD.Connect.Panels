@@ -19,9 +19,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly SmartObject m_SmartObject;
 		private readonly SigCallbackManager m_SigCallbacks;
 
-		private IDeviceBooleanInputCollection m_BooleanInput;
-		private IDeviceUShortInputCollection m_UShortInput;
-		private IDeviceStringInputCollection m_StringInput;
+		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
+		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
+		private readonly DeviceStringInputCollectionAdapter m_StringInput;
 
 		#region Properties
 
@@ -38,29 +38,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the device.
 		/// </summary>
-		private IDeviceBooleanInputCollection BooleanInput
-		{
-			get
-			{
-				return m_BooleanInput ?? (m_BooleanInput = new DeviceBooleanInputCollectionAdapter(m_SmartObject.BooleanInput));
-			}
-		}
+		private IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the device.
 		/// </summary>
-		private IDeviceUShortInputCollection UShortInput
-		{
-			get { return m_UShortInput ?? (m_UShortInput = new DeviceUShortInputCollectionAdapter(m_SmartObject.UShortInput)); }
-		}
+		private IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
 
 		/// <summary>
 		/// Collection of String Inputs sent to the device.
 		/// </summary>
-		private IDeviceStringInputCollection StringInput
-		{
-			get { return m_StringInput ?? (m_StringInput = new DeviceStringInputCollectionAdapter(m_SmartObject.StringInput)); }
-		}
+		private IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
 
 		#endregion
 
@@ -70,10 +58,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="smartObject"></param>
 		public SmartObjectAdapter(SmartObject smartObject)
 		{
+			m_BooleanInput = new DeviceBooleanInputCollectionAdapter();
+			m_UShortInput = new DeviceUShortInputCollectionAdapter();
+			m_StringInput = new DeviceStringInputCollectionAdapter();
+
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
 
 			m_SmartObject = smartObject;
+
+			m_BooleanInput.SetCollection(m_SmartObject.BooleanInput);
+			m_UShortInput.SetCollection(m_SmartObject.UShortInput);
+			m_StringInput.SetCollection(m_SmartObject.StringInput);
+
 			Subscribe(m_SmartObject);
 		}
 
