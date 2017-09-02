@@ -50,13 +50,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			get
             {
+#if SIMPLSHARP
 				if (IsDisposed)
 					throw new ObjectDisposedException(GetType().Name);
 
 				if (Device == null)
 					throw new InvalidOperationException("No device assigned");
 
-#if SIMPLSHARP
                 return m_BooleanInput ?? (m_BooleanInput = new DeviceBooleanInputCollectionAdapter(Device.BooleanInput));
 #else
                 throw new NotImplementedException();
@@ -71,13 +71,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			get
             {
+#if SIMPLSHARP
 				if (IsDisposed)
 					throw new ObjectDisposedException(GetType().Name);
 
 				if (Device == null)
 					throw new InvalidOperationException("No device assigned");
 
-#if SIMPLSHARP
                 return m_UShortInput ?? (m_UShortInput = new DeviceUShortInputCollectionAdapter(Device.UShortInput));
 #else
                 throw new NotImplementedException();
@@ -92,13 +92,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			get
             {
+#if SIMPLSHARP
 				if (IsDisposed)
 					throw new ObjectDisposedException(GetType().Name);
 
 				if (Device == null)
 					throw new InvalidOperationException("No device assigned");
 
-#if SIMPLSHARP
                 return m_StringInput ?? (m_StringInput = new DeviceStringInputCollectionAdapter(Device.StringInput));
 #else
                 throw new NotImplementedException();
@@ -113,13 +113,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
         {
             get
             {
+#if SIMPLSHARP
 				if (IsDisposed)
 					throw new ObjectDisposedException(GetType().Name);
 
 				if (Device == null)
 					throw new InvalidOperationException("No device assigned");
 
-#if SIMPLSHARP
                 return m_SmartObjects;
 #else
                 throw new NotImplementedException();
