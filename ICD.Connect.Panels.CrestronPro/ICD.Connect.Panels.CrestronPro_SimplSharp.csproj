@@ -119,7 +119,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriListAdapters\AbstractTriListAdapter.cs" />
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonAdapter.cs" />
-    <Compile Include="TriListAdapters\TswFt5ButtonDialingControl.cs" />
+    <Compile Include="TriListAdapters\Controls\TswFt5ButtonDialingControl.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>

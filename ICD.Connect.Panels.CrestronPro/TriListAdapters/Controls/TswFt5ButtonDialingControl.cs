@@ -6,18 +6,23 @@ using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 {
 	public sealed class TswFt5ButtonDialingControl : AbstractDialingDeviceControl<ITswFt5ButtonAdapter>
 	{
 		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
 
 		private TswFt5Button m_SubscribedPanel;
+		private ThinConferenceSource m_ActiveSource;
+
+		#region Properties
 
 		/// <summary>
 		/// Gets the type of conference this dialer supports.
 		/// </summary>
 		public override eConferenceSourceType Supports { get { return eConferenceSourceType.Audio; } }
+
+		#endregion
 
 		/// <summary>
 		/// Constructor.
@@ -50,7 +55,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <returns></returns>
 		public override IEnumerable<IConferenceSource> GetSources()
 		{
-			throw new NotImplementedException();
+			if (m_ActiveSource != null)
+				yield return m_ActiveSource;
 		}
 
 		/// <summary>
