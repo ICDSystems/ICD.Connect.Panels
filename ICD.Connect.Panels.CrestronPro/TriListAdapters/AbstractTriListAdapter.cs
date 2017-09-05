@@ -156,6 +156,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 				if (Name != null)
 					Panel.Description = Name;
 
+				RegisterExtenders(Panel);
+
 				eDeviceRegistrationUnRegistrationResponse result = Panel.Register();
 				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
 					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
@@ -164,6 +166,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Subscribe(Panel);
 			UpdateCachedOnlineStatus();
 		}
+
+		/// <summary>
+		/// Called before registration.
+		/// Override to control which extenders are used with the panel.
+		/// </summary>
+		/// <param name="panel"></param>
+	    protected virtual void RegisterExtenders(TPanel panel)
+	    {
+	    }
 #endif
 
 #endregion

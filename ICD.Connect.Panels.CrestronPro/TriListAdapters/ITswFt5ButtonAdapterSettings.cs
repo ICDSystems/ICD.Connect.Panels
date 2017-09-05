@@ -2,5 +2,6 @@
 {
 	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings
 	{
+		bool EnableVoIp { get; set; }
 	}
 }
