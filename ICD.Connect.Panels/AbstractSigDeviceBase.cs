@@ -52,6 +52,7 @@ namespace ICD.Connect.Panels
 		protected AbstractSigDeviceBase()
 		{
 			m_SigCallbacks = new SigCallbackManager();
+			m_SigCallbacks.OnAnyCallback += (sender, args) => RaiseOnAnyOutput();
 		}
 
 		#region Methods
