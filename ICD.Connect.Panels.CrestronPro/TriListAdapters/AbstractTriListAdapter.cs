@@ -292,7 +292,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			try
 			{
 				RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
-				RaiseOnAnyOutput();
 			}
 			catch (Exception e)
 			{
