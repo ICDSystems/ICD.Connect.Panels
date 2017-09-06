@@ -1,8 +1,7 @@
-﻿using System;
-using Crestron.SimplSharpPro.DeviceSupport;
-using ICD.Common.Services.Logging;
+﻿using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
+using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Settings.Core;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
@@ -14,10 +13,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		// Used with settings
 		private bool m_EnableVoIp;
 
-		protected AbstractTswFt5ButtonAdapter()
-		{
-			Controls.Add(new TswFt5ButtonDialingControl(this, 1));
-		}
+		/// <summary>
+		/// Gets the VoIp dialer for this panel.
+		/// </summary>
+		public abstract IDialingDeviceControl VoIpDialingControl { get; }
 
 		/// <summary>
 		/// Called before registration.
@@ -39,19 +38,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		/// Registers the VoIP extender for the given panel.
 		/// </summary>
 		/// <param name="panel"></param>
-		private void RegisterVoIpExtender(TPanel panel)
-		{
-			if (panel == null)
-				throw new ArgumentNullException("panel");
-
-			if (panel.ExtenderVoipReservedSigs == null)
-			{
-				Logger.AddEntry(eSeverity.Error, "{0} has no VoIP extender", this);
-				return;
-			}
-
-			panel.ExtenderVoipReservedSigs.Use();
-		}
+		protected abstract void RegisterVoIpExtender(TPanel panel);
 
 		#region New region
 
@@ -120,6 +107,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 
 	public interface ITswFt5ButtonAdapter : ITriListAdapter
 	{
+		/// <summary>
+		/// Gets the VoIp dialer for this panel.
+		/// </summary>
+		[PublicAPI]
+		IDialingDeviceControl VoIpDialingControl { get; }
 	}
 
 	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings
