@@ -192,8 +192,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 
 			UnsubscribePanel();
 
-			m_SubscribedPanel = panel as TPanel;
-			BuildSigCallbacks();
+			m_SubscribedPanel = panel;
+
+			// Rebuild the feedback callbacks
+			m_SigCallbackMap.Clear();
+			BuildSigCallbacks(m_SigCallbackMap);
 
 			SubscribePanel();
 		}
@@ -235,30 +238,23 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <summary>
 		/// Populates the sig callback map with handlers for sig changes.
 		/// </summary>
-		private void BuildSigCallbacks()
+		protected virtual void BuildSigCallbacks(Dictionary<Sig, Action<Sig>> map)
 		{
-			m_SigCallbackMap.Clear();
-
 			TVoIpSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
-			m_SigCallbackMap[sigs.BusyFeedback] = HandleBusyFeedback;
-			m_SigCallbackMap[sigs.CallActiveFeedback] = HandleCallActiveFeedback;
-			m_SigCallbackMap[sigs.CallTerminatedFeedback] = HandleCallTerminatedFeedback;
-			//m_SigCallbackMap[sigs.CommandStringFeedback] = HandleCommandStringFeedback;
-			m_SigCallbackMap[sigs.ConnectedFeedback] = HandleConnectedFeedback;
-			m_SigCallbackMap[sigs.DialingFeedback] = HandleDialingFeedback;
-			m_SigCallbackMap[sigs.DoNotDisturbFeedback] = HandleDoNotDisturbFeedback;
-			m_SigCallbackMap[sigs.HoldFeedback] = HandleHoldFeedback;
-			m_SigCallbackMap[sigs.IncomingCallDetectedFeedback] = HandleIncomingCallDetectedFeedback;
-			m_SigCallbackMap[sigs.IncomingCallerInformationFeedback] = HandleIncomingCallerInformationFeedback;
-			//m_SigCallbackMap[sigs.MutedFeedback] = HandleMutedFeedback;
-			//m_SigCallbackMap[sigs.MyURIFeedback] = HandleMyUriFeedback;
-			//m_SigCallbackMap[sigs.PTTFeedback] = HandlePttFeedback;
-			//m_SigCallbackMap[sigs.PTTModeFeedback] = HandlePttModeFeedback;
-			m_SigCallbackMap[sigs.RingbackFeedback] = HandleRingbackFeedback;
-			m_SigCallbackMap[sigs.RingingFeedback] = HandleRingingFeedback;
+			map[sigs.BusyFeedback] = HandleBusyFeedback;
+			map[sigs.CallActiveFeedback] = HandleCallActiveFeedback;
+			map[sigs.CallTerminatedFeedback] = HandleCallTerminatedFeedback;
+			map[sigs.ConnectedFeedback] = HandleConnectedFeedback;
+			map[sigs.DialingFeedback] = HandleDialingFeedback;
+			map[sigs.DoNotDisturbFeedback] = HandleDoNotDisturbFeedback;
+			map[sigs.HoldFeedback] = HandleHoldFeedback;
+			map[sigs.IncomingCallDetectedFeedback] = HandleIncomingCallDetectedFeedback;
+			map[sigs.IncomingCallerInformationFeedback] = HandleIncomingCallerInformationFeedback;
+			map[sigs.RingbackFeedback] = HandleRingbackFeedback;
+			map[sigs.RingingFeedback] = HandleRingingFeedback;
 		}
 
 		/// <summary>
@@ -275,22 +271,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 
 		private void HandleBusyFeedback(Sig obj)
 		{
-			throw new NotImplementedException();
 		}
 
 		private void HandleCallActiveFeedback(Sig obj)
 		{
-			throw new NotImplementedException();
 		}
 
 		private void HandleCallTerminatedFeedback(Sig obj)
 		{
-			throw new NotImplementedException();
-		}
-
-		private void HandleCommandStringFeedback(Sig obj)
-		{
-			throw new NotImplementedException();
 		}
 
 		private void HandleConnectedFeedback(Sig obj)
@@ -324,11 +312,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			UpdateActiveSource();
 		}
 
-		private void HandleMutedFeedback(Sig sig)
-		{
-			PrivacyMuted = sig.BoolValue;
-		}
-
 		private void HandleRingbackFeedback(Sig sig)
 		{
 			UpdateActiveSource();
@@ -341,7 +324,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 
 		private void UpdateActiveSource()
 		{
-			throw new NotImplementedException();
 		}
 
 		#endregion

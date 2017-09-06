@@ -12,7 +12,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 	{
 		private const int VOIP_DIALER_CONTROL_ID = 1;
 
-		private readonly IDialingDeviceControl m_DialingControl;
+		private IDialingDeviceControl m_DialingControl;
 
 		// Used with settings
 		private bool m_EnableVoIp;
@@ -32,7 +32,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 			base.ClearSettingsFinal();
 
 			m_EnableVoIp = false;
+
 			Controls.Remove(VOIP_DIALER_CONTROL_ID);
+			if (m_DialingControl != null)
+				m_DialingControl.Dispose();
+			m_DialingControl = null;
 		}
 
 		/// <summary>
@@ -55,10 +59,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		{
 			// Set this value before applying the rest of the settings and registering the panel
 			m_EnableVoIp = settings.EnableVoIp;
-			if (m_EnableVoIp)
-				Controls.Add(InstantiateDialingControl(VOIP_DIALER_CONTROL_ID));
 
 			base.ApplySettingsFinal(settings, factory);
+
+			// Create the control after the panel has been registered
+			if (!m_EnableVoIp)
+				return;
+
+			m_DialingControl = InstantiateDialingControl(VOIP_DIALER_CONTROL_ID);
+			Controls.Add(m_DialingControl);
 		}
 
 		/// <summary>
