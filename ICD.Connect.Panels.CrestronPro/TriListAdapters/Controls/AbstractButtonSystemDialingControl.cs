@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
+using ICD.Common.Services.Logging;
 using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
@@ -54,6 +55,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
 
 			Subscribe(parent);
+			SetPanel(parent.Panel as TPanel);
 		}
 
 		/// <summary>
@@ -176,6 +178,18 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <param name="panel"></param>
 		private void ParentOnPanelChanged(ITriListAdapter sender, BasicTriListWithSmartObject panel)
 		{
+			SetPanel(panel as TPanel);
+		}
+
+		/// <summary>
+		/// Sets the current subscribed panel to match the parent device.
+		/// </summary>
+		/// <param name="panel"></param>
+		private void SetPanel(TPanel panel)
+		{
+			if (panel == m_SubscribedPanel)
+				return;
+
 			UnsubscribePanel();
 
 			m_SubscribedPanel = panel as TPanel;
@@ -422,6 +436,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		private void ResumeCallback()
 		{
 			// Is this possible?
+			Logger.AddEntry(eSeverity.Warning, "{0} - Resume is unsupported", this);
 		}
 
 		/// <summary>
@@ -430,6 +445,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		private void HoldCallback()
 		{
 			// Is this possible?
+			Logger.AddEntry(eSeverity.Warning, "{0} - Hold is unsupported", this);
 		}
 
 		/// <summary>
