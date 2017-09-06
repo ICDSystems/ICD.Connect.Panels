@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
+using ICD.Common.Utils;
 using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
@@ -16,6 +18,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
 	{
+		private const string SIP_NUMBER_REGEX = @"^sip:([^@]*)@";
+
 		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
@@ -29,6 +33,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// Gets the type of conference this dialer supports.
 		/// </summary>
 		public override eConferenceSourceType Supports { get { return eConferenceSourceType.Audio; } }
+
+		/// <summary>
+		/// Gets the current active source.
+		/// </summary>
+		[CanBeNull]
+		public IConferenceSource ActiveSource { get { return m_ActiveSource; } }
 
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
@@ -269,61 +279,154 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 				callback(args.Sig);
 		}
 
-		private void HandleBusyFeedback(Sig obj)
+		private void HandleBusyFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Busy: {0}", sig.BoolValue);
 		}
 
-		private void HandleCallActiveFeedback(Sig obj)
+		private void HandleCallActiveFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Call active: {0}", sig.BoolValue);
 		}
 
-		private void HandleCallTerminatedFeedback(Sig obj)
+		private void HandleCallTerminatedFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Call terminated: {0}", sig.BoolValue);
 		}
 
-		private void HandleConnectedFeedback(Sig obj)
+		private void HandleConnectedFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Connected: {0}", sig.BoolValue);
 			UpdateActiveSource();
 		}
 
-		private void HandleDialingFeedback(Sig obj)
+		private void HandleDialingFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Dialing: {0}", sig.BoolValue);
 			UpdateActiveSource();
 		}
 
 		private void HandleDoNotDisturbFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Do not disturb: {0}", sig.BoolValue);
 			DoNotDisturb = sig.BoolValue;
 		}
 
-		private void HandleHoldFeedback(Sig obj)
+		private void HandleHoldFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Hold: {0}", sig.BoolValue);
 			UpdateActiveSource();
 		}
 
-		private void HandleIncomingCallDetectedFeedback(Sig obj)
+		private void HandleIncomingCallDetectedFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Incoming call detected: {0}", sig.BoolValue);
+
 			if (m_ActiveSource != null)
-				m_ActiveSource.Number = obj.StringValue;
+				m_ActiveSource.Number = sig.StringValue;
 		}
 
-		private void HandleIncomingCallerInformationFeedback(Sig obj)
+		private void HandleIncomingCallerInformationFeedback(Sig sig)
 		{
 			UpdateActiveSource();
 		}
 
 		private void HandleRingbackFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Ringback: {0}", sig.BoolValue);
+
 			UpdateActiveSource();
 		}
 
 		private void HandleRingingFeedback(Sig sig)
 		{
+			IcdConsole.PrintLine("Ringing: {0}", sig.BoolValue);
+
 			UpdateActiveSource();
 		}
 
+		/// <summary>
+		/// Updates the active source based on the current sig states.
+		/// </summary>
 		private void UpdateActiveSource()
 		{
+			if (m_ActiveSource == null)
+				return;
+
+			var sigs = Sigs;
+			if (sigs == null)
+				return;
+
+			// Caller number
+			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
+			if (!string.IsNullOrEmpty(uri))
+			{
+				m_ActiveSource.Name = uri;
+				m_ActiveSource.Number = NumberFromUri(uri);
+			}
+
+			m_ActiveSource.Status = StatusFromSigs(sigs);
+			m_ActiveSource.Direction = DirectionFromSigs(sigs);
+			m_ActiveSource.AnswerState = AnswerStateFromSigs(sigs);
+
+			// TODO
+			m_ActiveSource.Start = null;
+			m_ActiveSource.End = null;
+		}
+
+		/// <summary>
+		/// Gets the conference source status from the current sig states.
+		/// </summary>
+		/// <param name="sigs"></param>
+		/// <returns></returns>
+		private static eConferenceSourceStatus StatusFromSigs(TVoIpSigs sigs)
+		{
+			if (sigs == null)
+				throw new ArgumentNullException("sigs");
+
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Gets the direction from the current sig states.
+		/// </summary>
+		/// <param name="sigs"></param>
+		/// <returns></returns>
+		private static eConferenceSourceDirection DirectionFromSigs(TVoIpSigs sigs)
+		{
+			if (sigs == null)
+				throw new ArgumentNullException("sigs");
+
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Gets the answer state from the current sig states.
+		/// </summary>
+		/// <param name="sigs"></param>
+		/// <returns></returns>
+		private static eConferenceSourceAnswerState AnswerStateFromSigs(TVoIpSigs sigs)
+		{
+			if (sigs == null)
+				throw new ArgumentNullException("sigs");
+
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// Returns the number portion from the given uri.
+		/// </summary>
+		/// <param name="uri"></param>
+		/// <returns></returns>
+		private static string NumberFromUri(string uri)
+		{
+			if (uri == null)
+				throw new ArgumentNullException("uri");
+
+			Regex regex = new Regex(SIP_NUMBER_REGEX);
+			Match match = regex.Match(uri);
+
+			return match.Success ? match.Groups[1].Value : null;
 		}
 
 		#endregion
