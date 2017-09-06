@@ -2,11 +2,11 @@ using System;
 using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes.Factories;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1060
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw760
 {
-	public sealed class Tsw1060AdapterSettings : AbstractTswFt5ButtonAdapterSettings
+	public sealed class Tsw760AdapterSettings : AbstractTswX60BaseClassAdapterSettings
 	{
-		private const string FACTORY_NAME = "Tsw1060";
+		private const string FACTORY_NAME = "Tsw760";
 
 		/// <summary>
 		/// Gets the originator factory name.
@@ -16,7 +16,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1060
 		/// <summary>
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
-		public override Type OriginatorType { get { return typeof(Tsw1060Adapter); } }
+		public override Type OriginatorType { get { return typeof(Tsw760Adapter); } }
 
 		/// <summary>
 		/// Loads the settings from XML.
@@ -24,9 +24,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1060
 		/// <param name="xml"></param>
 		/// <returns></returns>
 		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
-		public static Tsw1060AdapterSettings FromXml(string xml)
+		public static Tsw760AdapterSettings FromXml(string xml)
 		{
-			Tsw1060AdapterSettings output = new Tsw1060AdapterSettings();
+			Tsw760AdapterSettings output = new Tsw760AdapterSettings();
 			ParseXml(output, xml);
 			return output;
 		}

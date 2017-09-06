@@ -2,11 +2,14 @@
 using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes.Factories;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1050
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
 {
-	public sealed class Tsw1050AdapterSettings : AbstractTswFt5ButtonAdapterSettings
+	/// <summary>
+	/// Settings for the Tsw750Adapter panel device.
+	/// </summary>
+	public sealed class Tsw750AdapterSettings : AbstractTswFt5ButtonSystemAdapterSettings
 	{
-		private const string FACTORY_NAME = "Tsw1050";
+		private const string FACTORY_NAME = "Tsw750";
 
 		/// <summary>
 		/// Gets the originator factory name.
@@ -16,7 +19,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1050
 		/// <summary>
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
-		public override Type OriginatorType { get { return typeof(Tsw1050Adapter); } }
+		public override Type OriginatorType { get { return typeof(Tsw750Adapter); } }
 
 		/// <summary>
 		/// Loads the settings from XML.
@@ -24,9 +27,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw1050
 		/// <param name="xml"></param>
 		/// <returns></returns>
 		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
-		public static Tsw1050AdapterSettings FromXml(string xml)
+		public static Tsw750AdapterSettings FromXml(string xml)
 		{
-			Tsw1050AdapterSettings output = new Tsw1050AdapterSettings();
+			Tsw750AdapterSettings output = new Tsw750AdapterSettings();
 			ParseXml(output, xml);
 			return output;
 		}

@@ -2,13 +2,13 @@
 #endif
 using Crestron.SimplSharpPro;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw750
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
 {
     /// <summary>
     /// Tsw750Adapter wraps a Tsw750 for use with the UIPro library.
     /// </summary>
 #if SIMPLSHARP
-	public sealed class Tsw750Adapter : AbstractTswFt5ButtonAdapter<Crestron.SimplSharpPro.UI.Tsw750, Tsw750AdapterSettings>
+	public sealed class Tsw750Adapter : AbstractTswFt5ButtonSystemAdapter<Crestron.SimplSharpPro.UI.Tsw750, Tsw750AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.

@@ -2,10 +2,10 @@
 #endif
 using Crestron.SimplSharpPro;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Tsw760
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw760
 {
 #if SIMPLSHARP
-    public sealed class Tsw760Adapter : AbstractTswFt5ButtonAdapter<Crestron.SimplSharpPro.UI.Tsw760, Tsw760AdapterSettings>
+	public sealed class Tsw760Adapter : AbstractTswX60BaseClassAdapter<Crestron.SimplSharpPro.UI.Tsw760, Tsw760AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.

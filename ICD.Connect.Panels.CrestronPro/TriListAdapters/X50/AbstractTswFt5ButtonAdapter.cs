@@ -1,8 +1,11 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
+﻿using System;
+using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Common.Services.Logging;
+using ICD.Common.Utils.Xml;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
 using ICD.Connect.Settings.Core;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 {
 	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, ITswFt5ButtonAdapter
 		where TSettings : ITswFt5ButtonAdapterSettings, new()
@@ -25,8 +28,29 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.RegisterExtenders(panel);
 
+			if (panel == null)
+				return;
+
 			if (m_EnableVoIp)
-				panel.ExtenderVoipReservedSigs.Use();
+				RegisterVoIpExtender(panel);
+		}
+
+		/// <summary>
+		/// Registers the VoIP extender for the given panel.
+		/// </summary>
+		/// <param name="panel"></param>
+		private void RegisterVoIpExtender(TPanel panel)
+		{
+			if (panel == null)
+				throw new ArgumentNullException("panel");
+
+			if (panel.ExtenderVoipReservedSigs == null)
+			{
+				Logger.AddEntry(eSeverity.Error, "{0} has no VoIP extender", this);
+				return;
+			}
+
+			panel.ExtenderVoipReservedSigs.Use();
 		}
 
 		#region New region
@@ -66,5 +90,40 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		#endregion
+	}
+
+	public abstract class AbstractTswFt5ButtonAdapterSettings : AbstractTriListAdapterSettings,
+															ITswFt5ButtonAdapterSettings
+	{
+		private const string ENABLE_VOIP_ELEMENT = "EnableVoIP";
+
+		public bool EnableVoIp { get; set; }
+
+		/// <summary>
+		/// Writes property elements to xml.
+		/// </summary>
+		/// <param name="writer"></param>
+		protected override void WriteElements(IcdXmlTextWriter writer)
+		{
+			base.WriteElements(writer);
+
+			writer.WriteElementString(ENABLE_VOIP_ELEMENT, IcdXmlConvert.ToString(EnableVoIp));
+		}
+
+		protected static void ParseXml(AbstractTswFt5ButtonAdapterSettings instance, string xml)
+		{
+			instance.EnableVoIp = XmlUtils.TryReadChildElementContentAsBoolean(xml, ENABLE_VOIP_ELEMENT) ?? false;
+
+			AbstractTriListAdapterSettings.ParseXml(instance, xml);
+		}
+	}
+
+	public interface ITswFt5ButtonAdapter : ITriListAdapter
+	{
+	}
+
+	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings
+	{
+		bool EnableVoIp { get; set; }
 	}
 }
