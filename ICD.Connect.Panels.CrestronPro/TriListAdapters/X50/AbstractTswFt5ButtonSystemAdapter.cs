@@ -9,29 +9,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		where TPanel : TswFt5ButtonSystem
 		where TSettings : ITswFt5ButtonSystemAdapterSettings, new()
 	{
-		private readonly IDialingDeviceControl m_DialingControl;
-
-		/// <summary>
-		/// Gets the VoIp dialer for this panel.
-		/// </summary>
-		public override IDialingDeviceControl VoIpDialingControl { get { return m_DialingControl; } }
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		protected AbstractTswFt5ButtonSystemAdapter()
-		{
-			m_DialingControl = InstantiateDialingControl(1);
-			Controls.Add(m_DialingControl);
-		}
-
 		/// <summary>
 		/// Called from constructor.
 		/// Override to control the type of dialing control to instantiate.
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected virtual IDialingDeviceControl InstantiateDialingControl(int id)
+		protected override IDialingDeviceControl InstantiateDialingControl(int id)
 		{
 			return new TswFt5ButtonSystemDialingControl(this, id);
 		}

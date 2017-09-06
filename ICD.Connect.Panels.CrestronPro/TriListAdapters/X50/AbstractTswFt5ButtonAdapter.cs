@@ -10,13 +10,56 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		where TSettings : ITswFt5ButtonAdapterSettings, new()
 		where TPanel : TswFt5Button
 	{
+		private const int VOIP_DIALER_CONTROL_ID = 1;
+
+		private readonly IDialingDeviceControl m_DialingControl;
+
 		// Used with settings
 		private bool m_EnableVoIp;
 
 		/// <summary>
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
-		public abstract IDialingDeviceControl VoIpDialingControl { get; }
+		public IDialingDeviceControl VoIpDialingControl { get { return m_DialingControl; }}
+
+		#region Settings
+
+		/// <summary>
+		/// Override to clear the instance settings.
+		/// </summary>
+		protected override void ClearSettingsFinal()
+		{
+			base.ClearSettingsFinal();
+
+			m_EnableVoIp = false;
+			Controls.Remove(VOIP_DIALER_CONTROL_ID);
+		}
+
+		/// <summary>
+		/// Override to apply properties to the settings instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		protected override void CopySettingsFinal(TSettings settings)
+		{
+			base.CopySettingsFinal(settings);
+
+			settings.EnableVoIp = m_EnableVoIp;
+		}
+
+		/// <summary>
+		/// Override to apply settings to the instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
+		{
+			// Set this value before applying the rest of the settings and registering the panel
+			m_EnableVoIp = settings.EnableVoIp;
+			if (m_EnableVoIp)
+				Controls.Add(InstantiateDialingControl(VOIP_DIALER_CONTROL_ID));
+
+			base.ApplySettingsFinal(settings, factory);
+		}
 
 		/// <summary>
 		/// Called before registration.
@@ -40,41 +83,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		/// <param name="panel"></param>
 		protected abstract void RegisterVoIpExtender(TPanel panel);
 
-		#region New region
-
 		/// <summary>
-		/// Override to clear the instance settings.
+		/// Called from constructor.
+		/// Override to control the type of dialing control to instantiate.
 		/// </summary>
-		protected override void ClearSettingsFinal()
-		{
-			base.ClearSettingsFinal();
-
-			m_EnableVoIp = false;
-		}
-
-		/// <summary>
-		/// Override to apply properties to the settings instance.
-		/// </summary>
-		/// <param name="settings"></param>
-		protected override void CopySettingsFinal(TSettings settings)
-		{
-			base.CopySettingsFinal(settings);
-
-			settings.EnableVoIp = m_EnableVoIp;
-		}
-
-		/// <summary>
-		/// Override to apply settings to the instance.
-		/// </summary>
-		/// <param name="settings"></param>
-		/// <param name="factory"></param>
-		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
-		{
-			// Set this value before applying the rest of the settings and instantiating the panel
-			m_EnableVoIp = settings.EnableVoIp;
-
-			base.ApplySettingsFinal(settings, factory);
-		}
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected abstract IDialingDeviceControl InstantiateDialingControl(int id);
 
 		#endregion
 	}
