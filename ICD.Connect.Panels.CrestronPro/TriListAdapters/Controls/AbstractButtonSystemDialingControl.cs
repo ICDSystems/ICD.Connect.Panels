@@ -80,22 +80,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			UnsubscribePanel();
 		}
 
-		/// <summary>
-		/// Instantiates a new source.
-		/// </summary>
-		/// <returns></returns>
-		private ThinConferenceSource InstantiateSource()
-		{
-			return new ThinConferenceSource
-			{
-				AnswerCallback = AnswerCallback,
-				HoldCallback = HoldCallback,
-				ResumeCallback = ResumeCallback,
-				HangupCallback = HangupCallback,
-				SendDtmfCallback = SendDtmfCallback,
-			};
-		}
-
 		#region Dialer Methods
 
 		/// <summary>
