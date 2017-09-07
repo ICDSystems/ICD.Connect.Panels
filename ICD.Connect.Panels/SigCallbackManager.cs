@@ -20,7 +20,7 @@ namespace ICD.Connect.Panels
 		/// Raised when any sig callback is called.
 		/// Useful for determining activity when a user interacts with a touchpanel.
 		/// </summary>
-		public event EventHandler OnAnyCallback;
+		public event EventHandler<SigAdapterEventArgs> OnAnyCallback;
 
 		/// <summary>
 		/// Maps sigs to registered callbacks.
@@ -58,7 +58,7 @@ namespace ICD.Connect.Panels
 		public void RaiseSigChangeCallback(ISig sig)
 		{
 			m_LastOutput = IcdEnvironment.GetLocalTime();
-			OnAnyCallback.Raise(this);
+			OnAnyCallback.Raise(this, new SigAdapterEventArgs(sig));
 
 			foreach (Action<SigCallbackManager, SigAdapterEventArgs> callback in GetCallbacksForSig(sig))
 			{

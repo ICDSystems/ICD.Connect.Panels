@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.SmartObjects
 {
 	public abstract class AbstractSmartObject : ISmartObject
 	{
-		public abstract event EventHandler OnAnyOutput;
+		public abstract event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		#region Properties
 

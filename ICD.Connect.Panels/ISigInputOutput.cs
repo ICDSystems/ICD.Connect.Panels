@@ -11,7 +11,7 @@ namespace ICD.Connect.Panels
 		/// Raised when the user interacts with the panel.
 		/// </summary>
 		[PublicAPI]
-		event EventHandler OnAnyOutput;
+		event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		#region Properties
 

@@ -18,7 +18,7 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Raised when the user interacts with the panel.
 		/// </summary>
-		public event EventHandler OnAnyOutput;
+		public event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		private readonly SigCallbackManager m_SigCallbacks;
 
@@ -52,7 +52,7 @@ namespace ICD.Connect.Panels
 		protected AbstractSigDeviceBase()
 		{
 			m_SigCallbacks = new SigCallbackManager();
-			m_SigCallbacks.OnAnyCallback += (sender, args) => RaiseOnAnyOutput();
+			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
 		}
 
 		#region Methods
@@ -184,11 +184,21 @@ namespace ICD.Connect.Panels
 		}
 
 		/// <summary>
+		/// Called when a sig changes state.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="sigAdapterEventArgs"></param>
+		private void SigCallbacksOnAnyCallback(object sender, SigAdapterEventArgs sigAdapterEventArgs)
+		{
+			RaiseOnAnyOutput(sigAdapterEventArgs.Data);
+		}
+
+		/// <summary>
 		/// Raises the OnAnyOutput event.
 		/// </summary>
-		protected void RaiseOnAnyOutput()
+		protected void RaiseOnAnyOutput(ISig sig)
 		{
-			OnAnyOutput.Raise(this);
+			OnAnyOutput.Raise(this, new SigAdapterEventArgs(sig));
 		}
 
 		#endregion

@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelServerSmartObject : AbstractSmartObject
 	{
-		public override event EventHandler OnAnyOutput;
+		public override event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		private readonly ushort m_SmartObjectId;
 		private readonly PanelServerDevice m_Device;
@@ -47,9 +47,9 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void SigCallbacksOnAnyOutput(object sender, EventArgs eventArgs)
+		private void SigCallbacksOnAnyOutput(object sender, SigAdapterEventArgs eventArgs)
 		{
-			OnAnyOutput.Raise(this);
+			OnAnyOutput.Raise(this, new SigAdapterEventArgs(eventArgs.Data));
 		}
 
 		#region Methods

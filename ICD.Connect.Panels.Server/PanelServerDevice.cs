@@ -19,7 +19,7 @@ namespace ICD.Connect.Panels.Server
 	/// </summary>
 	public sealed class PanelServerDevice : AbstractDeviceBase<PanelServerDeviceSettings>, IPanelDevice
 	{
-		public event EventHandler OnAnyOutput;
+		public event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
 		private readonly TcpServerBufferManager m_Buffers;
@@ -311,7 +311,7 @@ namespace ICD.Connect.Panels.Server
 				m_SmartObjects[sig.SmartObject].HandleOutputSig(sig);
 
 			LastOutput = IcdEnvironment.GetLocalTime();
-			OnAnyOutput.Raise(this);
+			OnAnyOutput.Raise(this, new SigAdapterEventArgs(sig));
 		}
 
 		#endregion

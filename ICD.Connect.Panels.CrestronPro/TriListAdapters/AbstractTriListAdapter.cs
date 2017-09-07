@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Connect.Panels.EventArguments;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
@@ -361,9 +362,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void SmartObjectOnAnyOutput(object sender, EventArgs eventArgs)
+		private void SmartObjectOnAnyOutput(object sender, SigAdapterEventArgs eventArgs)
 		{
-			RaiseOnAnyOutput();
+			RaiseOnAnyOutput(eventArgs.Data);
 		}
 
 #endregion

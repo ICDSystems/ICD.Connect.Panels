@@ -14,7 +14,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public sealed class SmartObjectAdapter : AbstractSmartObject, IDisposable
 	{
-		public override event EventHandler OnAnyOutput;
+		public override event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		private readonly SmartObject m_SmartObject;
 		private readonly SigCallbackManager m_SigCallbacks;
@@ -166,9 +166,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		#region Private Methods
 
-		private void SigCallbacksOnAnyCallback(object sender, EventArgs eventArgs)
+		private void SigCallbacksOnAnyCallback(object sender, SigAdapterEventArgs eventArgs)
 		{
-			OnAnyOutput.Raise(this);
+			OnAnyOutput.Raise(this, new SigAdapterEventArgs(eventArgs.Data));
 		}
 
 		/// <summary>

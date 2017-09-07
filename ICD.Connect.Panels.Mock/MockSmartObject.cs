@@ -10,7 +10,7 @@ namespace ICD.Connect.Panels.Mock
 {
 	public sealed class MockSmartObject : AbstractSmartObject
 	{
-		public override event EventHandler OnAnyOutput;
+		public override event EventHandler<SigAdapterEventArgs> OnAnyOutput;
 
 		private readonly SigCallbackManager m_SigCallbacks;
 
