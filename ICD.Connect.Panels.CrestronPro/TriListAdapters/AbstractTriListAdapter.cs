@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Connect.Panels.EventArguments;
+using ICD.Connect.Protocol.Sigs;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
@@ -325,7 +326,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			try
 			{
-				RaiseOutputSigChangeCallback(SigAdapterFactory.GetSigAdapter(args.Sig));
+				ISig sigAdapter = SigAdapterFactory.GetSigAdapter(args.Sig);
+				SigInfo sigInfo = new SigInfo(sigAdapter);
+
+				RaiseOutputSigChangeCallback(sigInfo);
 			}
 			catch (Exception e)
 			{
@@ -362,7 +366,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void SmartObjectOnAnyOutput(object sender, SigAdapterEventArgs eventArgs)
+		private void SmartObjectOnAnyOutput(object sender, SigInfoEventArgs eventArgs)
 		{
 			RaiseOnAnyOutput(eventArgs.Data);
 		}

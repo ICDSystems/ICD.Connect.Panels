@@ -18,7 +18,7 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Raised when the user interacts with the panel.
 		/// </summary>
-		public event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly SigCallbackManager m_SigCallbacks;
 
@@ -73,7 +73,7 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -84,7 +84,7 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -177,28 +177,28 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Raises the callbacks registered with the signature.
 		/// </summary>
-		/// <param name="sig"></param>
-		protected void RaiseOutputSigChangeCallback(ISig sig)
+		/// <param name="sigInfo"></param>
+		protected void RaiseOutputSigChangeCallback(SigInfo sigInfo)
 		{
-			m_SigCallbacks.RaiseSigChangeCallback(sig);
+			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
 
 		/// <summary>
 		/// Called when a sig changes state.
 		/// </summary>
 		/// <param name="sender"></param>
-		/// <param name="sigAdapterEventArgs"></param>
-		private void SigCallbacksOnAnyCallback(object sender, SigAdapterEventArgs sigAdapterEventArgs)
+		/// <param name="sigInfoEventArgs"></param>
+		private void SigCallbacksOnAnyCallback(object sender, SigInfoEventArgs sigInfoEventArgs)
 		{
-			RaiseOnAnyOutput(sigAdapterEventArgs.Data);
+			RaiseOnAnyOutput(sigInfoEventArgs.Data);
 		}
 
 		/// <summary>
 		/// Raises the OnAnyOutput event.
 		/// </summary>
-		protected void RaiseOnAnyOutput(ISig sig)
+		protected void RaiseOnAnyOutput(SigInfo sigInfo)
 		{
-			OnAnyOutput.Raise(this, new SigAdapterEventArgs(sig));
+			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 		}
 
 		#endregion

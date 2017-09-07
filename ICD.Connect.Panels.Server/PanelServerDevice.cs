@@ -19,7 +19,7 @@ namespace ICD.Connect.Panels.Server
 	/// </summary>
 	public sealed class PanelServerDevice : AbstractDeviceBase<PanelServerDeviceSettings>, IPanelDevice
 	{
-		public event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
 		private readonly TcpServerBufferManager m_Buffers;
@@ -90,19 +90,19 @@ namespace ICD.Connect.Panels.Server
 		/// <summary>
 		/// Caches and sends the sig.
 		/// </summary>
-		/// <param name="sig"></param>
-		public void SendSig(Sig sig)
+		/// <param name="sigInfo"></param>
+		public void SendSig(SigInfo sigInfo)
 		{
 			m_SendSection.Enter();
 
 			try
 			{
-				m_Cache.Add(sig);
+				m_Cache.Add(sigInfo);
 
 				if (!m_Server.GetClients().Any())
 					return;
 
-				string serial = sig.Serialize();
+				string serial = sigInfo.Serialize();
 				m_Server.Send(serial);
 			}
 			finally
@@ -117,7 +117,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -128,7 +128,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -140,7 +140,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="text"></param>
 		public void SendInputSerial(uint number, string text)
 		{
-			SendSig(new Sig(number, 0, text));
+			SendSig(new SigInfo(number, 0, text));
 		}
 
 		/// <summary>
@@ -150,7 +150,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputAnalog(uint number, ushort value)
 		{
-			SendSig(new Sig(number, 0, value));
+			SendSig(new SigInfo(number, 0, value));
 		}
 
 		/// <summary>
@@ -160,7 +160,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputDigital(uint number, bool value)
 		{
-			SendSig(new Sig(number, 0, value));
+			SendSig(new SigInfo(number, 0, value));
 		}
 
 		#endregion
@@ -264,7 +264,7 @@ namespace ICD.Connect.Panels.Server
 			try
 			{
 				// Send all of the cached sigs to the new client.
-				foreach (Sig sig in m_Cache)
+				foreach (SigInfo sig in m_Cache)
 					m_Server.Send(args.ClientId, sig.Serialize());
 			}
 			finally
@@ -303,15 +303,15 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="data"></param>
 		private void BuffersOnClientCompletedSerial(TcpServerBufferManager sender, uint clientId, string data)
 		{
-			Sig sig = Sig.Deserialize(data);
+			SigInfo sigInfo = SigInfo.Deserialize(data);
 
-			if (sig.SmartObject == 0)
-				m_SigCallbacks.RaiseSigChangeCallback(sig);
+			if (sigInfo.SmartObject == 0)
+				m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 			else
-				m_SmartObjects[sig.SmartObject].HandleOutputSig(sig);
+				m_SmartObjects[sigInfo.SmartObject].HandleOutputSig(sigInfo);
 
 			LastOutput = IcdEnvironment.GetLocalTime();
-			OnAnyOutput.Raise(this, new SigAdapterEventArgs(sig));
+			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 		}
 
 		#endregion

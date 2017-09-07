@@ -11,7 +11,7 @@ namespace ICD.Connect.Panels
 		/// Raised when the user interacts with the panel.
 		/// </summary>
 		[PublicAPI]
-		event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		#region Properties
 
@@ -32,7 +32,7 @@ namespace ICD.Connect.Panels
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		[PublicAPI]
-		void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback);
+		void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback);
 
 		/// <summary>
 		/// Unregisters the callback for output sig change events.
@@ -41,7 +41,7 @@ namespace ICD.Connect.Panels
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		[PublicAPI]
-		void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback);
+		void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback);
 
 		/// <summary>
 		/// Sends the serial data to the panel.

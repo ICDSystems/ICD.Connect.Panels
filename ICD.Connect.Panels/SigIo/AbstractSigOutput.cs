@@ -101,7 +101,7 @@ namespace ICD.Connect.Panels.SigIo
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		protected abstract void DeviceOnOutput(SigCallbackManager sender, SigAdapterEventArgs args);
+		protected abstract void DeviceOnOutput(SigCallbackManager sender, SigInfoEventArgs args);
 
 		#endregion
 	}

@@ -10,7 +10,7 @@ namespace ICD.Connect.Panels.Mock
 {
 	public sealed class MockSmartObject : AbstractSmartObject
 	{
-		public override event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly SigCallbackManager m_SigCallbacks;
 
@@ -68,7 +68,7 @@ namespace ICD.Connect.Panels.Mock
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void RegisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                     Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                     Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -80,7 +80,7 @@ namespace ICD.Connect.Panels.Mock
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void UnregisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                       Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                       Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -139,11 +139,11 @@ namespace ICD.Connect.Panels.Mock
 		/// <summary>
 		/// Raises the sig change callbacks.
 		/// </summary>
-		/// <param name="sig"></param>
+		/// <param name="sigInfo"></param>
 		[PublicAPI]
-		public void RaiseOutputSigChange(ISig sig)
+		public void RaiseOutputSigChange(SigInfo sigInfo)
 		{
-			m_SigCallbacks.RaiseSigChangeCallback(sig);
+			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
 
 		[PublicAPI]

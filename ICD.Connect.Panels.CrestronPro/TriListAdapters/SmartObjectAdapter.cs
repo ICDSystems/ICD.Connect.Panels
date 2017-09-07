@@ -1,10 +1,10 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.EventArguments;
+#if SIMPLSHARP
 using System;
 using Crestron.SimplSharpPro;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.Sigs;
-using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
@@ -14,7 +14,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public sealed class SmartObjectAdapter : AbstractSmartObject, IDisposable
 	{
-		public override event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly SmartObject m_SmartObject;
 		private readonly SigCallbackManager m_SigCallbacks;
@@ -94,7 +94,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void RegisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                     Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                     Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -106,7 +106,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void UnregisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                       Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                       Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -166,9 +166,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		#region Private Methods
 
-		private void SigCallbacksOnAnyCallback(object sender, SigAdapterEventArgs eventArgs)
+		private void SigCallbacksOnAnyCallback(object sender, SigInfoEventArgs eventArgs)
 		{
-			OnAnyOutput.Raise(this, new SigAdapterEventArgs(eventArgs.Data));
+			OnAnyOutput.Raise(this, new SigInfoEventArgs(eventArgs.Data));
 		}
 
 		/// <summary>
@@ -236,7 +236,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="smartObjectEventArgs"></param>
 		private void SmartObjectOnSigChange(GenericBase currentDevice, SmartObjectEventArgs smartObjectEventArgs)
 		{
-			m_SigCallbacks.RaiseSigChangeCallback(SigAdapterFactory.GetSigAdapter(smartObjectEventArgs.Sig));
+			ISig sigAdapter = SigAdapterFactory.GetSigAdapter(smartObjectEventArgs.Sig);
+			SigInfo sigInfo = new SigInfo(sigAdapter, (ushort)SmartObjectId);
+
+			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
 
 		#endregion

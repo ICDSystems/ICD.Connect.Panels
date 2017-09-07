@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.SmartObjects
 {
 	public abstract class AbstractSmartObject : ISmartObject
 	{
-		public abstract event EventHandler<SigAdapterEventArgs> OnAnyOutput;
+		public abstract event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		#region Properties
 
@@ -32,7 +32,7 @@ namespace ICD.Connect.Panels.SmartObjects
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public abstract void RegisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                     Action<SigCallbackManager, SigAdapterEventArgs> callback);
+		                                                     Action<SigCallbackManager, SigInfoEventArgs> callback);
 
 		/// <summary>
 		/// Unregisters the callback for output sig change events.
@@ -41,7 +41,7 @@ namespace ICD.Connect.Panels.SmartObjects
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public abstract void UnregisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                       Action<SigCallbackManager, SigAdapterEventArgs> callback);
+		                                                       Action<SigCallbackManager, SigInfoEventArgs> callback);
 
 		/// <summary>
 		/// Sends the serial data to the panel.

@@ -44,11 +44,11 @@ namespace ICD.Connect.Panels.Mock
 		/// <summary>
 		/// Raises the sig change callbacks.
 		/// </summary>
-		/// <param name="sig"></param>
+		/// <param name="sigInfo"></param>
 		[PublicAPI]
-		public void RaiseOutputSigChange(ISig sig)
+		public void RaiseOutputSigChange(SigInfo sigInfo)
 		{
-			RaiseOutputSigChangeCallback(sig);
+			RaiseOutputSigChangeCallback(sigInfo);
 		}
 
 		[PublicAPI]
