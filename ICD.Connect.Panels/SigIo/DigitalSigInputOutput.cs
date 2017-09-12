@@ -51,7 +51,7 @@ namespace ICD.Connect.Panels.SigIo
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		protected override void DeviceOnOutput(SigCallbackManager sender, SigAdapterEventArgs args)
+		protected override void DeviceOnOutput(SigCallbackManager sender, SigInfoEventArgs args)
 		{
 			bool value = args.Data.GetBoolValue();
 			OnOutput.Raise(this, new BoolEventArgs(value));

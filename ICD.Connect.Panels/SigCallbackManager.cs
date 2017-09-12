@@ -20,12 +20,12 @@ namespace ICD.Connect.Panels
 		/// Raised when any sig callback is called.
 		/// Useful for determining activity when a user interacts with a touchpanel.
 		/// </summary>
-		public event EventHandler OnAnyCallback;
+		public event EventHandler<SigInfoEventArgs> OnAnyCallback;
 
 		/// <summary>
 		/// Maps sigs to registered callbacks.
 		/// </summary>
-		private readonly Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>> m_SigToCallback;
+		private readonly Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> m_SigToCallback;
 
 		private readonly SafeCriticalSection m_RegistrationSection;
 
@@ -45,7 +45,7 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		public SigCallbackManager()
 		{
-			m_SigToCallback = new Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>>();
+			m_SigToCallback = new Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>>();
 			m_RegistrationSection = new SafeCriticalSection();
 		}
 
@@ -54,17 +54,17 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Raises the callbacks registered with the signature.
 		/// </summary>
-		/// <param name="sig"></param>
-		public void RaiseSigChangeCallback(ISig sig)
+		/// <param name="sigInfo"></param>
+		public void RaiseSigChangeCallback(SigInfo sigInfo)
 		{
 			m_LastOutput = IcdEnvironment.GetLocalTime();
-			OnAnyCallback.Raise(this);
+			OnAnyCallback.Raise(this, new SigInfoEventArgs(sigInfo));
 
-			foreach (Action<SigCallbackManager, SigAdapterEventArgs> callback in GetCallbacksForSig(sig))
+			foreach (Action<SigCallbackManager, SigInfoEventArgs> callback in GetCallbacksForSig(sigInfo))
 			{
 				try
 				{
-					callback(this, new SigAdapterEventArgs(sig));
+					callback(this, new SigInfoEventArgs(sigInfo));
 				}
 				catch (Exception e)
 				{
@@ -80,7 +80,7 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void RegisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void RegisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_RegistrationSection.Execute(() => RegisterCallback(m_SigToCallback, number, type, callback));
 		}
@@ -91,7 +91,7 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void UnregisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		public void UnregisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_RegistrationSection.Execute(() => UnregisterCallback(m_SigToCallback, number, type, callback));
 		}
@@ -106,11 +106,11 @@ namespace ICD.Connect.Panels
 		/// <param name="callbacks"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void RegisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>> callbacks, eSigType type,
-											 Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		private static void RegisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks, eSigType type,
+											 Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (!callbacks.ContainsKey(type))
-				callbacks[type] = new IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>();
+				callbacks[type] = new IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>();
 			callbacks[type].Add(callback);
 		}
 
@@ -121,11 +121,11 @@ namespace ICD.Connect.Panels
 		/// <param name="key"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void RegisterCallback(IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>> callbacks,
-												uint key, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		private static void RegisterCallback(IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> callbacks,
+												uint key, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (!callbacks.ContainsKey(key))
-				callbacks[key] = new Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>();
+				callbacks[key] = new Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>();
 			RegisterCallback(callbacks[key], type, callback);
 		}
 
@@ -135,8 +135,8 @@ namespace ICD.Connect.Panels
 		/// <param name="callbacks"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void UnregisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>> callbacks,
-											   eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		private static void UnregisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks,
+											   eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (callbacks.ContainsKey(type))
 				callbacks[type].Remove(callback);
@@ -150,8 +150,8 @@ namespace ICD.Connect.Panels
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		private static void UnregisterCallback(
-			IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>> callbacks,
-			uint key, eSigType type, Action<SigCallbackManager, SigAdapterEventArgs> callback)
+			IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> callbacks,
+			uint key, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (callbacks.ContainsKey(key))
 				UnregisterCallback(callbacks[key], type, callback);
@@ -163,15 +163,15 @@ namespace ICD.Connect.Panels
 		/// <param name="callbacks"></param>
 		/// <param name="sig"></param>
 		/// <returns></returns>
-		private static IEnumerable<Action<SigCallbackManager, SigAdapterEventArgs>> GetCallbacksForSig(
-			IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigAdapterEventArgs>>>> callbacks,
+		private static IEnumerable<Action<SigCallbackManager, SigInfoEventArgs>> GetCallbacksForSig(
+			IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> callbacks,
 			ISig sig)
 		{
 			if (!callbacks.ContainsKey(sig.Number))
-				return Enumerable.Empty<Action<SigCallbackManager, SigAdapterEventArgs>>();
+				return Enumerable.Empty<Action<SigCallbackManager, SigInfoEventArgs>>();
 
 			if (!callbacks[sig.Number].ContainsKey(sig.Type))
-				return Enumerable.Empty<Action<SigCallbackManager, SigAdapterEventArgs>>();
+				return Enumerable.Empty<Action<SigCallbackManager, SigInfoEventArgs>>();
 
 			return callbacks[sig.Number][sig.Type];
 		}
@@ -181,7 +181,7 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="sig"></param>
 		/// <returns></returns>
-		private IEnumerable<Action<SigCallbackManager, SigAdapterEventArgs>> GetCallbacksForSig(ISig sig)
+		private IEnumerable<Action<SigCallbackManager, SigInfoEventArgs>> GetCallbacksForSig(ISig sig)
 		{
 			return m_RegistrationSection.Execute(() => GetCallbacksForSig(m_SigToCallback, sig).ToArray());
 		}

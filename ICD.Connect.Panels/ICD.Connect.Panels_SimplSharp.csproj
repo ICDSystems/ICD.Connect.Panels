@@ -89,7 +89,7 @@
     <Compile Include="SmartObjects\AbstractSmartObject.cs" />
     <Compile Include="SmartObjects\ISmartObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventArguments\SigAdapterEventArgs.cs" />
+    <Compile Include="EventArguments\SigInfoEventArgs.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>

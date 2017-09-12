@@ -55,7 +55,7 @@ namespace ICD.Connect.Panels.SigIo
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		protected override void DeviceOnOutput(SigCallbackManager sender, SigAdapterEventArgs args)
+		protected override void DeviceOnOutput(SigCallbackManager sender, SigInfoEventArgs args)
 		{
 			ushort value = args.Data.GetUShortValue();
 			OnOutput.Raise(this, new UShortEventArgs(value));

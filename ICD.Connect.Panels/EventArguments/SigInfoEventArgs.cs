@@ -3,14 +3,14 @@ using ICD.Connect.Protocol.Sigs;
 
 namespace ICD.Connect.Panels.EventArguments
 {
-	public sealed class SigAdapterEventArgs : GenericEventArgs<ISig>
+	public sealed class SigInfoEventArgs : GenericEventArgs<SigInfo>
 	{
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		/// <param name="sig"></param>
-		public SigAdapterEventArgs(ISig sig)
-			: base(sig)
+		/// <param name="sigInfo"></param>
+		public SigInfoEventArgs(SigInfo sigInfo)
+			: base(sigInfo)
 		{
 		}
 	}

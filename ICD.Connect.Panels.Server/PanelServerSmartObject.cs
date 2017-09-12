@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelServerSmartObject : AbstractSmartObject
 	{
-		public override event EventHandler OnAnyOutput;
+		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly ushort m_SmartObjectId;
 		private readonly PanelServerDevice m_Device;
@@ -47,9 +47,9 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void SigCallbacksOnAnyOutput(object sender, EventArgs eventArgs)
+		private void SigCallbacksOnAnyOutput(object sender, SigInfoEventArgs eventArgs)
 		{
-			OnAnyOutput.Raise(this);
+			OnAnyOutput.Raise(this, new SigInfoEventArgs(eventArgs.Data));
 		}
 
 		#region Methods
@@ -61,7 +61,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void RegisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                     Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                     Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -73,7 +73,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		public override void UnregisterOutputSigChangeCallback(uint number, eSigType type,
-		                                                       Action<SigCallbackManager, SigAdapterEventArgs> callback)
+		                                                       Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -85,7 +85,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="text"></param>
 		public override void SendInputSerial(uint number, string text)
 		{
-			m_Device.SendSig(new Sig(number, m_SmartObjectId, text));
+			m_Device.SendSig(new SigInfo(number, m_SmartObjectId, text));
 		}
 
 		/// <summary>
@@ -95,7 +95,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public override void SendInputAnalog(uint number, ushort value)
 		{
-			m_Device.SendSig(new Sig(number, m_SmartObjectId, value));
+			m_Device.SendSig(new SigInfo(number, m_SmartObjectId, value));
 		}
 
 		/// <summary>
@@ -105,7 +105,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public override void SendInputDigital(uint number, bool value)
 		{
-			m_Device.SendSig(new Sig(number, m_SmartObjectId, value));
+			m_Device.SendSig(new SigInfo(number, m_SmartObjectId, value));
 		}
 
 		#endregion
@@ -114,12 +114,12 @@ namespace ICD.Connect.Panels.Server
 		/// The parent PanelServerDevices hands any output sigs with a SmartObject ID to the child
 		/// SmartObjectAdapter for handling.
 		/// </summary>
-		/// <param name="sig"></param>
-		internal void HandleOutputSig(Sig sig)
+		/// <param name="sigInfo"></param>
+		internal void HandleOutputSig(SigInfo sigInfo)
 		{
-			if (sig.SmartObject != m_SmartObjectId)
+			if (sigInfo.SmartObject != m_SmartObjectId)
 				throw new InvalidOperationException();
-			m_SigCallbacks.RaiseSigChangeCallback(sig);
+			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
 	}
 }
