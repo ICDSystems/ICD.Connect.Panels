@@ -246,8 +246,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			map[sigs.HoldFeedback] = HandleHoldFeedback;
 			map[sigs.IncomingCallDetectedFeedback] = HandleIncomingCallDetectedFeedback;
 			map[sigs.IncomingCallerInformationFeedback] = HandleIncomingCallerInformationFeedback;
-			map[sigs.RingbackFeedback] = HandleRingbackFeedback;
-			map[sigs.RingingFeedback] = HandleRingingFeedback;
 		}
 
 		/// <summary>
@@ -311,20 +309,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 
 		private void HandleIncomingCallerInformationFeedback(Sig sig)
 		{
-			UpdateActiveSource();
-		}
-
-		private void HandleRingbackFeedback(Sig sig)
-		{
-			IcdConsole.PrintLine("Ringback: {0}", sig.BoolValue);
-
-			UpdateActiveSource();
-		}
-
-		private void HandleRingingFeedback(Sig sig)
-		{
-			IcdConsole.PrintLine("Ringing: {0}", sig.BoolValue);
-
 			UpdateActiveSource();
 		}
 
