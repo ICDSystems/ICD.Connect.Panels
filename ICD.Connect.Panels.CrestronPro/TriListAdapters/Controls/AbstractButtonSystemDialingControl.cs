@@ -24,7 +24,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
-		private TPanel m_SubscribedPanel;
 		private ThinConferenceSource m_ActiveSource;
 
 		#region Properties
@@ -50,7 +49,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// Gets the current panel for the control.
 		/// </summary>
 		[CanBeNull]
-		protected TPanel Panel { get { return m_SubscribedPanel; } }
+		protected TPanel Panel { get; private set; }
 
 		#endregion
 
@@ -98,7 +97,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <param name="number"></param>
 		public override void Dial(string number)
 		{
-			if (m_SubscribedPanel == null)
+			if (Panel == null)
 				throw new InvalidOperationException("No panel");
 
 			if (Sigs == null)
@@ -181,16 +180,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <param name="panel"></param>
 		private void SetPanel(TPanel panel)
 		{
-			if (panel == m_SubscribedPanel)
+			if (panel == Panel)
 				return;
 
 			UnsubscribePanel();
 
-			m_SubscribedPanel = panel;
-
-			// Rebuild the feedback callbacks
-			m_SigCallbackMap.Clear();
-			BuildSigCallbacks(m_SigCallbackMap);
+			Panel = panel;
 
 			SubscribePanel();
 		}
@@ -204,6 +199,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// </summary>
 		private void SubscribePanel()
 		{
+			BuildSigCallbacks(m_SigCallbackMap);
+
 			if (Panel == null)
 				return;
 
@@ -219,6 +216,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// </summary>
 		private void UnsubscribePanel()
 		{
+			m_SigCallbackMap.Clear();
+
 			if (Panel == null)
 				return;
 
