@@ -36,7 +36,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			if (Sigs == null)
 				throw new InvalidOperationException("No panel");
 
-			// We will handle auto-answer ourselves
 			Sigs.AutoAnswer.BoolValue = enabled;
 
 			AutoAnswer = Sigs.AutoAnswerFeedback.BoolValue;
