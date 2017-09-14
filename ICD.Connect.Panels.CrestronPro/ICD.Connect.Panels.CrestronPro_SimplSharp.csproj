@@ -97,10 +97,14 @@
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="KrangPlugin.cs" />
     <Compile Include="TriListAdapters\Controls\AbstractButtonSystemDialingControl.cs" />
+    <Compile Include="TriListAdapters\Controls\TswFt5ButtonDialingControl.cs" />
     <Compile Include="TriListAdapters\Controls\TswX52ButtonVoiceControlDialingControl.cs" />
+    <Compile Include="TriListAdapters\X50\AbstractFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\X50\AbstractTswFt5ButtonSystemAdapter.cs" />
     <Compile Include="TriListAdapters\ITriListAdapter.cs" />
     <Compile Include="TriListAdapters\ITriListAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\X50\FtTs600\FtTs600Adapter.cs" />
+    <Compile Include="TriListAdapters\X50\FtTs600\FtTs600AdapterSettings.cs" />
     <Compile Include="TriListAdapters\X50\Tsw1050\Tsw1050Adapter.cs" />
     <Compile Include="TriListAdapters\X50\Tsw1050\Tsw1050AdapterSettings.cs" />
     <Compile Include="TriListAdapters\X50\Tsw550\Tsw550Adapter.cs" />

@@ -90,7 +90,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
 		/// Registers the VoIP extender for the given panel.
 		/// </summary>
 		/// <param name="panel"></param>
-		protected abstract void RegisterVoIpExtender(TPanel panel);
+		protected virtual void RegisterVoIpExtender(TPanel panel)
+		{
+			panel.ExtenderVoipReservedSigs.Use();
+		}
 
 		/// <summary>
 		/// Called from constructor.
