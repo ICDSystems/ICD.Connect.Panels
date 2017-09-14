@@ -4,7 +4,7 @@ using Crestron.SimplSharpPro;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.FtTs600
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
 #if SIMPLSHARP
 	public sealed class FtTs600Adapter : AbstractFt5ButtonAdapter<Crestron.SimplSharpPro.UI.FtTs600, FtTs600AdapterSettings>

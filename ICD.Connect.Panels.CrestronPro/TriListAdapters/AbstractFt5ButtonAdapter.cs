@@ -1,6 +1,6 @@
 ﻿using Crestron.SimplSharpPro.UI;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public abstract class AbstractFt5ButtonAdapter<TPanel, TSettings> : AbstractTswFt5ButtonAdapter<TPanel, TSettings>, IFt5ButtonAdapter
 		where TSettings : IFt5ButtonAdapterSettings, new()

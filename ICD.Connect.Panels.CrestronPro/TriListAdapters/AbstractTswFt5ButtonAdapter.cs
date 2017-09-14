@@ -4,7 +4,7 @@ using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Settings.Core;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, ITswFt5ButtonAdapter
 		where TSettings : ITswFt5ButtonAdapterSettings, new()

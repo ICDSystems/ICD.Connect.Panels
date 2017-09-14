@@ -2,7 +2,7 @@
 using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes.Factories;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.FtTs600
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
 	public sealed class FtTs600AdapterSettings : AbstractFt5ButtonAdapterSettings
 	{
