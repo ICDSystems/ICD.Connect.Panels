@@ -27,10 +27,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #endif
         where TSettings : ITriListAdapterSettings, new()
 	{
+#if SIMPLSHARP
 		/// <summary>
 		/// Raised when the internal wrapped panel changes.
 		/// </summary>
-	    public event PanelChangeCallback OnPanelChanged;
+		public event PanelChangeCallback OnPanelChanged;
 
 	    private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
 		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
@@ -38,8 +39,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly SmartObjectCollectionAdapter m_SmartObjects;
 
 	    private TPanel m_Panel;
+#endif
 
-	    #region Properties
+		#region Properties
 
 #if SIMPLSHARP
 	    /// <summary>
@@ -69,27 +71,67 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	    BasicTriListWithSmartObject ITriListAdapter.Panel { get { return Panel; } }
 #endif
 
-	    /// <summary>
-	    /// Collection of Boolean Inputs sent to the panel.
-	    /// </summary>
-	    protected override IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
+		/// <summary>
+		/// Collection of Boolean Inputs sent to the panel.
+		/// </summary>
+		protected override IDeviceBooleanInputCollection BooleanInput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_BooleanInput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
 
 	    /// <summary>
 	    /// Collection of Integer Inputs sent to the panel.
 	    /// </summary>
-	    protected override IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
+	    protected override IDeviceUShortInputCollection UShortInput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_UShortInput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
 
-	    /// <summary>
-	    /// Collection of String Inputs sent to the panel.
-	    /// </summary>
-	    protected override IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
+		/// <summary>
+		/// Collection of String Inputs sent to the panel.
+		/// </summary>
+		protected override IDeviceStringInputCollection StringInput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_StringInput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
 
-	    /// <summary>
-	    /// Collection containing the loaded SmartObjects of this panel.
-	    /// </summary>
-	    public override ISmartObjectCollection SmartObjects { get { return m_SmartObjects; } }
+		/// <summary>
+		/// Collection containing the loaded SmartObjects of this panel.
+		/// </summary>
+		public override ISmartObjectCollection SmartObjects
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_SmartObjects;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
 
-	    #endregion
+		#endregion
 
 		protected AbstractTriListAdapter()
 		{
@@ -103,7 +145,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #endif
 		}
 
-	    #region Methods
+#region Methods
 
 		/// <summary>
 		/// Release resources.

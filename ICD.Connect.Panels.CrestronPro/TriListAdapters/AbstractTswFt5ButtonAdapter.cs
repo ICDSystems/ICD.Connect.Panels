@@ -1,4 +1,6 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro.DeviceSupport;
+#endif
 using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls;
@@ -6,9 +8,13 @@ using ICD.Connect.Settings.Core;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
+#if SIMPLSHARP
 	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, ITswFt5ButtonAdapter
-		where TSettings : ITswFt5ButtonAdapterSettings, new()
 		where TPanel : TswFt5Button
+#else
+	public abstract class AbstractTswFt5ButtonAdapter<TSettings> : AbstractTriListAdapter<TSettings>, ITswFt5ButtonAdapter
+#endif
+		where TSettings : ITswFt5ButtonAdapterSettings, new()
 	{
 		private const int VOIP_DIALER_CONTROL_ID = 1;
 
@@ -22,7 +28,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		public IDialingDeviceControl VoIpDialingControl { get { return m_DialingControl; }}
 
-		#region Settings
+#region Settings
 
 		/// <summary>
 		/// Override to clear the instance settings.
@@ -70,6 +76,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Controls.Add(m_DialingControl);
 		}
 
+#if SIMPLSHARP
 		/// <summary>
 		/// Called before registration.
 		/// Override to control which extenders are used with the panel.
@@ -94,6 +101,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			panel.ExtenderVoipReservedSigs.Use();
 		}
+#endif
 
 		/// <summary>
 		/// Called from constructor.
@@ -103,7 +111,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <returns></returns>
 		protected abstract IDialingDeviceControl InstantiateDialingControl(int id);
 
-		#endregion
+#endregion
 	}
 
 	public abstract class AbstractTswFt5ButtonAdapterSettings : AbstractTriListAdapterSettings,

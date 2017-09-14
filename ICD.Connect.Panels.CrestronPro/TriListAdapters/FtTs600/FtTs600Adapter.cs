@@ -1,8 +1,8 @@
 ﻿#if SIMPLSHARP
-#endif
 using Crestron.SimplSharpPro;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
+#endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {

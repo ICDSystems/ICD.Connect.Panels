@@ -1,6 +1,6 @@
 ﻿#if SIMPLSHARP
-#endif
 using Crestron.SimplSharpPro;
+#endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060
 {

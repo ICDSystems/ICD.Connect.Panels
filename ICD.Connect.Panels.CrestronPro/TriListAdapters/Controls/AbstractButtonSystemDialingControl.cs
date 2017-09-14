@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using Crestron.SimplSharpPro;
@@ -576,3 +577,4 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		#endregion
 	}
 }
+#endif
