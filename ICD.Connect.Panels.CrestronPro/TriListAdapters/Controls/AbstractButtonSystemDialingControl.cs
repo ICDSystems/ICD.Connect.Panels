@@ -6,10 +6,11 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.X50;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 {
@@ -237,10 +238,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			if (sigs == null)
 				return;
 
-			map[sigs.BusyFeedback] = HandleBusyFeedback;
 			map[sigs.CallActiveFeedback] = HandleCallActiveFeedback;
 			map[sigs.CallTerminatedFeedback] = HandleCallTerminatedFeedback;
-			map[sigs.ConnectedFeedback] = HandleConnectedFeedback;
 			map[sigs.DialingFeedback] = HandleDialingFeedback;
 			map[sigs.DoNotDisturbFeedback] = HandleDoNotDisturbFeedback;
 			map[sigs.HoldFeedback] = HandleHoldFeedback;
@@ -260,42 +259,53 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 				callback(args.Sig);
 		}
 
-		private void HandleBusyFeedback(Sig sig)
-		{
-			IcdConsole.PrintLine("Busy: {0}", sig.BoolValue);
-		}
-
+		/// <summary>
+		/// Called when the CallActiveFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleCallActiveFeedback(Sig sig)
 		{
 			IcdConsole.PrintLine("Call active: {0}", sig.BoolValue);
+
+			if (sig.BoolValue)
+				LazyLoadActiveSource();
 		}
 
+		/// <summary>
+		/// Called when the CallTerminated sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleCallTerminatedFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Call terminated: {0}", sig.BoolValue);
+			if (sig.BoolValue)
+				ClearActiveSource();
 		}
 
-		private void HandleConnectedFeedback(Sig sig)
-		{
-			IcdConsole.PrintLine("Connected: {0}", sig.BoolValue);
-			UpdateActiveSource();
-		}
-
+		/// <summary>
+		/// Called when the CallActiveFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleDialingFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Dialing: {0}", sig.BoolValue);
-			UpdateActiveSource();
+			if (sig.BoolValue)
+				LazyLoadActiveSource();
 		}
 
+		/// <summary>
+		/// Called when the CallActiveFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleDoNotDisturbFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Do not disturb: {0}", sig.BoolValue);
 			DoNotDisturb = sig.BoolValue;
 		}
 
+		/// <summary>
+		/// Called when the HoldFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleHoldFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Hold: {0}", sig.BoolValue);
 			UpdateActiveSource();
 		}
 
@@ -303,8 +313,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		{
 			IcdConsole.PrintLine("Incoming call detected: {0}", sig.BoolValue);
 
-			if (m_ActiveSource != null)
-				m_ActiveSource.Number = sig.StringValue;
+			if (!sig.BoolValue)
+				return;
+
+			LazyLoadActiveSource();
 		}
 
 		private void HandleIncomingCallerInformationFeedback(Sig sig)
@@ -332,52 +344,35 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 				m_ActiveSource.Number = NumberFromUri(uri);
 			}
 
-			m_ActiveSource.Status = StatusFromSigs(sigs);
-			m_ActiveSource.Direction = DirectionFromSigs(sigs);
-			m_ActiveSource.AnswerState = AnswerStateFromSigs(sigs);
+			m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
+				                        ? eConferenceSourceStatus.OnHold
+				                        : eConferenceSourceStatus.Connected;
 
-			// TODO
-			m_ActiveSource.Start = null;
-			m_ActiveSource.End = null;
-		}
+			// Assume direction is outgoing unless otherwise set.
+			if (m_ActiveSource.Direction != eConferenceSourceDirection.Incoming)
+				m_ActiveSource.Direction = eConferenceSourceDirection.Outgoing;
+			
+			if (sigs.IncomingCallDetectedFeedback.BoolValue)
+				m_ActiveSource.Direction = eConferenceSourceDirection.Incoming;
 
-		/// <summary>
-		/// Gets the conference source status from the current sig states.
-		/// </summary>
-		/// <param name="sigs"></param>
-		/// <returns></returns>
-		private static eConferenceSourceStatus StatusFromSigs(TVoIpSigs sigs)
-		{
-			if (sigs == null)
-				throw new ArgumentNullException("sigs");
+			// Start/End
+			switch (m_ActiveSource.Status)
+			{
+				case eConferenceSourceStatus.Connected:
+					m_ActiveSource.Start = m_ActiveSource.Start ?? IcdEnvironment.GetLocalTime();
+					break;
+				case eConferenceSourceStatus.Disconnected:
+					m_ActiveSource.End = m_ActiveSource.End ?? IcdEnvironment.GetLocalTime();
+					break;
+			}
 
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Gets the direction from the current sig states.
-		/// </summary>
-		/// <param name="sigs"></param>
-		/// <returns></returns>
-		private static eConferenceSourceDirection DirectionFromSigs(TVoIpSigs sigs)
-		{
-			if (sigs == null)
-				throw new ArgumentNullException("sigs");
-
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Gets the answer state from the current sig states.
-		/// </summary>
-		/// <param name="sigs"></param>
-		/// <returns></returns>
-		private static eConferenceSourceAnswerState AnswerStateFromSigs(TVoIpSigs sigs)
-		{
-			if (sigs == null)
-				throw new ArgumentNullException("sigs");
-
-			throw new NotImplementedException();
+			// Answer state
+			switch (m_ActiveSource.Status)
+			{
+				case eConferenceSourceStatus.Connected:
+					m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
+					break;
+			}
 		}
 
 		/// <summary>
@@ -401,12 +396,77 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		#region Source Callbacks
 
 		/// <summary>
+		/// If the active source is currently null, creates a new source.
+		/// Updates the active source.
+		/// </summary>
+		private void LazyLoadActiveSource()
+		{
+			bool instantiated = false;
+
+			if (m_ActiveSource == null)
+			{
+				m_ActiveSource = new ThinConferenceSource();
+				instantiated = true;
+
+				Subscribe(m_ActiveSource);
+			}
+
+			UpdateActiveSource();
+
+			if (instantiated)
+				OnSourceAdded.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
+		}
+
+		/// <summary>
+		/// Clears the current active source to null.
+		/// </summary>
+		private void ClearActiveSource()
+		{
+			if (m_ActiveSource == null)
+				return;
+
+			Unsubscribe(m_ActiveSource);
+
+			m_ActiveSource.Status = eConferenceSourceStatus.Disconnected;
+			m_ActiveSource.End = IcdEnvironment.GetLocalTime();
+
+			m_ActiveSource = null;
+		}
+
+		/// <summary>
+		/// Subscribe to the source callbacks.
+		/// </summary>
+		/// <param name="source"></param>
+		private void Subscribe(ThinConferenceSource source)
+		{
+			source.OnSendDtmfCallback += SendDtmfCallback;
+			source.OnHangupCallback += HangupCallback;
+			source.OnResumeCallback += ResumeCallback;
+			source.OnHoldCallback += HoldCallback;
+			source.OnAnswerCallback += AnswerCallback;
+		}
+
+		/// <summary>
+		/// Unsubscribe from the source callbacks.
+		/// </summary>
+		/// <param name="source"></param>
+		private void Unsubscribe(ThinConferenceSource source)
+		{
+			source.OnSendDtmfCallback -= SendDtmfCallback;
+			source.OnHangupCallback -= HangupCallback;
+			source.OnResumeCallback -= ResumeCallback;
+			source.OnHoldCallback -= HoldCallback;
+			source.OnAnswerCallback -= AnswerCallback;
+		}
+
+		/// <summary>
 		/// Sends a DTMF string to the current source.
 		/// </summary>
-		/// <param name="digits"></param>
-		private void SendDtmfCallback(string digits)
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
+		private void SendDtmfCallback(object sender, StringEventArgs eventArgs)
 		{
-			foreach (char item in digits)
+			foreach (char item in eventArgs.Data)
 				SendDtmfCallback(item);
 		}
 
@@ -474,7 +534,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <summary>
 		/// Hangs-up the current source.
 		/// </summary>
-		private void HangupCallback()
+		private void HangupCallback(object sender, EventArgs eventArgs)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
@@ -485,7 +545,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <summary>
 		/// Resumes the current source from hold.
 		/// </summary>
-		private void ResumeCallback()
+		private void ResumeCallback(object sender, EventArgs eventArgs)
 		{
 			// Is this possible?
 			Logger.AddEntry(eSeverity.Warning, "{0} - Resume is unsupported", this);
@@ -494,7 +554,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <summary>
 		/// Places the current source on hold.
 		/// </summary>
-		private void HoldCallback()
+		private void HoldCallback(object sender, EventArgs eventArgs)
 		{
 			// Is this possible?
 			Logger.AddEntry(eSeverity.Warning, "{0} - Hold is unsupported", this);
@@ -503,7 +563,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <summary>
 		/// Answers the current incoming source.
 		/// </summary>
-		private void AnswerCallback()
+		private void AnswerCallback(object sender, EventArgs eventArgs)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
