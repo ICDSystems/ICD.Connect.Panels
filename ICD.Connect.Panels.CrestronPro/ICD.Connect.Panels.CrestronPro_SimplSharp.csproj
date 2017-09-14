@@ -111,6 +111,12 @@
     <Compile Include="TriListAdapters\X52\Tsw552\Tsw552Adapter.cs" />
     <Compile Include="TriListAdapters\X52\Tsw552\Tsw552AdapterSettings.cs" />
     <Compile Include="TriListAdapters\X60\AbstractTswX60BaseClassAdapter.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw1060Nc\Tsw1060NcAdapter.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw1060Nc\Tsw1060NcAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw560Nc\Tsw560NcAdapter.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw560Nc\Tsw560NcAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw760Nc\Tsw760NcAdapter.cs" />
+    <Compile Include="TriListAdapters\X60\Tsw760Nc\Tsw760NcAdapterSettings.cs" />
     <Compile Include="TriListAdapters\X60\Tsw1060\Tsw1060Adapter.cs" />
     <Compile Include="TriListAdapters\X60\Tsw1060\Tsw1060AdapterSettings.cs" />
     <Compile Include="TriListAdapters\X50\Tsw750\Tsw750AdapterSettings.cs" />
