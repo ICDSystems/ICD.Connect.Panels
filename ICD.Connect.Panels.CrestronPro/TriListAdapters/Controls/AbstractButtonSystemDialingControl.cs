@@ -265,8 +265,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// <param name="sig"></param>
 		private void HandleCallActiveFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Call active: {0}", sig.BoolValue);
-
 			if (sig.BoolValue)
 				LazyLoadActiveSource();
 		}
@@ -309,16 +307,20 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 			UpdateActiveSource();
 		}
 
+		/// <summary>
+		/// Called when the IncomingCallDetectedFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleIncomingCallDetectedFeedback(Sig sig)
 		{
-			IcdConsole.PrintLine("Incoming call detected: {0}", sig.BoolValue);
-
-			if (!sig.BoolValue)
-				return;
-
-			LazyLoadActiveSource();
+			if (sig.BoolValue)
+				LazyLoadActiveSource();
 		}
 
+		/// <summary>
+		/// Called when the IncomingCallerInformationFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
 		private void HandleIncomingCallerInformationFeedback(Sig sig)
 		{
 			UpdateActiveSource();
