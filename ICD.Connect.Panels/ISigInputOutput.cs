@@ -41,7 +41,8 @@ namespace ICD.Connect.Panels
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
 		[PublicAPI]
-		void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback);
+		void UnregisterOutputSigChangeCallback(uint number, eSigType type,
+		                                       Action<SigCallbackManager, SigInfoEventArgs> callback);
 
 		/// <summary>
 		/// Sends the serial data to the panel.

@@ -25,7 +25,8 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Maps sigs to registered callbacks.
 		/// </summary>
-		private readonly Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> m_SigToCallback;
+		private readonly Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>>
+			m_SigToCallback;
 
 		private readonly SafeCriticalSection m_RegistrationSection;
 
@@ -45,7 +46,8 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		public SigCallbackManager()
 		{
-			m_SigToCallback = new Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>>();
+			m_SigToCallback =
+				new Dictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>>();
 			m_RegistrationSection = new SafeCriticalSection();
 		}
 
@@ -80,7 +82,8 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void RegisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		public void RegisterSigChangeCallback(uint number, eSigType type,
+		                                      Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_RegistrationSection.Execute(() => RegisterCallback(m_SigToCallback, number, type, callback));
 		}
@@ -91,7 +94,8 @@ namespace ICD.Connect.Panels
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void UnregisterSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		public void UnregisterSigChangeCallback(uint number, eSigType type,
+		                                        Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_RegistrationSection.Execute(() => UnregisterCallback(m_SigToCallback, number, type, callback));
 		}
@@ -106,8 +110,9 @@ namespace ICD.Connect.Panels
 		/// <param name="callbacks"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void RegisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks, eSigType type,
-											 Action<SigCallbackManager, SigInfoEventArgs> callback)
+		private static void RegisterCallback(
+			IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks, eSigType type,
+			Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (!callbacks.ContainsKey(type))
 				callbacks[type] = new IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>();
@@ -121,8 +126,9 @@ namespace ICD.Connect.Panels
 		/// <param name="key"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void RegisterCallback(IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> callbacks,
-												uint key, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		private static void RegisterCallback(
+			IDictionary<uint, Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>> callbacks,
+			uint key, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (!callbacks.ContainsKey(key))
 				callbacks[key] = new Dictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>>();
@@ -135,8 +141,9 @@ namespace ICD.Connect.Panels
 		/// <param name="callbacks"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		private static void UnregisterCallback(IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks,
-											   eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		private static void UnregisterCallback(
+			IDictionary<eSigType, IcdHashSet<Action<SigCallbackManager, SigInfoEventArgs>>> callbacks,
+			eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			if (callbacks.ContainsKey(type))
 				callbacks[type].Remove(callback);

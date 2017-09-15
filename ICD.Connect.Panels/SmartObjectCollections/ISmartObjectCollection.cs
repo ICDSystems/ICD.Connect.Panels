@@ -3,14 +3,14 @@ using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels.SmartObjectCollections
 {
-    public delegate void AddSmartObject(object sender, ISmartObject e);
+	public delegate void AddSmartObject(object sender, ISmartObject e);
 
-    public delegate void RemoveSmartObject(object sender, ISmartObject e);
+	public delegate void RemoveSmartObject(object sender, ISmartObject e);
 
 	public interface ISmartObjectCollection : IEnumerable<KeyValuePair<uint, ISmartObject>>
 	{
-        event AddSmartObject OnSmartObjectSubscribe;
-        event RemoveSmartObject OnSmartObjectUnsubscribe;
+		event AddSmartObject OnSmartObjectSubscribe;
+		event RemoveSmartObject OnSmartObjectUnsubscribe;
 
 		/// <summary>
 		/// Get the object at the specified number.
@@ -27,6 +27,5 @@ namespace ICD.Connect.Panels.SmartObjectCollections
 		/// Clears the cached smart objects.
 		/// </summary>
 		void Clear();
-
 	}
 }
