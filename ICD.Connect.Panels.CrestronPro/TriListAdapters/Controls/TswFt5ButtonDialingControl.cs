@@ -2,7 +2,6 @@
 using System;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Services.Logging;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.X50;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 {

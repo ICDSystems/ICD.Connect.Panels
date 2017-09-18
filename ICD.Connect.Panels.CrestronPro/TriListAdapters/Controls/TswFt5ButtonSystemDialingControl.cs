@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.X50;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 {

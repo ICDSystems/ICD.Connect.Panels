@@ -2,7 +2,6 @@
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.X50;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52
