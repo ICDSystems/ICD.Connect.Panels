@@ -3,7 +3,7 @@ using System;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Services.Logging;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public sealed class TswFt5ButtonDialingControl :
 	AbstractButtonSystemDialingControl<ITswFt5ButtonAdapter, TswFt5Button, TsxVoipReservedSigs>

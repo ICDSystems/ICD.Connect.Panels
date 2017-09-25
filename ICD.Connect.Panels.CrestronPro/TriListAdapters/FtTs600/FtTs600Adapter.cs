@@ -1,7 +1,7 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using ICD.Connect.Conferencing.Controls;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600

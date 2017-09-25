@@ -115,7 +115,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	}
 
 	public abstract class AbstractTswFt5ButtonAdapterSettings : AbstractTriListAdapterSettings,
-															ITswFt5ButtonAdapterSettings
+	                                                            ITswFt5ButtonAdapterSettings
 	{
 		private const string ENABLE_VOIP_ELEMENT = "EnableVoIP";
 

@@ -13,7 +13,7 @@ using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public abstract class AbstractButtonSystemDialingControl<TParent, TPanel, TVoIpSigs> : AbstractDialingDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter

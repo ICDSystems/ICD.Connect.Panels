@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.X52;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
-	public sealed class TswFt5ButtonSystemDialingControl :
-		AbstractButtonSystemDialingControl<ITswFt5ButtonSystemAdapter, TswFt5ButtonSystem, Tss752VoipReservedSigs>
+	public sealed class TswX52ButtonVoiceControlDialingControl :
+		AbstractButtonSystemDialingControl<ITswX52ButtonVoiceControlAdapter, Tswx52ButtonVoiceControl, Tswx52VoipReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
 		/// </summary>
-		protected override Tss752VoipReservedSigs Sigs
+		protected override Tswx52VoipReservedSigs Sigs
 		{
 			get { return Panel == null ? null : Panel.ExtenderVoipReservedSigs; }
 		}
@@ -22,7 +23,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		public TswFt5ButtonSystemDialingControl(ITswFt5ButtonSystemAdapter parent, int id)
+		public TswX52ButtonVoiceControlDialingControl(ITswX52ButtonVoiceControlAdapter parent, int id)
 			: base(parent, id)
 		{
 		}
@@ -62,7 +63,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls
 		{
 			base.BuildSigCallbacks(map);
 
-			Tss752VoipReservedSigs sigs = Sigs;
+			Tswx52VoipReservedSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
