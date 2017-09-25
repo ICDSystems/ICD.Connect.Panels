@@ -1,6 +1,8 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Conferencing.Controls;
+using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 #endif
 
@@ -29,12 +31,32 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
+		/// Called from constructor.
+		/// Override to control the type of backlight control to instantiate.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected override IPowerDeviceControl InstantiateBacklightControl(int id)
+		{
+			return new TswFt5ButtonSystemBacklightControl(this, id);
+		}
+
+		/// <summary>
 		/// Registers the VoIP extender for the given panel.
 		/// </summary>
 		/// <param name="panel"></param>
 		protected override void RegisterVoIpExtender(TPanel panel)
 		{
 			panel.ExtenderVoipReservedSigs.Use();
+		}
+
+		/// <summary>
+		/// Registers the system extender for the given panel.
+		/// </summary>
+		/// <param name="panel"></param>
+		protected override void RegisterSystemExtender(TPanel panel)
+		{
+			panel.ExtenderSystemReservedSigs.Use();
 		}
 #endif
 	}

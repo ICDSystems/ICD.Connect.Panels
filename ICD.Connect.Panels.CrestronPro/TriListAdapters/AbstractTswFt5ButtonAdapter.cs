@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Devices.Controls;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
 using ICD.Common.Properties;
@@ -17,18 +18,38 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		where TSettings : ITswFt5ButtonAdapterSettings, new()
 	{
 		private const int VOIP_DIALER_CONTROL_ID = 1;
+		private const int BACKLIGHT_CONTROL_ID = 2;
 
 		private IDialingDeviceControl m_DialingControl;
+		private readonly IPowerDeviceControl m_BacklightControl;
 
 		// Used with settings
 		private bool m_EnableVoIp;
+
+		#region Properties
 
 		/// <summary>
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
 		public IDialingDeviceControl VoIpDialingControl { get { return m_DialingControl; }}
 
-#region Settings
+		/// <summary>
+		/// Gets the backlight control for this panel.
+		/// </summary>
+		public IPowerDeviceControl BacklightControl { get { return m_BacklightControl; } }
+
+		#endregion
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		protected AbstractTswFt5ButtonAdapter()
+		{
+			m_BacklightControl = InstantiateBacklightControl(BACKLIGHT_CONTROL_ID);
+			Controls.Add(m_BacklightControl);
+		}
+
+		#region Settings
 
 		/// <summary>
 		/// Override to clear the instance settings.
@@ -89,8 +110,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			if (panel == null)
 				return;
 
+			RegisterSystemExtender(panel);
+
 			if (m_EnableVoIp)
 				RegisterVoIpExtender(panel);
+		}
+
+		/// <summary>
+		/// Registers the system extender for the given panel.
+		/// </summary>
+		/// <param name="panel"></param>
+		protected virtual void RegisterSystemExtender(TPanel panel)
+		{
+			panel.ExtenderSystemReservedSigs.Use();
 		}
 
 		/// <summary>
@@ -111,7 +143,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <returns></returns>
 		protected abstract IDialingDeviceControl InstantiateDialingControl(int id);
 
-#endregion
+		/// <summary>
+		/// Called from constructor.
+		/// Override to control the type of backlight control to instantiate.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected abstract IPowerDeviceControl InstantiateBacklightControl(int id);
+
+		#endregion
 	}
 
 	public abstract class AbstractTswFt5ButtonAdapterSettings : AbstractTriListAdapterSettings,

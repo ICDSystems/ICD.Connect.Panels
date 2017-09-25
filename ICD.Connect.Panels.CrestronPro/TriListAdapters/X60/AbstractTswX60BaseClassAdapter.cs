@@ -1,5 +1,7 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharpPro.UI;
+using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 #endif
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X52;
 
@@ -15,6 +17,25 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 #endif
 		where TSettings : ITswX60BaseClassAdapterSettings, new()
 	{
+		/// <summary>
+		/// Called from constructor.
+		/// Override to control the type of backlight control to instantiate.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected override IPowerDeviceControl InstantiateBacklightControl(int id)
+		{
+			return new TswX60BaseBacklightControl(this, id);
+		}
+
+		/// <summary>
+		/// Registers the system extender for the given panel.
+		/// </summary>
+		/// <param name="panel"></param>
+		protected override void RegisterSystemExtender(TPanel panel)
+		{
+			panel.ExtenderSystemReservedSigs.Use();
+		}
 	}
 
 	public abstract class AbstractTswX60BaseClassAdapterSettings : AbstractTswX52ButtonVoiceControlAdapterSettings,
