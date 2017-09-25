@@ -96,7 +96,7 @@
   <ItemGroup>
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="KrangPlugin.cs" />
-    <Compile Include="TriListAdapters\Controls\Voip\AbstractButtonSystemDialingControl.cs" />
+    <Compile Include="TriListAdapters\Controls\Voip\AbstractFt5ButtonDialingControl.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonDialingControl.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\TswX52ButtonVoiceControlDialingControl.cs" />
     <Compile Include="TriListAdapters\AbstractFt5ButtonAdapter.cs" />

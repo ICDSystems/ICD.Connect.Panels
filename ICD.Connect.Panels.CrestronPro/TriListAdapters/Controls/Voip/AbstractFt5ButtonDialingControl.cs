@@ -15,7 +15,7 @@ using ICD.Connect.Conferencing.EventArguments;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
-	public abstract class AbstractButtonSystemDialingControl<TParent, TPanel, TVoIpSigs> : AbstractDialingDeviceControl<TParent>
+	public abstract class AbstractFt5ButtonDialingControl<TParent, TPanel, TVoIpSigs> : AbstractDialingDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
@@ -60,7 +60,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		protected AbstractButtonSystemDialingControl(TParent parent, int id)
+		protected AbstractFt5ButtonDialingControl(TParent parent, int id)
 			: base(parent, id)
 		{
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();

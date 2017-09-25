@@ -7,7 +7,7 @@ using Crestron.SimplSharpPro.DeviceSupport;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public sealed class TswFt5ButtonSystemDialingControl :
-		AbstractButtonSystemDialingControl<ITswFt5ButtonSystemAdapter, TswFt5ButtonSystem, Tss752VoipReservedSigs>
+		AbstractFt5ButtonDialingControl<ITswFt5ButtonSystemAdapter, TswFt5ButtonSystem, Tss752VoipReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.

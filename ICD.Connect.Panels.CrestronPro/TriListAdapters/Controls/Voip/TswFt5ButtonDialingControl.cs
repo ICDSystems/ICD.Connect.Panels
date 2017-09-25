@@ -6,7 +6,7 @@ using ICD.Common.Services.Logging;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public sealed class TswFt5ButtonDialingControl :
-	AbstractButtonSystemDialingControl<ITswFt5ButtonAdapter, TswFt5Button, TsxVoipReservedSigs>
+	AbstractFt5ButtonDialingControl<ITswFt5ButtonAdapter, TswFt5Button, TsxVoipReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.

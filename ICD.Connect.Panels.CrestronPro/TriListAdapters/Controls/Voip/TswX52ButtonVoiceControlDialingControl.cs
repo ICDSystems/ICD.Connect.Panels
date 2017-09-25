@@ -8,7 +8,7 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.X52;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public sealed class TswX52ButtonVoiceControlDialingControl :
-		AbstractButtonSystemDialingControl<ITswX52ButtonVoiceControlAdapter, Tswx52ButtonVoiceControl, Tswx52VoipReservedSigs>
+		AbstractFt5ButtonDialingControl<ITswX52ButtonVoiceControlAdapter, Tswx52ButtonVoiceControl, Tswx52VoipReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
