@@ -49,21 +49,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	    /// </summary>
 	    [PublicAPI]
 	    [CanBeNull]
-	    public TPanel Panel
-	    {
-		    get { return m_Panel; }
-		    private set
-		    {
-			    if (value == m_Panel)
-				    return;
-
-			    m_Panel = value;
-
-			    PanelChangeCallback handler = OnPanelChanged;
-			    if (handler != null)
-				    handler(this, m_Panel);
-		    }
-	    }
+	    public TPanel Panel { get { return m_Panel; } }
 
 	    /// <summary>
 	    /// Gets the internal wrapped panel instance.
@@ -188,7 +174,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 				}
 			}
 
-			Panel = panel;
+			m_Panel = panel;
 
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
 			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
@@ -209,6 +195,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			Subscribe(Panel);
 			UpdateCachedOnlineStatus();
+
+			PanelChangeCallback handler = OnPanelChanged;
+			if (handler != null)
+				handler(this, m_Panel);
 		}
 
 		/// <summary>
