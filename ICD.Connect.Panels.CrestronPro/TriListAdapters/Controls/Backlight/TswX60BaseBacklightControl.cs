@@ -1,4 +1,5 @@
-﻿using Crestron.SimplSharpPro.UI;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro.UI;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X60;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
@@ -25,3 +26,4 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 	}
 }
+#endif

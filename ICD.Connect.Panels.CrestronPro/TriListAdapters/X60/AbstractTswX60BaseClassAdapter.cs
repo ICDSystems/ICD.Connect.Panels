@@ -17,6 +17,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 #endif
 		where TSettings : ITswX60BaseClassAdapterSettings, new()
 	{
+#if SIMPLSHARP
 		/// <summary>
 		/// Called from constructor.
 		/// Override to control the type of backlight control to instantiate.
@@ -36,6 +37,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 		{
 			panel.ExtenderSystemReservedSigs.Use();
 		}
+#endif
 	}
 
 	public abstract class AbstractTswX60BaseClassAdapterSettings : AbstractTswX52ButtonVoiceControlAdapterSettings,

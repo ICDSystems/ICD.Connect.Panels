@@ -1,4 +1,5 @@
-﻿using Crestron.SimplSharpPro.DeviceSupport;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro.DeviceSupport;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
@@ -24,3 +25,4 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 	}
 }
+#endif
