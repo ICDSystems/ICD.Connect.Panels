@@ -105,6 +105,8 @@
     <Compile Include="TriListAdapters\Controls\Voip\TswX52ButtonVoiceControlDialingControl.cs" />
     <Compile Include="TriListAdapters\AbstractFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonSystemAdapter.cs" />
+    <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapter.cs" />
+    <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapterSettings.cs" />
     <Compile Include="TriListAdapters\ITriListAdapter.cs" />
     <Compile Include="TriListAdapters\ITriListAdapterSettings.cs" />
     <Compile Include="TriListAdapters\FtTs600\FtTs600Adapter.cs" />
