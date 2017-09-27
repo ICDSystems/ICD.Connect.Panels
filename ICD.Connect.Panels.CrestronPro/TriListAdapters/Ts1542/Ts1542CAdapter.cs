@@ -1,10 +1,13 @@
 using System;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
+#endif
 using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes.Factories;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {
+#if SIMPLSHARP
 	public sealed class Ts1542CAdapter : AbstractTs1542Adapter<Crestron.SimplSharpPro.UI.Ts1542C, Ts1542CAdapterSettings>
 	{
 		/// <summary>
@@ -18,6 +21,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 			return new Crestron.SimplSharpPro.UI.Ts1542C(ipid, controlSystem);
 		}
 	}
+#else
+	public sealed class Ts1542CAdapter : AbstractTs1542Adapter<Ts1542CAdapterSettings>
+	{
+	}
+#endif
 
 	public sealed class Ts1542CAdapterSettings : AbstractTs1542AdapterSettings
 	{

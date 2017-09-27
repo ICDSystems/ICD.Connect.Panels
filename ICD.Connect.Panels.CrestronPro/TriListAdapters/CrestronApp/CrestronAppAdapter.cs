@@ -1,7 +1,10 @@
-﻿using Crestron.SimplSharpPro;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro;
+#endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 {
+#if SIMPLSHARP
 	public sealed class CrestronAppAdapter : AbstractTriListAdapter<Crestron.SimplSharpPro.UI.CrestronApp, CrestronAppAdapterSettings>
 	{
 		/// <summary>
@@ -15,4 +18,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 			return new Crestron.SimplSharpPro.UI.CrestronApp(ipid, controlSystem);
 		}
 	}
+#else
+	public sealed class CrestronAppAdapter : AbstractTriListAdapter<CrestronAppAdapterSettings>
+	{
+	}
+#endif
 }

@@ -1,9 +1,15 @@
-﻿using Crestron.SimplSharpPro.UI;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro.UI;
+#endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
+#if SIMPLSHARP
 	public abstract class AbstractDge1BaseAdapter<TPanel, TSettings> : AbstractDgeAdapter<TPanel, TSettings>, IDge1BaseAdapter
 		where TPanel : Dge1Base
+#else
+	public abstract class AbstractDge1BaseAdapter<TSettings> : AbstractDgeAdapter<TSettings>, IDge1BaseAdapter
+#endif
 		where TSettings : IDge1BaseAdapterSettings, new()
 	{
 	}

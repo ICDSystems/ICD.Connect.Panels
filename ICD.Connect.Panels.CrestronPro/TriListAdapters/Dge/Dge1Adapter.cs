@@ -1,11 +1,14 @@
 ﻿using System;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
+#endif
 using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes.Factories;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
+#if SIMPLSHARP
 	public sealed class Dge1Adapter : AbstractDge1BaseAdapter<Dge1, Dge1AdapterSettings>
 	{
 		/// <summary>
@@ -19,6 +22,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 			return new Dge1(ipid, controlSystem);
 		}
 	}
+#else
+	public sealed class Dge1Adapter : AbstractDge1BaseAdapter<Dge1AdapterSettings>
+	{
+	}
+#endif
 
 	public sealed class Dge1AdapterSettings : AbstractDge1BaseAdapterSettings
 	{
