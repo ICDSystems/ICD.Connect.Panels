@@ -1,6 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes.Factories;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
@@ -23,7 +23,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static FtTs600AdapterSettings FromXml(string xml)
 		{
 			FtTs600AdapterSettings output = new FtTs600AdapterSettings();

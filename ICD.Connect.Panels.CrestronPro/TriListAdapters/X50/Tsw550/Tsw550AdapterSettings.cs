@@ -1,6 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes.Factories;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw550
 {
@@ -26,7 +26,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw550
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static Tsw550AdapterSettings FromXml(string xml)
 		{
 			Tsw550AdapterSettings output = new Tsw550AdapterSettings();

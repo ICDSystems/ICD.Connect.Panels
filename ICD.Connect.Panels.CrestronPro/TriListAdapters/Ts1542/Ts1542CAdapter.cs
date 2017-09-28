@@ -3,7 +3,7 @@ using System;
 using Crestron.SimplSharpPro;
 #endif
 using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes.Factories;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {
@@ -46,7 +46,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static Ts1542CAdapterSettings FromXml(string xml)
 		{
 			Ts1542CAdapterSettings output = new Ts1542CAdapterSettings();

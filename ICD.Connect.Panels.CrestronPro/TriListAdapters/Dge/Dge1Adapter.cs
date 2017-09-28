@@ -4,7 +4,7 @@ using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
 using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes.Factories;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
@@ -47,7 +47,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static Dge1AdapterSettings FromXml(string xml)
 		{
 			Dge1AdapterSettings output = new Dge1AdapterSettings();
