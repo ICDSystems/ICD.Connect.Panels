@@ -1,9 +1,7 @@
 ﻿using System;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
-using ICD.Connect.Settings;
-using ICD.Connect.Settings.Attributes.Factories;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.Server
 {
@@ -18,10 +16,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public override string FactoryName { get { return FACTORY_NAME; } }
 
-		public override Type OriginatorType
-		{
-			get { return typeof(PanelServerDevice); }
-		}
+		public override Type OriginatorType { get { return typeof(PanelServerDevice); } }
 
 		public ushort Port { get; set; }
 
@@ -41,10 +36,10 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static PanelServerDeviceSettings FromXml(string xml)
 		{
-			ushort port = XmlUtils.ReadChildElementContentAsUShort(xml, PORT_ELEMENT);
+			ushort port = XmlUtils.TryReadChildElementContentAsUShort(xml, PORT_ELEMENT) ?? 0;
 
 			PanelServerDeviceSettings output = new PanelServerDeviceSettings
 			{

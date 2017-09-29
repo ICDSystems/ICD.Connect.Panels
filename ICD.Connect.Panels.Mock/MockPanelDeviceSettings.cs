@@ -1,8 +1,6 @@
 using System;
 using ICD.Common.Properties;
-using ICD.Connect.Settings;
-using ICD.Connect.Settings.Attributes.Factories;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.Mock
 {
@@ -25,7 +23,7 @@ namespace ICD.Connect.Panels.Mock
 		/// </summary>
 		/// <param name="xml"></param>
 		/// <returns></returns>
-		[PublicAPI, XmlPanelSettingsFactoryMethod(FACTORY_NAME)]
+		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
 		public static MockPanelDeviceSettings FromXml(string xml)
 		{
 			MockPanelDeviceSettings output = new MockPanelDeviceSettings();

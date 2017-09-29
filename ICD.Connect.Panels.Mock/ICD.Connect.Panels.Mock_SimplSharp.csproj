@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AbstractMockSig.cs" />
     <Compile Include="AbstractMockSigCollection.cs" />
+    <Compile Include="KrangPlugin.cs" />
     <Compile Include="MockPanelDevice.cs" />
     <Compile Include="MockPanelDeviceSettings.cs" />
     <Compile Include="MockSigCollections.cs" />
