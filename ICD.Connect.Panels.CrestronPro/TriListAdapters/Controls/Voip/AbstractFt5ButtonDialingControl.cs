@@ -534,6 +534,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
 
+			Sigs.Reject();
 			Sigs.Hangup();
 		}
 
