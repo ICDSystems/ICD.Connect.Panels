@@ -348,16 +348,25 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				m_ActiveSource.Number = SipUtils.NumberFromUri(uri);
 			}
 
-			m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
-				                        ? eConferenceSourceStatus.OnHold
-				                        : eConferenceSourceStatus.Connected;
+			// Status
+			if (sigs.CallActiveFeedback.BoolValue)
+			{
+				m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
+										? eConferenceSourceStatus.OnHold
+										: eConferenceSourceStatus.Connected;
+			}
+			else
+			{
+				m_ActiveSource.Status = sigs.DialingFeedback.BoolValue
+					                        ? eConferenceSourceStatus.Dialing
+					                        : eConferenceSourceStatus.Disconnecting;
+			}
 
-			// Assume direction is outgoing unless otherwise set.
-			if (m_ActiveSource.Direction != eConferenceSourceDirection.Incoming)
-				m_ActiveSource.Direction = eConferenceSourceDirection.Outgoing;
-			
+			// Direction
 			if (sigs.IncomingCallDetectedFeedback.BoolValue)
 				m_ActiveSource.Direction = eConferenceSourceDirection.Incoming;
+			if (m_ActiveSource.Direction != eConferenceSourceDirection.Incoming)
+				m_ActiveSource.Direction = eConferenceSourceDirection.Outgoing;
 
 			// Start/End
 			switch (m_ActiveSource.Status)
@@ -371,12 +380,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			// Answer state
-			switch (m_ActiveSource.Status)
-			{
-				case eConferenceSourceStatus.Connected:
-					m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
-					break;
-			}
+			if (sigs.CallActiveFeedback.BoolValue)
+				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
+			if (m_ActiveSource.AnswerState != eConferenceSourceAnswerState.Answered)
+				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Unanswered;
 		}
 
 		#endregion
