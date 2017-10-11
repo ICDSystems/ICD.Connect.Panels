@@ -1,7 +1,6 @@
 ﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
@@ -12,6 +11,7 @@ using ICD.Common.Utils.Extensions;
 using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Conferencing.EventArguments;
+using ICD.Connect.Conferencing.Utils;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
@@ -20,8 +20,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
 	{
-		private const string SIP_NUMBER_REGEX = @"^sip:([^@]*)@";
-
 		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
@@ -344,7 +342,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (!string.IsNullOrEmpty(uri))
 			{
 				m_ActiveSource.Name = uri;
-				m_ActiveSource.Number = NumberFromUri(uri);
+				m_ActiveSource.Number = SipUtils.NumberFromUri(uri);
 			}
 
 			m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
@@ -376,22 +374,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 					m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
 					break;
 			}
-		}
-
-		/// <summary>
-		/// Returns the number portion from the given uri.
-		/// </summary>
-		/// <param name="uri"></param>
-		/// <returns></returns>
-		private static string NumberFromUri(string uri)
-		{
-			if (uri == null)
-				throw new ArgumentNullException("uri");
-
-			Regex regex = new Regex(SIP_NUMBER_REGEX);
-			Match match = regex.Match(uri);
-
-			return match.Success ? match.Groups[1].Value : null;
 		}
 
 		#endregion
