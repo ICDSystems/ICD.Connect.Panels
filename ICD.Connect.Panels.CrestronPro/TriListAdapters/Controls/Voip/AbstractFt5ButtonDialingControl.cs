@@ -103,6 +103,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
 
+			if (!SipUtils.IsValidNumber(number))
+				throw new InvalidOperationException(string.Format("Not a valid SIP number: {0}", number));
+
 			Sigs.DialString.StringValue = number;
 			Sigs.DialCurrentNumber();
 		}
