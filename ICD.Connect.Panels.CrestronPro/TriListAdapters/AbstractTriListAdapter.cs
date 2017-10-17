@@ -343,7 +343,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Port panel output sig change exception - {0}", e.Message);
+				Logger.AddEntry(eSeverity.Error, e, "{0} output sig change exception", this);
 			}
 		}
 #endif
