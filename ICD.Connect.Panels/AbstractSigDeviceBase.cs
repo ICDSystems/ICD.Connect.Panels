@@ -62,9 +62,11 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		protected override void DisposeFinal(bool disposing)
 		{
+			OnAnyOutput = null;
+
 			base.DisposeFinal(disposing);
 
-			OnAnyOutput = null;
+			m_SigCallbacks.Clear();
 		}
 
 		/// <summary>

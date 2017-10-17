@@ -54,6 +54,14 @@ namespace ICD.Connect.Panels
 		#region Methods
 
 		/// <summary>
+		/// Clears all of the registered callbacks.
+		/// </summary>
+		public void Clear()
+		{
+			m_RegistrationSection.Execute(() => m_SigToCallback.Clear());
+		}
+
+		/// <summary>
 		/// Raises the callbacks registered with the signature.
 		/// </summary>
 		/// <param name="sigInfo"></param>

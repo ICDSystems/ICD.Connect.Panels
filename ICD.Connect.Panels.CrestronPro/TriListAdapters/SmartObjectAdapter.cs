@@ -82,6 +82,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		public void Dispose()
 		{
 			Unsubscribe(m_SmartObject);
+
+			m_SigCallbacks.Clear();
 		}
 
 		/// <summary>
