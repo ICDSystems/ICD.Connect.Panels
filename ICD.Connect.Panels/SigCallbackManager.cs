@@ -79,7 +79,7 @@ namespace ICD.Connect.Panels
 				catch (Exception e)
 				{
 					ServiceProvider.TryGetService<ILoggerService>()
-					               .AddEntry(eSeverity.Error, e, "Exception in callback - {0}", e.Message);
+					               .AddEntry(eSeverity.Error, e, "Exception in callback");
 				}
 			}
 		}
