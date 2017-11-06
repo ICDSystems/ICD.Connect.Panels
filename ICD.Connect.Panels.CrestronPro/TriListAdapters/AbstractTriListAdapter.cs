@@ -396,6 +396,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			RaiseOnAnyOutput(eventArgs.Data);
 		}
 
-#endregion
+		#endregion
+
+		#region Console
+
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			addRow("IPID", m_Panel == null ? null : StringUtils.ToIpIdString((byte)m_Panel.ID));
+		}
+
+		#endregion
 	}
 }
