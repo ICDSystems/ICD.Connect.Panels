@@ -1,4 +1,6 @@
 ﻿using System;
+using ICD.Common.Utils;
+using ICD.Connect.API.Nodes;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Protocol.Sigs;
 #if SIMPLSHARP
@@ -16,16 +18,16 @@ using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
-    /// <summary>
-    /// TriListAdapter wraps a TriList to provide IPanelDevice features.
-    /// </summary>
+	/// <summary>
+	/// TriListAdapter wraps a TriList to provide IPanelDevice features.
+	/// </summary>
 #if SIMPLSHARP
 	public abstract class AbstractTriListAdapter<TPanel, TSettings> : AbstractPanelDevice<TSettings>, ITriListAdapter
 		where TPanel : BasicTriListWithSmartObject
 #else
     public abstract class AbstractTriListAdapter<TSettings> : AbstractPanelDevice<TSettings>
 #endif
-        where TSettings : ITriListAdapterSettings, new()
+		where TSettings : ITriListAdapterSettings, new()
 	{
 #if SIMPLSHARP
 		/// <summary>
@@ -33,28 +35,28 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		public event PanelChangeCallback OnPanelChanged;
 
-	    private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
+		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
 		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
 		private readonly DeviceStringInputCollectionAdapter m_StringInput;
 		private readonly SmartObjectCollectionAdapter m_SmartObjects;
 
-	    private TPanel m_Panel;
+		private TPanel m_Panel;
 #endif
 
 		#region Properties
 
 #if SIMPLSHARP
-	    /// <summary>
-	    /// Gets the wrapped panel instance.
-	    /// </summary>
-	    [PublicAPI]
-	    [CanBeNull]
-	    public TPanel Panel { get { return m_Panel; } }
+		/// <summary>
+		/// Gets the wrapped panel instance.
+		/// </summary>
+		[PublicAPI]
+		[CanBeNull]
+		public TPanel Panel { get { return m_Panel; } }
 
-	    /// <summary>
-	    /// Gets the internal wrapped panel instance.
-	    /// </summary>
-	    BasicTriListWithSmartObject ITriListAdapter.Panel { get { return Panel; } }
+		/// <summary>
+		/// Gets the internal wrapped panel instance.
+		/// </summary>
+		BasicTriListWithSmartObject ITriListAdapter.Panel { get { return Panel; } }
 #endif
 
 		/// <summary>
@@ -72,10 +74,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			}
 		}
 
-	    /// <summary>
-	    /// Collection of Integer Inputs sent to the panel.
-	    /// </summary>
-	    protected override IDeviceUShortInputCollection UShortInput
+		/// <summary>
+		/// Collection of Integer Inputs sent to the panel.
+		/// </summary>
+		protected override IDeviceUShortInputCollection UShortInput
 		{
 			get
 			{
@@ -122,7 +124,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		protected AbstractTriListAdapter()
 		{
 #if SIMPLSHARP
-            m_SmartObjects = new SmartObjectCollectionAdapter();
+			m_SmartObjects = new SmartObjectCollectionAdapter();
 			m_BooleanInput = new DeviceBooleanInputCollectionAdapter();
 			m_UShortInput = new DeviceUShortInputCollectionAdapter();
 			m_StringInput = new DeviceStringInputCollectionAdapter();
@@ -131,7 +133,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #endif
 		}
 
-#region Methods
+		#region Methods
 
 		/// <summary>
 		/// Release resources.
@@ -141,9 +143,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.DisposeFinal(disposing);
 
 #if SIMPLSHARP
-            // Unsubscribe and unregister
+			// Unsubscribe and unregister
 			Unsubscribe(m_SmartObjects);
-            SetPanel(null);
+			SetPanel(null);
 #endif
 		}
 
@@ -206,14 +208,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Override to control which extenders are used with the panel.
 		/// </summary>
 		/// <param name="panel"></param>
-	    protected virtual void RegisterExtenders(TPanel panel)
-	    {
-	    }
+		protected virtual void RegisterExtenders(TPanel panel)
+		{
+		}
 #endif
 
-#endregion
+		#endregion
 
-#region Private Methods
+		#region Private Methods
 
 		/// <summary>
 		/// Gets the current online status of the panel.
@@ -226,11 +228,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #else
             return false;
 #endif
-        }
+		}
 
-#endregion
+		#endregion
 
-#region Settings
+		#region Settings
 
 		/// <summary>
 		/// Override to clear the instance settings.
@@ -240,7 +242,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.ClearSettingsFinal();
 
 #if SIMPLSHARP
-            SetPanel(null);
+			SetPanel(null);
 #endif
 		}
 
@@ -257,7 +259,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #else
             settings.Ipid = 0;
 #endif
-        }
+		}
 
 		/// <summary>
 		/// Override to apply settings to the instance.
@@ -269,33 +271,33 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.ApplySettingsFinal(settings, factory);
 
 #if SIMPLSHARP
-            TPanel triList = InstantiateTriList(settings.Ipid, ProgramInfo.ControlSystem);
+			TPanel triList = InstantiateTriList(settings.Ipid, ProgramInfo.ControlSystem);
 			SetPanel(triList);
 #else
             throw new NotImplementedException();
 #endif
-        }
+		}
 
 #if SIMPLSHARP
-        /// <summary>
-        /// Creates an instance of the wrapped trilist.
-        /// </summary>
-        /// <param name="ipid"></param>
-        /// <param name="controlSystem"></param>
-        /// <returns></returns>
-        protected abstract TPanel InstantiateTriList(byte ipid, CrestronControlSystem controlSystem);
+		/// <summary>
+		/// Creates an instance of the wrapped trilist.
+		/// </summary>
+		/// <param name="ipid"></param>
+		/// <param name="controlSystem"></param>
+		/// <returns></returns>
+		protected abstract TPanel InstantiateTriList(byte ipid, CrestronControlSystem controlSystem);
 #endif
 
-#endregion
+		#endregion
 
-#region Panel Callbacks
+		#region Panel Callbacks
 
 #if SIMPLSHARP
-        /// <summary>
-        /// Subscribe to the panel events.
-        /// </summary>
-        /// <param name="panel"></param>
-        private void Subscribe(TPanel panel)
+		/// <summary>
+		/// Subscribe to the panel events.
+		/// </summary>
+		/// <param name="panel"></param>
+		private void Subscribe(TPanel panel)
 		{
 			if (panel == null)
 				return;
@@ -348,23 +350,23 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 #endif
 
-#endregion
+		#endregion
 
-#region SmartObject Callbacks
+		#region SmartObject Callbacks
 
 		private void Subscribe(ISmartObjectCollection smartObjects)
-	    {
-		    smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
-		    smartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
-	    }
+		{
+			smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+		}
 
-	    private void Unsubscribe(ISmartObjectCollection smartObjects)
-	    {
-		    smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
-		    smartObjects.OnSmartObjectUnsubscribe -= SmartObjectsOnSmartObjectUnsubscribe;
-	    }
+		private void Unsubscribe(ISmartObjectCollection smartObjects)
+		{
+			smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectUnsubscribe -= SmartObjectsOnSmartObjectUnsubscribe;
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Subscribes to SmartObject Touch Events
 		/// </summary>
 		/// <param name="sender"></param>
@@ -373,6 +375,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
 		}
+
 		/// <summary>
 		/// Unsubscribes from SmartObject Touch Events
 		/// </summary>
