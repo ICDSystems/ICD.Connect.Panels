@@ -7,6 +7,9 @@ namespace ICD.Connect.Panels.Mock
 {
 	public sealed class MockSmartObjectCollection : ISmartObjectCollection
 	{
+		public event AddSmartObject OnSmartObjectSubscribe;
+		public event RemoveSmartObject OnSmartObjectUnsubscribe;
+
 		private readonly Dictionary<uint, ISmartObject> m_SmartObjects;
 
 		/// <summary>
@@ -27,9 +30,6 @@ namespace ICD.Connect.Panels.Mock
 			return GetEnumerator();
 		}
 
-		public event AddSmartObject OnSmartObjectSubscribe;
-		public event RemoveSmartObject OnSmartObjectUnsubscribe;
-
 		/// <summary>
 		/// Get the object at the specified number.
 		/// 
@@ -39,7 +39,15 @@ namespace ICD.Connect.Panels.Mock
 		/// Object stored at the key specified.
 		/// </returns>
 		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Index Number specified.</exception>
-		public ISmartObject this[uint paramKey] { get { return m_SmartObjects[paramKey]; } }
+		public ISmartObject this[uint paramKey]
+		{
+			get
+			{
+				if (!m_SmartObjects.ContainsKey(paramKey))
+					m_SmartObjects[paramKey] = new MockSmartObject();
+				return m_SmartObjects[paramKey];
+			}
+		}
 
 		/// <summary>
 		/// Clears the cached smart objects.
@@ -47,11 +55,6 @@ namespace ICD.Connect.Panels.Mock
 		public void Clear()
 		{
 			m_SmartObjects.Clear();
-		}
-
-		public void AddSmartObject(ISmartObject smartObject)
-		{
-			m_SmartObjects[smartObject.SmartObjectId] = smartObject;
 		}
 	}
 }

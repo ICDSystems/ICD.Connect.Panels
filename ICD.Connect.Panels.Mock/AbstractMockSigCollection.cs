@@ -28,7 +28,24 @@ namespace ICD.Connect.Panels.Mock
 		/// <param name="sigNumber">Number of the sig to return.</param>
 		/// <returns/>
 		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Sig Number specified.</exception>
-		public T this[uint sigNumber] { get { return m_SigCacheSection.Execute(() => m_SigCache[sigNumber]); } }
+		public T this[uint sigNumber]
+		{
+			get
+			{
+				m_SigCacheSection.Enter();
+
+				try
+				{
+					if (!m_SigCache.ContainsKey(sigNumber))
+						m_SigCache[sigNumber] = InstantiateSig(sigNumber);
+					return m_SigCache[sigNumber];
+				}
+				finally
+				{
+					m_SigCacheSection.Leave();
+				}
+			}
+		}
 
 		#endregion
 
@@ -46,6 +63,8 @@ namespace ICD.Connect.Panels.Mock
 		{
 			m_SigCache[number] = sig;
 		}
+
+		protected abstract T InstantiateSig(uint sigNumber);
 
 		public IEnumerator<T> GetEnumerator()
 		{
