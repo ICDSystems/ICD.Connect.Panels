@@ -56,6 +56,10 @@ namespace ICD.Connect.Panels.Mock
 		/// </summary>
 		public MockSmartObject()
 		{
+			m_BooleanInput = new MockBooleanInputCollection();
+			m_UShortInput = new MockUShortInputCollection();
+			m_StringInput = new MockStringInputCollection();
+
 			m_SigCallbacks = new SigCallbackManager();
 		}
 

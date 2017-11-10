@@ -10,10 +10,10 @@ namespace ICD.Connect.Panels.Mock
 	/// </summary>
 	public sealed class MockPanelDevice : AbstractPanelDevice<MockPanelDeviceSettings>
 	{
-		private IDeviceBooleanInputCollection m_BooleanInput;
-		private IDeviceUShortInputCollection m_UShortInput;
-		private IDeviceStringInputCollection m_StringInput;
-		private ISmartObjectCollection m_SmartObjects;
+		private readonly IDeviceBooleanInputCollection m_BooleanInput;
+		private readonly IDeviceUShortInputCollection m_UShortInput;
+		private readonly IDeviceStringInputCollection m_StringInput;
+		private readonly ISmartObjectCollection m_SmartObjects;
 
 		#region Properties
 
@@ -39,7 +39,13 @@ namespace ICD.Connect.Panels.Mock
 
 		#endregion
 
-		#region Methods
+		public MockPanelDevice()
+		{
+			m_BooleanInput = new MockBooleanInputCollection();
+			m_UShortInput = new MockUShortInputCollection();
+			m_StringInput = new MockStringInputCollection();
+			m_SmartObjects = new MockSmartObjectCollection();
+		}
 
 		/// <summary>
 		/// Raises the sig change callbacks.
@@ -50,32 +56,6 @@ namespace ICD.Connect.Panels.Mock
 		{
 			RaiseOutputSigChangeCallback(sigInfo);
 		}
-
-		[PublicAPI]
-		public void SetBooleanInput(IDeviceBooleanInputCollection collection)
-		{
-			m_BooleanInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetUShortInput(IDeviceUShortInputCollection collection)
-		{
-			m_UShortInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetStringInput(IDeviceStringInputCollection collection)
-		{
-			m_StringInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetSmartObjects(ISmartObjectCollection collection)
-		{
-			m_SmartObjects = collection;
-		}
-
-		#endregion
 
 		/// <summary>
 		/// Gets the current online status of the device.
