@@ -3,6 +3,7 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -312,6 +313,17 @@ namespace ICD.Connect.Panels.Server
 
 			LastOutput = IcdEnvironment.GetLocalTime();
 			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+		}
+
+		#endregion
+
+		#region Console
+
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			addRow("Port", Port);
 		}
 
 		#endregion
