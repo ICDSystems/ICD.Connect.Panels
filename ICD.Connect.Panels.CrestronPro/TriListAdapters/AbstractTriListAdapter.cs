@@ -6,11 +6,11 @@ using ICD.Connect.Protocol.Sigs;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
 #endif
 using ICD.Common.Properties;
 using ICD.Common.Services.Logging;
-using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Settings.Core;
@@ -408,7 +408,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.BuildConsoleStatus(addRow);
 
+#if SIMPLSHARP
 			addRow("IPID", m_Panel == null ? null : StringUtils.ToIpIdString((byte)m_Panel.ID));
+#endif
 		}
 
 		#endregion
