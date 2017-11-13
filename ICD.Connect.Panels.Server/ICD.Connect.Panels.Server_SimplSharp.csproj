@@ -70,6 +70,8 @@
   <ItemGroup>
     <Compile Include="KrangPlugin.cs" />
     <None Include="ObfuscationSettings.cs" />
+    <Compile Include="PanelClientDevice.cs" />
+    <Compile Include="PanelClientDeviceSettings.cs" />
     <Compile Include="PanelServerDevice.cs" />
     <Compile Include="PanelServerDeviceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
