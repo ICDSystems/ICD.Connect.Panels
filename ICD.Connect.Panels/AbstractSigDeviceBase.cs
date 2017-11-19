@@ -243,9 +243,10 @@ namespace ICD.Connect.Panels
 			TableBuilder builder = new TableBuilder("Number", "Name", "Type", "Value");
 
 			IEnumerable<ISig> sigs = BooleanInput.Cast<ISig>()
-												 .Concat(UShortInput.Cast<ISig>())
-												 .Concat(StringInput.Cast<ISig>())
-												 .Where(s => s.HasValue());
+			                                     .Concat(UShortInput.Cast<ISig>())
+			                                     .Concat(StringInput.Cast<ISig>()
+			                                                        .Where(s => !string.IsNullOrEmpty(s.GetStringValue())))
+			                                     .Where(s => s.HasValue());
 
 			foreach (ISig item in sigs)
 				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
