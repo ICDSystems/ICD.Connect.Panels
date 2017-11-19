@@ -226,7 +226,7 @@ namespace ICD.Connect.Panels
 			foreach (IConsoleCommand command in GetBaseConsoleCommands())
 				yield return command;
 
-			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", PrintSigs);
+			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
 		}
 
 		/// <summary>
@@ -243,8 +243,8 @@ namespace ICD.Connect.Panels
 			TableBuilder builder = new TableBuilder("Number", "Name", "Type", "Value");
 
 			IEnumerable<ISig> sigs = BooleanInput.Cast<ISig>()
-												 .Concat(UShortInput)
-												 .Concat(StringInput)
+												 .Concat(UShortInput.Cast<ISig>())
+												 .Concat(StringInput.Cast<ISig>())
 												 .Where(s => s.HasValue());
 
 			foreach (ISig item in sigs)
