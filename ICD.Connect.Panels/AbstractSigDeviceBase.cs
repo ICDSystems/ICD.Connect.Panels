@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Services.Logging;
+using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Connect.API.Commands;
+using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
@@ -203,6 +208,49 @@ namespace ICD.Connect.Panels
 		protected void RaiseOnAnyOutput(SigInfo sigInfo)
 		{
 			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+		}
+
+		#endregion
+
+		#region Console
+
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			addRow("Last Output", LastOutput);
+		}
+
+		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
+		{
+			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", PrintSigs);
+		}
+
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
+		{
+			return base.GetConsoleCommands();
+		}
+
+		private string PrintSigs()
+		{
+			TableBuilder builder = new TableBuilder("Number", "Name", "Type", "Value");
+
+			IEnumerable<ISig> sigs = BooleanInput.Cast<ISig>()
+												 .Concat(UShortInput)
+												 .Concat(StringInput)
+												 .Where(s => s.HasValue());
+
+			foreach (ISig item in sigs)
+				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
+
+			return builder.ToString();
 		}
 
 		#endregion
