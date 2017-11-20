@@ -24,14 +24,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly IPowerDeviceControl m_BacklightControl;
 
 		// Used with settings
-		private bool m_EnableVoIp;
+		private bool m_EnableVoip;
 
 		#region Properties
 
 		/// <summary>
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
-		public IDialingDeviceControl VoIpDialingControl { get { return m_DialingControl; }}
+		public IDialingDeviceControl VoipDialingControl { get { return m_DialingControl; }}
 
 		/// <summary>
 		/// Gets the backlight control for this panel.
@@ -58,7 +58,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.ClearSettingsFinal();
 
-			m_EnableVoIp = false;
+			m_EnableVoip = false;
 
 			Controls.Remove(VOIP_DIALER_CONTROL_ID);
 			if (m_DialingControl != null)
@@ -74,7 +74,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.CopySettingsFinal(settings);
 
-			settings.EnableVoIp = m_EnableVoIp;
+			settings.EnableVoip = m_EnableVoip;
 		}
 
 		/// <summary>
@@ -85,12 +85,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
 		{
 			// Set this value before applying the rest of the settings and registering the panel
-			m_EnableVoIp = settings.EnableVoIp;
+			m_EnableVoip = settings.EnableVoip;
 
 			base.ApplySettingsFinal(settings, factory);
 
 			// Create the control after the panel has been registered
-			if (!m_EnableVoIp)
+			if (!m_EnableVoip)
 				return;
 
 			m_DialingControl = InstantiateDialingControl(VOIP_DIALER_CONTROL_ID);
@@ -112,7 +112,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			RegisterSystemExtender(panel);
 
-			if (m_EnableVoIp)
+			if (m_EnableVoip)
 				RegisterVoIpExtender(panel);
 		}
 
@@ -159,7 +159,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	{
 		private const string ENABLE_VOIP_ELEMENT = "EnableVoIP";
 
-		public bool EnableVoIp { get; set; }
+		public bool EnableVoip { get; set; }
 
 		/// <summary>
 		/// Writes property elements to xml.
@@ -169,12 +169,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(ENABLE_VOIP_ELEMENT, IcdXmlConvert.ToString(EnableVoIp));
+			writer.WriteElementString(ENABLE_VOIP_ELEMENT, IcdXmlConvert.ToString(EnableVoip));
 		}
 
 		protected static void ParseXml(AbstractTswFt5ButtonAdapterSettings instance, string xml)
 		{
-			instance.EnableVoIp = XmlUtils.TryReadChildElementContentAsBoolean(xml, ENABLE_VOIP_ELEMENT) ?? false;
+			instance.EnableVoip = XmlUtils.TryReadChildElementContentAsBoolean(xml, ENABLE_VOIP_ELEMENT) ?? false;
 
 			AbstractTriListAdapterSettings.ParseXml(instance, xml);
 		}
@@ -186,11 +186,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
 		[PublicAPI]
-		IDialingDeviceControl VoIpDialingControl { get; }
+		IDialingDeviceControl VoipDialingControl { get; }
 	}
 
 	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings
 	{
-		bool EnableVoIp { get; set; }
+		bool EnableVoip { get; set; }
 	}
 }
