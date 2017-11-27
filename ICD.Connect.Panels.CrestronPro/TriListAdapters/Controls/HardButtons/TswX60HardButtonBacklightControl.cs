@@ -4,19 +4,19 @@ using System.Collections.Generic;
 using Crestron.SimplSharpPro.UI;
 using ICD.Common.Services.Logging;
 using ICD.Connect.API.Commands;
-using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X60;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 {
-	public sealed class TswX60HardButtonControl : AbstractDeviceControl<ITswX60BaseClassAdapter>
+	public sealed class TswX60HardButtonBacklightControl : AbstractHardButtonBacklightControl<ITswX60BaseClassAdapter>
 	{
 		/// <summary>
 		/// Constructor.
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		public TswX60HardButtonControl(ITswX60BaseClassAdapter parent, int id)
+		public TswX60HardButtonBacklightControl(ITswX60BaseClassAdapter parent, int id)
 			: base(parent, id)
 		{
 		}
@@ -27,7 +27,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		/// </summary>
 		/// <param name="address"></param>
 		/// <param name="enabled"></param>
-		public void SetBacklightEnabled(int address, bool enabled)
+		public override void SetBacklightEnabled(int address, bool enabled)
 		{
 			TswX60BaseClass panel = Parent.Panel as TswX60BaseClass;
 			if (panel == null)

@@ -25,7 +25,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 		/// </summary>
 		protected AbstractTswX60BaseClassAdapter()
 		{
-			Controls.Add(new TswX60HardButtonControl(this, HARD_BUTTON_CONTROL_ID));
+			Controls.Add(new TswX60HardButtonBacklightControl(this, HARD_BUTTON_CONTROL_ID));
 		}
 
 		/// <summary>
