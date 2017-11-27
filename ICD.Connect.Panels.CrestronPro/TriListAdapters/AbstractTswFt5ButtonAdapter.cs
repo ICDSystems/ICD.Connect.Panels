@@ -19,6 +19,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	{
 		private const int VOIP_DIALER_CONTROL_ID = 1;
 		private const int BACKLIGHT_CONTROL_ID = 2;
+		protected const int HARD_BUTTON_CONTROL_ID = 3;
 
 		private IDialingDeviceControl m_DialingControl;
 		private readonly IPowerDeviceControl m_BacklightControl;
