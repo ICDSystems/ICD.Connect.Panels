@@ -81,9 +81,7 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers = new TcpServerBufferManager(() => new JsonSerialBuffer());
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
-
-			m_Server.Start();
-			UpdateCachedOnlineStatus();
+            
 		}
 
 		#region Methods
@@ -199,7 +197,9 @@ namespace ICD.Connect.Panels.Server
 			base.ApplySettingsFinal(settings, factory);
 
 			Port = settings.Port;
-		}
+		    m_Server.Start();
+		    UpdateCachedOnlineStatus();
+        }
 
 		#endregion
 
