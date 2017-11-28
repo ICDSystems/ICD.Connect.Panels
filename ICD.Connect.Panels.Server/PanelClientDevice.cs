@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using ICD.Common.Services.Logging;
 using ICD.Common.Utils.EventArguments;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
@@ -6,10 +8,11 @@ using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Protocol.Network.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
+using ICD.Connect.Settings.Core;
 
 namespace ICD.Connect.Panels.Server
 {
-    public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
+	public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
 	{
 		private readonly AsyncTcpClient m_Client;
 		private readonly JsonSerialBuffer m_Buffer;
@@ -30,6 +33,47 @@ namespace ICD.Connect.Panels.Server
 
 			Subscribe(m_Buffer);
 			Subscribe(m_Client);
+		}
+
+		/// <summary>
+		/// Override to apply settings to the instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		protected override void ApplySettingsFinal(PanelClientDeviceSettings settings, IDeviceFactory factory)
+		{
+			base.ApplySettingsFinal(settings, factory);
+
+			Port = settings.Port;
+			Address = settings.Address;
+
+			IPanelDevice panel = null;
+			if (settings.Panel != null)
+			{
+				panel = factory.GetOriginatorById(settings.Panel.Value) as IPanelDevice;
+				if (panel == null)
+				{
+					Logger.AddEntry(eSeverity.Error, "No panel with id {0}", settings.Panel.Value);
+				}
+			}
+
+			SetPanel(panel);
+		}
+
+		protected override void CopySettingsFinal(PanelClientDeviceSettings settings)
+		{
+			base.CopySettingsFinal(settings);
+			settings.Panel = m_Panel != null ? m_Panel.Id : (int?)null;
+			settings.Port = Port;
+			settings.Address = Address;
+		}
+
+		protected override void ClearSettingsFinal()
+		{
+			base.ClearSettingsFinal();
+			SetPanel(null);
+			Port = 0;
+			Address = null;
 		}
 
 		/// <summary>
@@ -218,7 +262,7 @@ namespace ICD.Connect.Panels.Server
 				case eSigType.Serial:
 					device.SendInputSerial(sig.Number, sig.GetStringValue());
 					break;
-				
+
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
