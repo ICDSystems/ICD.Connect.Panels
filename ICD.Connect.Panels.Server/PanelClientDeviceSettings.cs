@@ -3,6 +3,7 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Devices;
 using ICD.Connect.Settings.Attributes;
+using ICD.Connect.Settings.Attributes.SettingsProperties;
 
 namespace ICD.Connect.Panels.Server
 {
@@ -25,7 +26,7 @@ namespace ICD.Connect.Panels.Server
 
 		public ushort Port { get; set; }
 
-		[SettingsProperty(SettingsProperty.ePropertyType.PanelId)]
+		[OriginatorIdSettingsProperty(typeof(IPanelDevice))]
 		public int? Panel { get; set; }
 
 		/// <summary>
