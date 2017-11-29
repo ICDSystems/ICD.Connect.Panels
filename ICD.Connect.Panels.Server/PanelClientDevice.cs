@@ -222,7 +222,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="buffer"></param>
 		private void Subscribe(JsonSerialBuffer buffer)
 		{
-			buffer.OnCompletedSerial += BufferOnOnCompletedSerial;
+			buffer.OnCompletedSerial += BufferOnCompletedSerial;
 		}
 
 		/// <summary>
@@ -231,7 +231,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="buffer"></param>
 		private void Unsubscribe(JsonSerialBuffer buffer)
 		{
-			buffer.OnCompletedSerial -= BufferOnOnCompletedSerial;
+			buffer.OnCompletedSerial -= BufferOnCompletedSerial;
 		}
 
 		/// <summary>
@@ -239,7 +239,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void BufferOnOnCompletedSerial(object sender, StringEventArgs args)
+		private void BufferOnCompletedSerial(object sender, StringEventArgs args)
 		{
 			if (m_Panel == null)
 				return;
