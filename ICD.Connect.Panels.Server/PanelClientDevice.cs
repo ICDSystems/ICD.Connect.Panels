@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Net;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Timers;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
@@ -14,8 +14,12 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
 	{
+		// How often to check the connection and reconnect if necessary.
+		private const long CONNECTION_CHECK_MILLISECONDS = 30 * 1000;
+
 		private readonly AsyncTcpClient m_Client;
 		private readonly JsonSerialBuffer m_Buffer;
+		private readonly SafeTimer m_ConnectionTimer;
 
 		private IPanelDevice m_Panel;
 
@@ -31,9 +35,84 @@ namespace ICD.Connect.Panels.Server
 			m_Client = new AsyncTcpClient();
 			m_Buffer = new JsonSerialBuffer();
 
+			m_ConnectionTimer = new SafeTimer(ConnectionTimerCallback, 0, CONNECTION_CHECK_MILLISECONDS);
+
 			Subscribe(m_Buffer);
 			Subscribe(m_Client);
 		}
+
+		/// <summary>
+		/// Release resources.
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void DisposeFinal(bool disposing)
+		{
+			m_ConnectionTimer.Dispose();
+
+			base.DisposeFinal(disposing);
+
+			SetPanel(null);
+
+			Unsubscribe(m_Buffer);
+			Unsubscribe(m_Client);
+
+			m_Client.Dispose();
+		}
+
+		#region Methods
+
+		/// <summary>
+		/// Connect to the panel server.
+		/// </summary>
+		public void Connect()
+		{
+			m_Client.Connect();
+		}
+
+		/// <summary>
+		/// Disconnect from the panel server.
+		/// </summary>
+		public void Disconnect()
+		{
+			m_Client.Disconnect();
+		}
+
+		/// <summary>
+		/// Sets the wrapped panel.
+		/// </summary>
+		/// <param name="panel"></param>
+		public void SetPanel(IPanelDevice panel)
+		{
+			if (panel == m_Panel)
+				return;
+
+			Disconnect();
+
+			Unsubscribe(m_Panel);
+			m_Panel = panel;
+			Subscribe(m_Panel);
+
+			if (m_Panel != null)
+				Connect();
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Called periodically to maintain connection to the device.
+		/// </summary>
+		private void ConnectionTimerCallback()
+		{
+			if (m_Client != null && !m_Client.IsConnected)
+				Connect();
+		}
+
+		protected override bool GetIsOnlineStatus()
+		{
+			return m_Client != null && m_Client.IsOnline;
+		}
+
+		#region Settings
 
 		/// <summary>
 		/// Override to apply settings to the instance.
@@ -76,56 +155,7 @@ namespace ICD.Connect.Panels.Server
 			Address = null;
 		}
 
-		/// <summary>
-		/// Release resources.
-		/// </summary>
-		/// <param name="disposing"></param>
-		protected override void DisposeFinal(bool disposing)
-		{
-			base.DisposeFinal(disposing);
-
-			SetPanel(null);
-
-			Unsubscribe(m_Buffer);
-			Unsubscribe(m_Client);
-
-			m_Client.Dispose();
-		}
-
-		/// <summary>
-		/// Connect to the panel server.
-		/// </summary>
-		public void Connect()
-		{
-			m_Client.Connect();
-		}
-
-		/// <summary>
-		/// Disconnect from the panel server.
-		/// </summary>
-		public void Disconnect()
-		{
-			m_Client.Disconnect();
-		}
-
-		/// <summary>
-		/// Sets the wrapped panel.
-		/// </summary>
-		/// <param name="panel"></param>
-		public void SetPanel(IPanelDevice panel)
-		{
-			if (panel == m_Panel)
-				return;
-
-			Disconnect();
-
-			Unsubscribe(m_Panel);
-			m_Panel = panel;
-			Subscribe(m_Panel);
-
-			if (m_Panel != null)
-				Connect();
-		}
+		#endregion
 
 		#region Panel Callbacks
 
@@ -164,11 +194,6 @@ namespace ICD.Connect.Panels.Server
 		}
 
 		#endregion
-
-		protected override bool GetIsOnlineStatus()
-		{
-			return m_Client != null && m_Client.IsOnline;
-		}
 
 		#region Client Callbacks
 
