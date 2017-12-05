@@ -87,6 +87,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
+		/// Clears the assigned input sig values.
+		/// </summary>
+		public override void Clear()
+		{
+			foreach (IBoolInputSig item in BooleanInput)
+				SendInputDigital(item.Number, false);
+
+			foreach (IUShortInputSig item in UShortInput)
+				SendInputAnalog(item.Number, 0);
+
+			foreach (IStringInputSig item in StringInput)
+				SendInputSerial(item.Number, null);
+		}
+
+		/// <summary>
 		/// Registers the callback for output sig change events.
 		/// </summary>
 		/// <param name="number"></param>
