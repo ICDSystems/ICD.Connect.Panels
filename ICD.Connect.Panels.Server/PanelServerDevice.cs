@@ -275,7 +275,14 @@ namespace ICD.Connect.Panels.Server
 			{
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
-					m_Server.Send(args.ClientId, sig.Serialize());
+					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
+
+				// Inform the client of used smartobjects
+				foreach (uint so in m_SmartObjects.Select(kvp => kvp.Key))
+				{
+					uint closureSo = so;
+					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE));
+				}
 			}
 			finally
 			{
