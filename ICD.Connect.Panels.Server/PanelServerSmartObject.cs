@@ -55,6 +55,14 @@ namespace ICD.Connect.Panels.Server
 		#region Methods
 
 		/// <summary>
+		/// Clears the assigned input sig values.
+		/// </summary>
+		public override void Clear()
+		{
+			// Clearing is handled by the parent device.
+		}
+
+		/// <summary>
 		/// Registers the callback for output sig change events.
 		/// </summary>
 		/// <param name="number"></param>

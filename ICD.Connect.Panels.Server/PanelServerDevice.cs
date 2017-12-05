@@ -118,6 +118,14 @@ namespace ICD.Connect.Panels.Server
 		}
 
 		/// <summary>
+		/// Clears the assigned input sig values.
+		/// </summary>
+		public void Clear()
+		{
+			m_SendSection.Execute(() => m_Cache.Clear());
+		}
+
+		/// <summary>
 		/// Registers the callback for output sig change events.
 		/// </summary>
 		/// <param name="number"></param>

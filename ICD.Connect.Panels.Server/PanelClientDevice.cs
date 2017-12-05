@@ -68,6 +68,15 @@ namespace ICD.Connect.Panels.Server
 		#region Methods
 
 		/// <summary>
+		/// Clears the assigned input sigs.
+		/// </summary>
+		public void Clear()
+		{
+			if (m_Panel != null)
+				m_Panel.Clear();
+		}
+
+		/// <summary>
 		/// Connect to the panel server.
 		/// </summary>
 		public void Connect()

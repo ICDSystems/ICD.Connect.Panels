@@ -26,6 +26,11 @@ namespace ICD.Connect.Panels.SmartObjects
 		#region Methods
 
 		/// <summary>
+		/// Clears the assigned input sig values.
+		/// </summary>
+		public abstract void Clear();
+
+		/// <summary>
 		/// Registers the callback for output sig change events.
 		/// </summary>
 		/// <param name="number"></param>

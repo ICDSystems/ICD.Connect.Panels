@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ICD.Connect.Panels.SmartObjectCollections;
+using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels
 {
@@ -38,5 +39,16 @@ namespace ICD.Connect.Panels
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Clears the assigned input sig values.
+		/// </summary>
+		public override void Clear()
+		{
+			base.Clear();
+
+			foreach (ISmartObject so in SmartObjects.Select(kvp => kvp.Value))
+				so.Clear();
+		}
 	}
 }
