@@ -75,7 +75,13 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
+				foreach (var item in m_SmartObjects)
+				{
+					if (OnSmartObjectUnsubscribe != null)
+						OnSmartObjectUnsubscribe(this, item.Value);
+				}
 				m_SmartObjects.Clear();
+
 			}
 			finally
 			{
@@ -116,7 +122,12 @@ namespace ICD.Connect.Panels.Server
 		private PanelServerSmartObject LazyLoadSmartObject(ushort key)
 		{
 			if (!m_SmartObjects.ContainsKey(key))
+			{
 				m_SmartObjects[key] = new PanelServerSmartObject(m_Device, key);
+				if (OnSmartObjectSubscribe != null)
+					OnSmartObjectSubscribe(this, m_SmartObjects[key]);
+			}
+
 			return m_SmartObjects[key];
 		}
 
