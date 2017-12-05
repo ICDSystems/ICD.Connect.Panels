@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Timers;
+using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
@@ -338,6 +340,30 @@ namespace ICD.Connect.Panels.Server
 			addRow("Address", Address);
 			addRow("Port", Port);
 			addRow("Panel", m_Panel);
+		}
+
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
+		{
+			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			yield return new ConsoleCommand("Connect", "", () => Connect());
+			yield return new ConsoleCommand("Disconnect", "", () => Disconnect());
+			yield return new GenericConsoleCommand<string>("SetAddress", "SetAddress <hostname>", h => Address = h);
+			yield return new GenericConsoleCommand<ushort>("SetPort", string.Format("SetPort <{0} - {1}>", 0, ushort.MaxValue), p => Port = p);
+		}
+
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
+		{
+			return base.GetConsoleCommands();
 		}
 
 		#endregion
