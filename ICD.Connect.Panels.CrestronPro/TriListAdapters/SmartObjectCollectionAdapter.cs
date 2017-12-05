@@ -65,10 +65,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	    public void SetSmartObjects(SmartObjectCollection collection)
 	    {
 	        if (collection == m_Collection)
-	        {
-	            return;
-	        }
+		        return;
+
 	        m_Collection = collection;
+
             Clear();
 	    }
 
@@ -83,17 +83,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	        {
 	            foreach (var item in m_SmartObjects)
 	            {
-	                if (OnSmartObjectUnsubscribe != null)
-	                {
-	                    OnSmartObjectUnsubscribe(this, item.Value);
-	                }
+		            if (OnSmartObjectUnsubscribe != null)
+			            OnSmartObjectUnsubscribe(this, item.Value);
 	            }
 	            m_SmartObjects.Clear();
 
-	        }
-	        catch (Exception ex)
-	        {
-	            IcdConsole.PrintLine("Exception occurred: {0} - {1}", ex.Message, ex.InnerException.Message);
 	        }
 			finally
 			{
@@ -142,10 +136,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	        if (!m_SmartObjects.ContainsKey(key))
 	        {
 	            m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
-	            if (OnSmartObjectSubscribe != null)
-	            {
-	                OnSmartObjectSubscribe(this, m_SmartObjects[key]);
-	            }
+		        if (OnSmartObjectSubscribe != null)
+			        OnSmartObjectSubscribe(this, m_SmartObjects[key]);
 	        }
 
 	        return m_SmartObjects[key];

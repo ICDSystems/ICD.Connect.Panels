@@ -168,7 +168,7 @@ namespace ICD.Connect.Panels.Server
 			if (panel == null)
 				return;
 
-			panel.OnAnyOutput += PanelOnOnAnyOutput;
+			panel.OnAnyOutput += PanelOnAnyOutput;
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace ICD.Connect.Panels.Server
 			if (panel == null)
 				return;
 
-			panel.OnAnyOutput -= PanelOnOnAnyOutput;
+			panel.OnAnyOutput -= PanelOnAnyOutput;
 		}
 
 		/// <summary>
@@ -188,7 +188,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void PanelOnOnAnyOutput(object sender, SigInfoEventArgs args)
+		private void PanelOnAnyOutput(object sender, SigInfoEventArgs args)
 		{
 			m_Client.Send(args.Data.Serialize());
 		}
