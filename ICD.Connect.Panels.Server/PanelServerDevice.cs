@@ -3,15 +3,18 @@ using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Common.Utils.Json;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SmartObjectCollections;
+using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.EventArguments;
 using ICD.Connect.Protocol.Network.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings.Core;
+using Newtonsoft.Json;
 
 namespace ICD.Connect.Panels.Server
 {
@@ -20,6 +23,9 @@ namespace ICD.Connect.Panels.Server
 	/// </summary>
 	public sealed class PanelServerDevice : AbstractDeviceBase<PanelServerDeviceSettings>, IPanelDevice
 	{
+		public const string SIG_MESSAGE = "S";
+		public const string SMART_OBJECT_MESSAGE = "So";
+
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
@@ -74,6 +80,7 @@ namespace ICD.Connect.Panels.Server
 
 			m_SigCallbacks = new SigCallbackManager();
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
+			Subscribe(m_SmartObjects);
 
 			m_Server = new AsyncTcpServer {MaxNumberOfClients = AsyncTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED};
 			Subscribe(m_Server);
@@ -101,7 +108,7 @@ namespace ICD.Connect.Panels.Server
 				if (!m_Server.GetClients().Any())
 					return;
 
-				string serial = sigInfo.Serialize();
+				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
 				m_Server.Send(serial);
 			}
 			finally
@@ -212,6 +219,8 @@ namespace ICD.Connect.Panels.Server
 		{
 			base.DisposeFinal(disposing);
 
+			Unsubscribe(m_SmartObjects);
+
 			Unsubscribe(m_Buffers);
 			m_Buffers.Dispose();
 
@@ -304,15 +313,84 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="data"></param>
 		private void BuffersOnClientCompletedSerial(TcpServerBufferManager sender, uint clientId, string data)
 		{
-			SigInfo sigInfo = SigInfo.Deserialize(data);
+			JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), data);
+		}
 
-			if (sigInfo.SmartObject == 0)
-				m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
-			else
-				m_SmartObjects[sigInfo.SmartObject].HandleOutputSig(sigInfo);
+		/// <summary>
+		/// Deserialize incoming json messages.
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <param name="messageName"></param>
+		/// <returns></returns>
+		private object DeserializeJson(JsonReader reader, string messageName)
+		{
+			switch (messageName)
+			{
+				case (SIG_MESSAGE):
+					SigInfo sigInfo = SigInfo.Deserialize(reader);
 
-			LastOutput = IcdEnvironment.GetLocalTime();
-			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+					if (sigInfo.SmartObject == 0)
+						m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
+					else
+						m_SmartObjects[sigInfo.SmartObject].HandleOutputSig(sigInfo);
+
+					LastOutput = IcdEnvironment.GetLocalTime();
+
+					OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+
+					return sigInfo;
+
+				default:
+					return null;
+			}
+		}
+
+		#endregion
+
+		#region SmartObject Callbacks
+
+		private void Subscribe(ISmartObjectCollection smartObjects)
+		{
+			smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+		}
+
+		private void Unsubscribe(ISmartObjectCollection smartObjects)
+		{
+			smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+		}
+
+		/// <summary>
+		/// Subscribes to SmartObject Touch Events
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="smartObject"></param>
+		private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+		{
+			// When a SmartObject is added to the collection we need to inform the clients that we are
+			// using the SmartObject so they can handle output events.
+			SendSmartObjectId(smartObject.SmartObjectId);
+		}
+
+		/// <summary>
+		/// Sends a message to the clients informing of a smart object being added.
+		/// </summary>
+		/// <param name="smartObjectId"></param>
+		private void SendSmartObjectId(uint smartObjectId)
+		{
+			m_SendSection.Enter();
+
+			try
+			{
+				if (!m_Server.GetClients().Any())
+					return;
+
+				string serial = JsonUtils.SerializeMessage(w => w.WriteValue(smartObjectId), SMART_OBJECT_MESSAGE);
+				m_Server.Send(serial);
+			}
+			finally
+			{
+				m_SendSection.Leave();
+			}
 		}
 
 		#endregion

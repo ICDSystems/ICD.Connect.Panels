@@ -1,14 +1,18 @@
 ﻿using System;
 using ICD.Common.Services.Logging;
 using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
+using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Timers;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
+using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Network.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings.Core;
+using Newtonsoft.Json;
 
 namespace ICD.Connect.Panels.Server
 {
@@ -269,9 +273,38 @@ namespace ICD.Connect.Panels.Server
 			if (m_Panel == null)
 				return;
 
-			SigInfo sig = SigInfo.Deserialize(args.Data);
+			JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), args.Data);
+		}
 
-			HandleInputSig(sig.SmartObject == 0 ? (ISigInputOutput)m_Panel : m_Panel.SmartObjects[sig.SmartObject], sig);
+		/// <summary>
+		/// Deserialize incoming json messages.
+		/// </summary>
+		/// <param name="reader"></param>
+		/// <param name="messageName"></param>
+		/// <returns></returns>
+		private object DeserializeJson(JsonReader reader, string messageName)
+		{
+			switch (messageName)
+			{
+				// Received an input sig from the server
+				case (PanelServerDevice.SIG_MESSAGE):
+					SigInfo sigInfo = SigInfo.Deserialize(reader);
+					HandleInputSig(sigInfo.SmartObject == 0 ? (ISigInputOutput)m_Panel : m_Panel.SmartObjects[sigInfo.SmartObject],
+					               sigInfo);
+					return sigInfo;
+
+				// Server informs us to use the given smart object
+				case (PanelServerDevice.SMART_OBJECT_MESSAGE):
+					uint smartObject = (uint)reader.GetValueAsInt();
+
+// ReSharper disable once UnusedVariable
+					ISmartObject so = m_Panel.SmartObjects[smartObject];
+
+					return smartObject;
+
+				default:
+					return null;
+			}
 		}
 
 		private void HandleInputSig(ISigInputOutput device, SigInfo sig)
