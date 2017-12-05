@@ -240,6 +240,9 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="args"></param>
 		private void ClientOnOnIsOnlineStateChanged(object sender, BoolEventArgs args)
 		{
+			if (!args.Data)
+				Clear();
+
 			UpdateCachedOnlineStatus();
 		}
 
