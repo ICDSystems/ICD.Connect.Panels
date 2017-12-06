@@ -20,6 +20,9 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
 	{
+		// When we lose connection with the panel server we set this join high on the panel
+		private const ushort DIGITAL_OFFLINE_JOIN = 29;
+
 		// How often to check the connection and reconnect if necessary.
 		private const long CONNECTION_CHECK_MILLISECONDS = 30 * 1000;
 
@@ -109,9 +112,13 @@ namespace ICD.Connect.Panels.Server
 
 			if (m_Panel != null)
 				Connect();
+
+			UpdateCachedOnlineStatus();
 		}
 
 		#endregion
+
+		#region Private Methods
 
 		/// <summary>
 		/// Called periodically to maintain connection to the device.
@@ -126,6 +133,26 @@ namespace ICD.Connect.Panels.Server
 		{
 			return m_Client != null && m_Client.IsOnline;
 		}
+
+		protected override void UpdateCachedOnlineStatus()
+		{
+			base.UpdateCachedOnlineStatus();
+
+			UpdatePanelOfflineJoin();
+		}
+
+		/// <summary>
+		/// Sets the panel offline join high when there is no connection to the server.
+		/// </summary>
+		private void UpdatePanelOfflineJoin()
+		{
+			if (m_Panel == null)
+				return;
+
+			m_Panel.SendInputDigital(DIGITAL_OFFLINE_JOIN, !IsOnline);
+		}
+
+		#endregion
 
 		#region Settings
 
