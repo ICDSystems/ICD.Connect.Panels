@@ -178,11 +178,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			m_Panel = panel;
 
-			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
-			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
-			m_StringInput.SetCollection(Panel == null ? null : Panel.StringInput);
-			m_SmartObjects.SetSmartObjects(Panel == null ? null : Panel.SmartObjects);
-
 			if (Panel != null && !Panel.Registered)
 			{
 				if (Name != null)
@@ -194,6 +189,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
 					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 			}
+
+			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
+			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
+			m_StringInput.SetCollection(Panel == null ? null : Panel.StringInput);
+			m_SmartObjects.SetSmartObjects(Panel == null ? null : Panel.SmartObjects);
+
+			// Set the panel to "offline" visually by default.
+			if (m_Panel != null)
+				SendInputDigital(CommonJoins.DIGITAL_OFFLINE_JOIN, true);
 
 			Subscribe(Panel);
 			UpdateCachedOnlineStatus();
