@@ -20,9 +20,6 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
 	{
-		// When we lose connection with the panel server we set this join high on the panel
-		private const ushort DIGITAL_OFFLINE_JOIN = 29;
-
 		// How often to check the connection and reconnect if necessary.
 		private const long CONNECTION_CHECK_MILLISECONDS = 30 * 1000;
 
@@ -149,7 +146,7 @@ namespace ICD.Connect.Panels.Server
 			if (m_Panel == null)
 				return;
 
-			m_Panel.SendInputDigital(DIGITAL_OFFLINE_JOIN, !IsOnline);
+			m_Panel.SendInputDigital(CommonJoins.DIGITAL_OFFLINE_JOIN, !IsOnline);
 		}
 
 		#endregion

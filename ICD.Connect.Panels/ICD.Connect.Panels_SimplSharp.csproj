@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AbstractPanelDeviceSettings.cs" />
     <Compile Include="AbstractSigDevice.cs" />
+    <Compile Include="CommonJoins.cs" />
     <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
     <Compile Include="Controls\IHardButtonBacklightControl.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
