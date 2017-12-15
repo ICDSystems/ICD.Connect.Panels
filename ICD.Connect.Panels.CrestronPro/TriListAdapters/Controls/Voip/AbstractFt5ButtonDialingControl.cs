@@ -342,7 +342,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			// Caller number
 			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
-			if (!string.IsNullOrEmpty(uri))
+			if (!StringUtils.IsNullOrWhitespace(uri))
 			{
 				m_ActiveSource.Name = uri;
 				m_ActiveSource.Number = SipUtils.NumberFromUri(uri);
