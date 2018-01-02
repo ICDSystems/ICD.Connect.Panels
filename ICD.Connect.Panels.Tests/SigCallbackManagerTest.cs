@@ -34,6 +34,7 @@ namespace ICD.Connect.Panels.Tests
 
 			manager.RaiseSigChangeCallback(new SigInfo());
 			
+		    // ReSharper disable once PossibleInvalidOperationException
 			Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)manager.LastOutput).TotalSeconds, 1);
 	    }
 
