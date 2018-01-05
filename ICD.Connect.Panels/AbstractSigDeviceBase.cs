@@ -242,6 +242,9 @@ namespace ICD.Connect.Panels
 				yield return command;
 
 			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
+			yield return new ParamsConsoleCommand("SendAnalogSig", "Sends the given sigs to this device. Paramaters are SigNumber, AnalogValue.", a => SendAnalogSig(a));
+			yield return new ParamsConsoleCommand("SendDigitalSig", "Sends the given sigs to this device. Parameters are SigNumber, DigitalValue.", a => SendDigitalSig(a));
+			yield return new ParamsConsoleCommand("SendSerialSig", "Sends the given sigs to this device. Parameters are SigNumber, SerialValue", a => SendSerialSig(a));
 		}
 
 		/// <summary>
@@ -267,6 +270,31 @@ namespace ICD.Connect.Panels
 				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
 
 			return builder.ToString();
+		}
+
+		private void SendAnalogSig(string[] args)
+		{
+			uint sigNumber;
+			StringUtils.TryParse(args[0], out sigNumber);
+			ushort analogValue;
+			StringUtils.TryParse(args[1], out analogValue);
+			SendInputAnalog(sigNumber, analogValue);
+		}
+
+		private void SendDigitalSig(string[] args)
+		{
+			uint sigNumber;
+			StringUtils.TryParse(args[0], out sigNumber);
+			bool digitaValue;
+			StringUtils.TryParse(args[1], out digitaValue);
+			SendInputDigital(sigNumber, digitaValue);
+		}
+
+		private void SendSerialSig(string[] args)
+		{
+			uint sigNumber;
+			StringUtils.TryParse(args[0], out sigNumber);
+			SendInputSerial(sigNumber, args[1]);
 		}
 
 		#endregion
