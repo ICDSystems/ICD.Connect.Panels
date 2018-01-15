@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Common.Utils;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Protocol.Sigs;
@@ -10,7 +11,6 @@ using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
 #endif
 using ICD.Common.Properties;
-using ICD.Common.Services.Logging;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Settings.Core;

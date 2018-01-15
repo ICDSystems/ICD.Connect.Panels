@@ -1,8 +1,8 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Common.Utils.Services.Logging;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro.UI;
-using ICD.Common.Services.Logging;
 using ICD.Connect.API.Commands;
 using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X60;
