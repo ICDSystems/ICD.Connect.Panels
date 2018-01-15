@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
+using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
@@ -417,6 +419,28 @@ namespace ICD.Connect.Panels.Server
 			base.BuildConsoleStatus(addRow);
 
 			addRow("Port", Port);
+		}
+
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns/>
+		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
+		{
+			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			yield return new GenericConsoleCommand<uint, ushort, string>("SendSerialSOSig", "", (n, s, v) => Callback(n, s, v));
+		}
+
+		private void Callback(uint number, ushort so, string serial)
+		{
+			SmartObjects[so].SendInputSerial(number, serial);
+		}
+
+		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
+		{
+			return base.GetConsoleCommands();
 		}
 
 		#endregion
