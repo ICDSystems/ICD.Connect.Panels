@@ -1,5 +1,4 @@
 using ICD.Connect.Devices;
-using ICD.Connect.Settings;
 
 namespace ICD.Connect.Panels
 {
@@ -8,7 +7,7 @@ namespace ICD.Connect.Panels
 	/// </summary>
 	public abstract class AbstractPanelDeviceSettings : AbstractDeviceBaseSettings, IPanelDeviceSettings
 	{
-		public const string PANEL_ELEMENT = "Panel";
+		private const string PANEL_ELEMENT = "Panel";
 
 		/// <summary>
 		/// Gets the xml element.
