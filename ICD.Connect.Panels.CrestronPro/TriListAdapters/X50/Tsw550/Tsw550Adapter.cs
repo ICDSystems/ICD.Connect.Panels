@@ -4,11 +4,12 @@ using Crestron.SimplSharpPro;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw550
 {
-    /// <summary>
-    /// Tsw550Adapter wraps a Tsw550 for use with the UIPro library.
-    /// </summary>
+	/// <summary>
+	/// Tsw550Adapter wraps a Tsw550 for use with the UIPro library.
+	/// </summary>
 #if SIMPLSHARP
-	public sealed class Tsw550Adapter : AbstractTswFt5ButtonSystemAdapter<Crestron.SimplSharpPro.UI.Tsw550, Tsw550AdapterSettings>
+	public sealed class Tsw550Adapter :
+		AbstractTswFt5ButtonSystemAdapter<Crestron.SimplSharpPro.UI.Tsw550, Tsw550AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.

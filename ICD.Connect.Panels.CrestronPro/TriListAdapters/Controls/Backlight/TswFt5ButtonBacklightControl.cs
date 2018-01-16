@@ -3,7 +3,8 @@ using Crestron.SimplSharpPro.DeviceSupport;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
-	public sealed class TswFt5ButtonBacklightControl : AbstractFt5ButtonBacklightControl<ITswFt5ButtonAdapter, TswFt5Button, TsxSystemReservedSigs>
+	public sealed class TswFt5ButtonBacklightControl :
+		AbstractFt5ButtonBacklightControl<ITswFt5ButtonAdapter, TswFt5Button, TsxSystemReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
@@ -24,4 +25,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 	}
 }
+
 #endif

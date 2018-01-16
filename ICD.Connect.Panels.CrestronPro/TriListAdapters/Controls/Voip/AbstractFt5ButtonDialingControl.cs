@@ -15,7 +15,8 @@ using ICD.Connect.Conferencing.Utils;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
-	public abstract class AbstractFt5ButtonDialingControl<TParent, TPanel, TVoIpSigs> : AbstractDialingDeviceControl<TParent>
+	public abstract class AbstractFt5ButtonDialingControl<TParent, TPanel, TVoIpSigs> :
+		AbstractDialingDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
@@ -207,7 +208,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (Panel == null)
 				return;
 
-			var sigs = Sigs;
+			TVoIpSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
@@ -224,7 +225,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (Panel == null)
 				return;
 
-			var sigs = Sigs;
+			TVoIpSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
@@ -336,7 +337,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (m_ActiveSource == null)
 				return;
 
-			var sigs = Sigs;
+			TVoIpSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
@@ -352,8 +353,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (sigs.CallActiveFeedback.BoolValue)
 			{
 				m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
-										? eConferenceSourceStatus.OnHold
-										: eConferenceSourceStatus.Connected;
+					                        ? eConferenceSourceStatus.OnHold
+					                        : eConferenceSourceStatus.Connected;
 			}
 			else
 			{
@@ -570,4 +571,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		#endregion
 	}
 }
+
 #endif

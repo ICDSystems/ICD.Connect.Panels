@@ -1,9 +1,9 @@
 using System;
+using ICD.Common.Properties;
+using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif
-using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {

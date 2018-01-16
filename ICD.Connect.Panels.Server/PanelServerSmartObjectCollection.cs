@@ -14,10 +14,10 @@ namespace ICD.Connect.Panels.Server
 		private readonly Dictionary<uint, PanelServerSmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
 
-	    public event AddSmartObject OnSmartObjectSubscribe;
-	    public event RemoveSmartObject OnSmartObjectUnsubscribe;
+		public event AddSmartObject OnSmartObjectSubscribe;
+		public event RemoveSmartObject OnSmartObjectUnsubscribe;
 
-	    /// <summary>
+		/// <summary>
 		/// Get the object at the specified number.
 		/// </summary>
 		/// <param name="paramKey">the key of the value to get.</param>
@@ -75,13 +75,12 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
-				foreach (var item in m_SmartObjects)
+				foreach (KeyValuePair<uint, PanelServerSmartObject> item in m_SmartObjects)
 				{
 					if (OnSmartObjectUnsubscribe != null)
 						OnSmartObjectUnsubscribe(this, item.Value);
 				}
 				m_SmartObjects.Clear();
-
 			}
 			finally
 			{

@@ -88,7 +88,6 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers = new TcpServerBufferManager(() => new JsonSerialBuffer());
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
-            
 		}
 
 		#region Methods
@@ -131,7 +130,8 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void RegisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		public void RegisterOutputSigChangeCallback(uint number, eSigType type,
+		                                            Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.RegisterSigChangeCallback(number, type, callback);
 		}
@@ -142,7 +142,8 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="number"></param>
 		/// <param name="type"></param>
 		/// <param name="callback"></param>
-		public void UnregisterOutputSigChangeCallback(uint number, eSigType type, Action<SigCallbackManager, SigInfoEventArgs> callback)
+		public void UnregisterOutputSigChangeCallback(uint number, eSigType type,
+		                                              Action<SigCallbackManager, SigInfoEventArgs> callback)
 		{
 			m_SigCallbacks.UnregisterSigChangeCallback(number, type, callback);
 		}
@@ -212,9 +213,9 @@ namespace ICD.Connect.Panels.Server
 			base.ApplySettingsFinal(settings, factory);
 
 			Port = settings.Port;
-		    m_Server.Start();
-		    UpdateCachedOnlineStatus();
-        }
+			m_Server.Start();
+			UpdateCachedOnlineStatus();
+		}
 
 		#endregion
 

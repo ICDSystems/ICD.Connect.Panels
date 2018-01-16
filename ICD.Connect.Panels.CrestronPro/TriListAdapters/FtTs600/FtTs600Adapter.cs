@@ -9,7 +9,8 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
 #if SIMPLSHARP
-	public sealed class FtTs600Adapter : AbstractFt5ButtonAdapter<Crestron.SimplSharpPro.UI.FtTs600, FtTs600AdapterSettings>
+	public sealed class FtTs600Adapter :
+		AbstractFt5ButtonAdapter<Crestron.SimplSharpPro.UI.FtTs600, FtTs600AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.

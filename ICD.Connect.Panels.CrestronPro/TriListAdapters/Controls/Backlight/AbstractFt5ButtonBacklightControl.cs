@@ -8,7 +8,8 @@ using ICD.Connect.Devices.Controls;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
-	public abstract class AbstractFt5ButtonBacklightControl<TParent, TPanel, TSystemSigs> : AbstractPowerDeviceControl<TParent>
+	public abstract class AbstractFt5ButtonBacklightControl<TParent, TPanel, TSystemSigs> :
+		AbstractPowerDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TSystemSigs : TsxSystemReservedSigs
@@ -147,7 +148,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 			if (Panel == null)
 				return;
 
-			var sigs = Sigs;
+			TSystemSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
@@ -164,7 +165,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 			if (Panel == null)
 				return;
 
-			var sigs = Sigs;
+			TSystemSigs sigs = Sigs;
 			if (sigs == null)
 				return;
 
@@ -227,4 +228,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		#endregion
 	}
 }
+
 #endif

@@ -5,7 +5,8 @@ using Crestron.SimplSharpPro.UI;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 #if SIMPLSHARP
-	public abstract class AbstractFt5ButtonAdapter<TPanel, TSettings> : AbstractTswFt5ButtonAdapter<TPanel, TSettings>, IFt5ButtonAdapter
+	public abstract class AbstractFt5ButtonAdapter<TPanel, TSettings> : AbstractTswFt5ButtonAdapter<TPanel, TSettings>,
+	                                                                    IFt5ButtonAdapter
 		where TPanel : Ft5Button
 #else
 	public abstract class AbstractFt5ButtonAdapter<TSettings> : AbstractTswFt5ButtonAdapter<TSettings>, IFt5ButtonAdapter

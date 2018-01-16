@@ -3,7 +3,8 @@ using ICD.Connect.Devices.Controls;
 
 namespace ICD.Connect.Panels.Controls
 {
-	public abstract class AbstractHardButtonBacklightControl<TParent> : AbstractDeviceControl<TParent>, IHardButtonBacklightControl
+	public abstract class AbstractHardButtonBacklightControl<TParent> : AbstractDeviceControl<TParent>,
+	                                                                    IHardButtonBacklightControl
 		where TParent : IDeviceBase
 	{
 		/// <summary>

@@ -10,7 +10,6 @@ using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
-
 	public sealed class SmartObjectCollectionAdapter : ISmartObjectCollection
 	{
 		private SmartObjectCollection m_Collection;
@@ -18,8 +17,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly Dictionary<uint, ISmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
 
-        public event AddSmartObject OnSmartObjectSubscribe;
-        public event RemoveSmartObject OnSmartObjectUnsubscribe;
+		public event AddSmartObject OnSmartObjectSubscribe;
+		public event RemoveSmartObject OnSmartObjectUnsubscribe;
 
 		/// <summary>
 		/// Get the object at the specified number.
@@ -58,37 +57,36 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		#region Methods
 
-        /// <summary>
-        /// Initializes smart objects
-        /// </summary>
-        /// <param name="collection"></param>
-	    public void SetSmartObjects(SmartObjectCollection collection)
-	    {
-	        if (collection == m_Collection)
-		        return;
+		/// <summary>
+		/// Initializes smart objects
+		/// </summary>
+		/// <param name="collection"></param>
+		public void SetSmartObjects(SmartObjectCollection collection)
+		{
+			if (collection == m_Collection)
+				return;
 
-	        m_Collection = collection;
+			m_Collection = collection;
 
-            Clear();
-	    }
+			Clear();
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Clears the cached smart objects.
 		/// </summary>
 		public void Clear()
 		{
 			m_SmartObjectsSection.Enter();
 
-	        try
-	        {
-	            foreach (var item in m_SmartObjects)
-	            {
-		            if (OnSmartObjectUnsubscribe != null)
-			            OnSmartObjectUnsubscribe(this, item.Value);
-	            }
-	            m_SmartObjects.Clear();
-
-	        }
+			try
+			{
+				foreach (KeyValuePair<uint, ISmartObject> item in m_SmartObjects)
+				{
+					if (OnSmartObjectUnsubscribe != null)
+						OnSmartObjectUnsubscribe(this, item.Value);
+				}
+				m_SmartObjects.Clear();
+			}
 			finally
 			{
 				m_SmartObjectsSection.Leave();
@@ -97,8 +95,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		public IEnumerator<KeyValuePair<uint, ISmartObject>> GetEnumerator()
 		{
-            if (m_Collection == null)
-                throw new InvalidOperationException("No internal collection");
+			if (m_Collection == null)
+				throw new InvalidOperationException("No internal collection");
 
 			m_SmartObjectsSection.Enter();
 
@@ -123,27 +121,28 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			return GetEnumerator();
 		}
 
-	    /// <summary>
-	    /// Gets the smart object wrapper for the given key.
-	    /// </summary>
-	    /// <param name="key"></param>
-	    /// <returns></returns>
-	    private ISmartObject LazyLoadSmartObject(uint key)
-	    {
-            if (m_Collection == null)
-                throw new InvalidOperationException("No internal collection");
+		/// <summary>
+		/// Gets the smart object wrapper for the given key.
+		/// </summary>
+		/// <param name="key"></param>
+		/// <returns></returns>
+		private ISmartObject LazyLoadSmartObject(uint key)
+		{
+			if (m_Collection == null)
+				throw new InvalidOperationException("No internal collection");
 
-	        if (!m_SmartObjects.ContainsKey(key))
-	        {
-	            m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
-		        if (OnSmartObjectSubscribe != null)
-			        OnSmartObjectSubscribe(this, m_SmartObjects[key]);
-	        }
+			if (!m_SmartObjects.ContainsKey(key))
+			{
+				m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
+				if (OnSmartObjectSubscribe != null)
+					OnSmartObjectSubscribe(this, m_SmartObjects[key]);
+			}
 
-	        return m_SmartObjects[key];
-	    }
+			return m_SmartObjects[key];
+		}
 
-	    #endregion
+		#endregion
 	}
 }
+
 #endif

@@ -170,9 +170,7 @@ namespace ICD.Connect.Panels.Server
 			{
 				panel = factory.GetOriginatorById(settings.Panel.Value) as IPanelDevice;
 				if (panel == null)
-				{
 					Logger.AddEntry(eSeverity.Error, "No panel with id {0}", settings.Panel.Value);
-				}
 			}
 
 			SetPanel(panel);

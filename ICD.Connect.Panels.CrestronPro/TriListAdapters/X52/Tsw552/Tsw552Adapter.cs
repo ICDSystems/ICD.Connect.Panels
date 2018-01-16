@@ -5,7 +5,8 @@ using Crestron.SimplSharpPro;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52.Tsw552
 {
 #if SIMPLSHARP
-	public sealed class Tsw552Adapter : AbstractTswX52ButtonVoiceControlAdapter<Crestron.SimplSharpPro.UI.Tsw552, Tsw552AdapterSettings>
+	public sealed class Tsw552Adapter :
+		AbstractTswX52ButtonVoiceControlAdapter<Crestron.SimplSharpPro.UI.Tsw552, Tsw552AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.

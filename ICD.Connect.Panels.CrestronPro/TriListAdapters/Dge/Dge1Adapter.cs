@@ -1,10 +1,10 @@
 ﻿using System;
+using ICD.Common.Properties;
+using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
-using ICD.Common.Properties;
-using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {

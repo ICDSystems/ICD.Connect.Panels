@@ -72,6 +72,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 	public abstract class AbstractTswFt5ButtonSystemAdapterSettings : AbstractTswFt5ButtonAdapterSettings,
 	                                                                  ITswFt5ButtonSystemAdapterSettings
 	{
-
 	}
 }

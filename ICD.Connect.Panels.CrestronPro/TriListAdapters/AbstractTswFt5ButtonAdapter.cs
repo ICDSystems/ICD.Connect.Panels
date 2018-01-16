@@ -1,16 +1,17 @@
-﻿using ICD.Connect.Devices.Controls;
+﻿using ICD.Common.Properties;
+using ICD.Common.Utils.Xml;
+using ICD.Connect.Conferencing.Controls;
+using ICD.Connect.Devices.Controls;
+using ICD.Connect.Settings.Core;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
-using ICD.Common.Properties;
-using ICD.Common.Utils.Xml;
-using ICD.Connect.Conferencing.Controls;
-using ICD.Connect.Settings.Core;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 #if SIMPLSHARP
-	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, ITswFt5ButtonAdapter
+	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>,
+	                                                                       ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 #else
 	public abstract class AbstractTswFt5ButtonAdapter<TSettings> : AbstractTriListAdapter<TSettings>, ITswFt5ButtonAdapter
@@ -32,7 +33,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <summary>
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
-		public IDialingDeviceControl VoipDialingControl { get { return m_DialingControl; }}
+		public IDialingDeviceControl VoipDialingControl { get { return m_DialingControl; } }
 
 		/// <summary>
 		/// Gets the backlight control for this panel.

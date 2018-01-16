@@ -5,7 +5,8 @@ using Crestron.SimplSharpPro.UI;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
 #if SIMPLSHARP
-	public abstract class AbstractDge1BaseAdapter<TPanel, TSettings> : AbstractDgeAdapter<TPanel, TSettings>, IDge1BaseAdapter
+	public abstract class AbstractDge1BaseAdapter<TPanel, TSettings> : AbstractDgeAdapter<TPanel, TSettings>,
+	                                                                   IDge1BaseAdapter
 		where TPanel : Dge1Base
 #else
 	public abstract class AbstractDge1BaseAdapter<TSettings> : AbstractDgeAdapter<TSettings>, IDge1BaseAdapter

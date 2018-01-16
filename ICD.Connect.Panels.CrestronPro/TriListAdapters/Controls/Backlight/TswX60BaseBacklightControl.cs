@@ -26,4 +26,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 	}
 }
+
 #endif
