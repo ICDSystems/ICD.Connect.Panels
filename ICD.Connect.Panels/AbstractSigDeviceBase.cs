@@ -242,9 +242,9 @@ namespace ICD.Connect.Panels
 				yield return command;
 
 			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
-			yield return new GenericConsoleCommand<uint, ushort>("SendAnalogSig", "Sends the given sig to this device. Paramaters are SigNumber, AnalogValue.", (n, v) => SendInputAnalog(n, v));
-			yield return new GenericConsoleCommand<uint, bool>("SendDigitalSig", "Sends the given sig to this device. Parameters are SigNumber, DigitalValue.", (n, v) => SendInputDigital(n, v));
-			yield return new GenericConsoleCommand<uint, string>("SendSerialSig", "Sends the given sig to this device. Parameters are SigNumber, SerialValue", (n, v) => SendInputSerial(n, v));
+			yield return new GenericConsoleCommand<uint, ushort>("SendAnalogSig", "SendAnalogSig <Number> <Value>", (n, v) => SendInputAnalog(n, v));
+			yield return new GenericConsoleCommand<uint, bool>("SendDigitalSig", "SendDigitalSig <Number> <Value>", (n, v) => SendInputDigital(n, v));
+			yield return new GenericConsoleCommand<uint, string>("SendSerialSig", "SendSerialSig <Number> <Value>", (n, v) => SendInputSerial(n, v));
 		}
 
 		/// <summary>
@@ -264,7 +264,10 @@ namespace ICD.Connect.Panels
 			                                     .Concat(UShortInput.Cast<ISig>())
 			                                     .Concat(StringInput.Cast<ISig>()
 			                                                        .Where(s => !string.IsNullOrEmpty(s.GetStringValue())))
-			                                     .Where(s => s.HasValue());
+			                                     .Where(s => s.HasValue())
+												 .OrderBy(s => s.Type)
+												 .ThenBy(s => s.Number)
+												 .ThenBy(s => s.Name);
 
 			foreach (ISig item in sigs)
 				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
