@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Settings.Core;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif
 
@@ -18,6 +19,30 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 		                                                                            CrestronControlSystem controlSystem)
 		{
 			return new Crestron.SimplSharpPro.UI.CrestronApp(ipid, controlSystem);
+		}
+
+		/// <summary>
+		/// Override to apply properties to the settings instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		protected override void CopySettingsFinal(CrestronAppAdapterSettings settings)
+		{
+			base.CopySettingsFinal(settings);
+
+			settings.ProjectName = Panel == null ? null : Panel.ParameterProjectName.Value;
+		}
+
+		/// <summary>
+		/// Override to apply settings to the instance.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		protected override void ApplySettingsFinal(CrestronAppAdapterSettings settings, IDeviceFactory factory)
+		{
+			base.ApplySettingsFinal(settings, factory);
+
+			if (Panel != null)
+				Panel.ParameterProjectName.Value = settings.ProjectName;
 		}
 	}
 #else
