@@ -1,4 +1,5 @@
-﻿using ICD.Connect.Settings.Core;
+﻿using ICD.Connect.API.Nodes;
+using ICD.Connect.Settings.Core;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif
@@ -43,6 +44,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 
 			if (Panel != null)
 				Panel.ParameterProjectName.Value = settings.ProjectName;
+		}
+
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			addRow("ProjectName", Panel == null ? null : Panel.ParameterProjectName.Value);
 		}
 	}
 #else
