@@ -82,7 +82,11 @@ namespace ICD.Connect.Panels.Server
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
-			m_Server = new AsyncTcpServer {MaxNumberOfClients = AsyncTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED};
+			m_Server = new AsyncTcpServer
+			{
+				Name = GetType().Name,
+				MaxNumberOfClients = AsyncTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED
+			};
 			Subscribe(m_Server);
 
 			m_Buffers = new TcpServerBufferManager(() => new JsonSerialBuffer());
