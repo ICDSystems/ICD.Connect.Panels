@@ -38,7 +38,10 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public PanelClientDevice()
 		{
-			m_Client = new AsyncTcpClient();
+			m_Client = new AsyncTcpClient
+			{
+				Name = GetType().Name
+			};
 			m_Buffer = new JsonSerialBuffer();
 
 			m_ConnectionTimer = new SafeTimer(ConnectionTimerCallback, 0, CONNECTION_CHECK_MILLISECONDS);
