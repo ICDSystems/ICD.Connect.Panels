@@ -22,11 +22,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			writer.WriteElementString(IPID_ELEMENT, StringUtils.ToIpIdString(Ipid));
 		}
 
-		protected static void ParseXml(AbstractTriListAdapterSettings instance, string xml)
+		/// <summary>
+		/// Updates the settings from xml.
+		/// </summary>
+		/// <param name="xml"></param>
+		public override void ParseXml(string xml)
 		{
-			instance.Ipid = XmlUtils.ReadChildElementContentAsByte(xml, IPID_ELEMENT);
+			base.ParseXml(xml);
 
-			ParseXml((AbstractPanelDeviceSettings)instance, xml);
+			Ipid = XmlUtils.ReadChildElementContentAsByte(xml, IPID_ELEMENT);
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace ICD.Connect.Panels.Server
 				Panel = panel
 			};
 
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

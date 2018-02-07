@@ -27,7 +27,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 		public static FtTs600AdapterSettings FromXml(string xml)
 		{
 			FtTs600AdapterSettings output = new FtTs600AdapterSettings();
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

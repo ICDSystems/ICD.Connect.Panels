@@ -30,7 +30,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
 		public static Tsw750AdapterSettings FromXml(string xml)
 		{
 			Tsw750AdapterSettings output = new Tsw750AdapterSettings();
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

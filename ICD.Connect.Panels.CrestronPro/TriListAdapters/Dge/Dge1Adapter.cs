@@ -51,7 +51,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		public static Dge1AdapterSettings FromXml(string xml)
 		{
 			Dge1AdapterSettings output = new Dge1AdapterSettings();
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

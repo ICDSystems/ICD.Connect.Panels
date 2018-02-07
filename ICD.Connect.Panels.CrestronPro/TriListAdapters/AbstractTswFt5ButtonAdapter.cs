@@ -174,11 +174,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			writer.WriteElementString(ENABLE_VOIP_ELEMENT, IcdXmlConvert.ToString(EnableVoip));
 		}
 
-		protected static void ParseXml(AbstractTswFt5ButtonAdapterSettings instance, string xml)
+		/// <summary>
+		/// Updates the settings from xml.
+		/// </summary>
+		/// <param name="xml"></param>
+		public override void ParseXml(string xml)
 		{
-			instance.EnableVoip = XmlUtils.TryReadChildElementContentAsBoolean(xml, ENABLE_VOIP_ELEMENT) ?? false;
+			base.ParseXml(xml);
 
-			AbstractTriListAdapterSettings.ParseXml(instance, xml);
+			EnableVoip = XmlUtils.TryReadChildElementContentAsBoolean(xml, ENABLE_VOIP_ELEMENT) ?? false;
 		}
 	}
 

@@ -27,7 +27,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52.Tsw1052
 		public static Tsw1052AdapterSettings FromXml(string xml)
 		{
 			Tsw1052AdapterSettings output = new Tsw1052AdapterSettings();
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

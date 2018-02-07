@@ -46,7 +46,7 @@ namespace ICD.Connect.Panels.Server
 				Port = port
 			};
 
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

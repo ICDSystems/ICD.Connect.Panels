@@ -49,7 +49,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 			{
 				ProjectName = XmlUtils.TryReadChildElementContentAsString(xml, PROJECT_NAME_ELEMENT)
 			};
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}

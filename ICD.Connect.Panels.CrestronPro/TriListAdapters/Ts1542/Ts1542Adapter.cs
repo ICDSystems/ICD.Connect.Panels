@@ -50,7 +50,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 		public static Ts1542AdapterSettings FromXml(string xml)
 		{
 			Ts1542AdapterSettings output = new Ts1542AdapterSettings();
-			ParseXml(output, xml);
+			output.ParseXml(xml);
 			return output;
 		}
 	}
