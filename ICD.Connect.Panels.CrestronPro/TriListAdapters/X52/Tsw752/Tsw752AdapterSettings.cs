@@ -1,9 +1,9 @@
 using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52.Tsw752
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class Tsw752AdapterSettings : AbstractTswX52ButtonVoiceControlAdapterSettings
 	{
 		private const string FACTORY_NAME = "Tsw752";
@@ -17,18 +17,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52.Tsw752
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
 		public override Type OriginatorType { get { return typeof(Tsw752Adapter); } }
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static Tsw752AdapterSettings FromXml(string xml)
-		{
-			Tsw752AdapterSettings output = new Tsw752AdapterSettings();
-			output.ParseXml(xml);
-			return output;
-		}
 	}
 }

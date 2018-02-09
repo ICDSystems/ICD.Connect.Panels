@@ -1,5 +1,4 @@
 using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
@@ -27,6 +26,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 	}
 #endif
 
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class Ts1542CAdapterSettings : AbstractTs1542AdapterSettings
 	{
 		private const string FACTORY_NAME = "Ts1542C";
@@ -40,18 +40,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
 		public override Type OriginatorType { get { return typeof(Ts1542CAdapter); } }
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static Ts1542CAdapterSettings FromXml(string xml)
-		{
-			Ts1542CAdapterSettings output = new Ts1542CAdapterSettings();
-			output.ParseXml(xml);
-			return output;
-		}
 	}
 }

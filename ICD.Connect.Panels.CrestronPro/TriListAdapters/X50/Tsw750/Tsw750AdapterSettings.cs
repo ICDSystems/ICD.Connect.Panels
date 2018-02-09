@@ -1,5 +1,4 @@
 ﻿using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
@@ -7,6 +6,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
 	/// <summary>
 	/// Settings for the Tsw750Adapter panel device.
 	/// </summary>
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class Tsw750AdapterSettings : AbstractTswFt5ButtonSystemAdapterSettings
 	{
 		private const string FACTORY_NAME = "Tsw750";
@@ -20,18 +20,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw750
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
 		public override Type OriginatorType { get { return typeof(Tsw750Adapter); } }
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static Tsw750AdapterSettings FromXml(string xml)
-		{
-			Tsw750AdapterSettings output = new Tsw750AdapterSettings();
-			output.ParseXml(xml);
-			return output;
-		}
 	}
 }

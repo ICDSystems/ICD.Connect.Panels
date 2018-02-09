@@ -1,9 +1,9 @@
 using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060Nc
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class Tsw1060NcAdapterSettings : AbstractTswX60BaseClassAdapterSettings
 	{
 		private const string FACTORY_NAME = "Tsw1060Nc";
@@ -17,18 +17,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060Nc
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
 		public override Type OriginatorType { get { return typeof(Tsw1060NcAdapter); } }
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static Tsw1060NcAdapterSettings FromXml(string xml)
-		{
-			Tsw1060NcAdapterSettings output = new Tsw1060NcAdapterSettings();
-			output.ParseXml(xml);
-			return output;
-		}
 	}
 }

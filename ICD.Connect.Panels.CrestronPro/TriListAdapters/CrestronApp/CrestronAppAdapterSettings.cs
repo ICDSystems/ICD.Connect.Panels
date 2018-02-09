@@ -1,10 +1,10 @@
 ﻿using System;
-using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class CrestronAppAdapterSettings : AbstractTriListAdapterSettings
 	{
 		private const string PROJECT_NAME_ELEMENT = "ProjectName";
@@ -38,19 +38,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 		}
 
 		/// <summary>
-		/// Loads the settings from XML.
+		/// Updates the settings from xml.
 		/// </summary>
 		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static CrestronAppAdapterSettings FromXml(string xml)
+		public override void ParseXml(string xml)
 		{
-			CrestronAppAdapterSettings output = new CrestronAppAdapterSettings
-			{
-				ProjectName = XmlUtils.TryReadChildElementContentAsString(xml, PROJECT_NAME_ELEMENT)
-			};
-			output.ParseXml(xml);
-			return output;
+			base.ParseXml(xml);
+
+			ProjectName = XmlUtils.TryReadChildElementContentAsString(xml, PROJECT_NAME_ELEMENT);
 		}
 	}
 }

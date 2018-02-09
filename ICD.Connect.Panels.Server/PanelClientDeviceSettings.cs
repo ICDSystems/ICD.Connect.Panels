@@ -1,5 +1,4 @@
 ﻿using System;
-using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Devices;
 using ICD.Connect.Settings.Attributes;
@@ -7,6 +6,7 @@ using ICD.Connect.Settings.Attributes.SettingsProperties;
 
 namespace ICD.Connect.Panels.Server
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class PanelClientDeviceSettings : AbstractDeviceSettings
 	{
 		private const string FACTORY_NAME = "PanelClient";
@@ -43,26 +43,20 @@ namespace ICD.Connect.Panels.Server
 		}
 
 		/// <summary>
-		/// Loads the settings from XML.
+		/// Updates the settings from xml.
 		/// </summary>
 		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static PanelClientDeviceSettings FromXml(string xml)
+		public override void ParseXml(string xml)
 		{
+			base.ParseXml(xml);
+
 			string address = XmlUtils.TryReadChildElementContentAsString(xml, ADDRESS_ELEMENT);
 			ushort port = XmlUtils.TryReadChildElementContentAsUShort(xml, PORT_ELEMENT) ?? 0;
 			int? panel = XmlUtils.TryReadChildElementContentAsInt(xml, PANEL_ELEMENT);
 
-			PanelClientDeviceSettings output = new PanelClientDeviceSettings
-			{
-				Address = address,
-				Port = port,
-				Panel = panel
-			};
-
-			output.ParseXml(xml);
-			return output;
+			Address = address;
+			Port = port;
+			Panel = panel;
 		}
 	}
 }

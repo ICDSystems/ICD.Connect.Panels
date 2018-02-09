@@ -1,9 +1,9 @@
 ﻿using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class FtTs600AdapterSettings : AbstractFt5ButtonAdapterSettings
 	{
 		private const string FACTORY_NAME = "FtTs600";
@@ -17,18 +17,5 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 		/// Gets the type of the originator for this settings instance.
 		/// </summary>
 		public override Type OriginatorType { get { return typeof(FtTs600Adapter); } }
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static FtTs600AdapterSettings FromXml(string xml)
-		{
-			FtTs600AdapterSettings output = new FtTs600AdapterSettings();
-			output.ParseXml(xml);
-			return output;
-		}
 	}
 }
