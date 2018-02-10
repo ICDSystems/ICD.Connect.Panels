@@ -9,6 +9,7 @@ using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
+using ICD.Connect.Panels.Server.PanelServer;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Network.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
@@ -16,7 +17,7 @@ using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings.Core;
 using Newtonsoft.Json;
 
-namespace ICD.Connect.Panels.Server
+namespace ICD.Connect.Panels.Server.PanelClient
 {
 	public sealed class PanelClientDevice : AbstractDevice<PanelClientDeviceSettings>
 	{

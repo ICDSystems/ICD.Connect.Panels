@@ -19,9 +19,10 @@ using Newtonsoft.Json;
 namespace ICD.Connect.Panels.Server
 {
 	/// <summary>
-	/// The PanelServerDevice wraps a TCPServer to emulate how existing Crestron panels work.
+	/// The AbstractPanelServerDevice wraps a TCPServer to emulate how existing Crestron panels work.
 	/// </summary>
-	public sealed class PanelServerDevice : AbstractDeviceBase<PanelServerDeviceSettings>, IPanelDevice
+	public abstract class AbstractPanelServerDevice<TSettings> : AbstractDeviceBase<TSettings>, IPanelServerDevice
+		where TSettings : IPanelServerDeviceSettings, new()
 	{
 		public const string SIG_MESSAGE = "S";
 		public const string SMART_OBJECT_MESSAGE = "So";
@@ -73,7 +74,7 @@ namespace ICD.Connect.Panels.Server
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public PanelServerDevice()
+		protected AbstractPanelServerDevice()
 		{
 			m_Cache = new SigCache();
 			m_SendSection = new SafeCriticalSection();
@@ -200,7 +201,7 @@ namespace ICD.Connect.Panels.Server
 		/// Override to apply properties to the settings instance.
 		/// </summary>
 		/// <param name="settings"></param>
-		protected override void CopySettingsFinal(PanelServerDeviceSettings settings)
+		protected override void CopySettingsFinal(TSettings settings)
 		{
 			base.CopySettingsFinal(settings);
 
@@ -212,7 +213,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="settings"></param>
 		/// <param name="factory"></param>
-		protected override void ApplySettingsFinal(PanelServerDeviceSettings settings, IDeviceFactory factory)
+		protected override void ApplySettingsFinal(TSettings settings, IDeviceFactory factory)
 		{
 			base.ApplySettingsFinal(settings, factory);
 

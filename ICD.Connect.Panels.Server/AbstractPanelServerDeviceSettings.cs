@@ -1,22 +1,10 @@
-﻿using System;
-using ICD.Common.Utils.Xml;
-using ICD.Connect.Settings.Attributes;
+﻿using ICD.Common.Utils.Xml;
 
 namespace ICD.Connect.Panels.Server
 {
-	[KrangSettings(FACTORY_NAME)]
-	public sealed class PanelServerDeviceSettings : AbstractPanelDeviceSettings
+	public abstract class AbstractPanelServerDeviceSettings : AbstractPanelDeviceSettings, IPanelServerDeviceSettings
 	{
-		private const string FACTORY_NAME = "PanelServer";
-
 		private const string PORT_ELEMENT = "Port";
-
-		/// <summary>
-		/// Gets the originator factory name.
-		/// </summary>
-		public override string FactoryName { get { return FACTORY_NAME; } }
-
-		public override Type OriginatorType { get { return typeof(PanelServerDevice); } }
 
 		public ushort Port { get; set; }
 

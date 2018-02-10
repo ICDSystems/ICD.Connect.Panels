@@ -11,7 +11,7 @@ namespace ICD.Connect.Panels.Server
 		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly ushort m_SmartObjectId;
-		private readonly PanelServerDevice m_Device;
+		private readonly IPanelServerDevice m_Device;
 		private readonly SigCallbackManager m_SigCallbacks;
 
 		#region Properties
@@ -33,7 +33,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="device"></param>
 		/// <param name="smartObjectId"></param>
-		public PanelServerSmartObject(PanelServerDevice device, ushort smartObjectId)
+		public PanelServerSmartObject(IPanelServerDevice device, ushort smartObjectId)
 		{
 			m_Device = device;
 			m_SmartObjectId = smartObjectId;

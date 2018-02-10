@@ -9,7 +9,7 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelServerSmartObjectCollection : ISmartObjectCollection
 	{
-		private readonly PanelServerDevice m_Device;
+		private readonly IPanelServerDevice m_Device;
 
 		private readonly Dictionary<uint, PanelServerSmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
@@ -56,7 +56,7 @@ namespace ICD.Connect.Panels.Server
 		/// Constructor.
 		/// </summary>
 		/// <param name="device"></param>
-		public PanelServerSmartObjectCollection(PanelServerDevice device)
+		public PanelServerSmartObjectCollection(IPanelServerDevice device)
 		{
 			m_SmartObjects = new Dictionary<uint, PanelServerSmartObject>();
 			m_SmartObjectsSection = new SafeCriticalSection();

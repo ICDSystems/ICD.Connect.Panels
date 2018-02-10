@@ -4,7 +4,7 @@ using ICD.Connect.Devices;
 using ICD.Connect.Settings.Attributes;
 using ICD.Connect.Settings.Attributes.SettingsProperties;
 
-namespace ICD.Connect.Panels.Server
+namespace ICD.Connect.Panels.Server.PanelClient
 {
 	[KrangSettings(FACTORY_NAME)]
 	public sealed class PanelClientDeviceSettings : AbstractDeviceSettings
