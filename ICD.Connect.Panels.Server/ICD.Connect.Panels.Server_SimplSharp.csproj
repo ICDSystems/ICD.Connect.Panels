@@ -68,12 +68,18 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractPanelServerDevice.cs" />
+    <Compile Include="AbstractPanelServerDeviceSettings.cs" />
+    <Compile Include="IPanelServerDevice.cs" />
+    <Compile Include="IPanelServerDeviceSettings.cs" />
     <Compile Include="KrangPlugin.cs" />
     <None Include="ObfuscationSettings.cs" />
-    <Compile Include="PanelClientDevice.cs" />
-    <Compile Include="PanelClientDeviceSettings.cs" />
-    <Compile Include="PanelServerDevice.cs" />
-    <Compile Include="PanelServerDeviceSettings.cs" />
+    <Compile Include="Osd\OsdPanelDevice.cs" />
+    <Compile Include="Osd\OsdPanelDeviceSettings.cs" />
+    <Compile Include="PanelClient\PanelClientDevice.cs" />
+    <Compile Include="PanelClient\PanelClientDeviceSettings.cs" />
+    <Compile Include="PanelServer\PanelServerDevice.cs" />
+    <Compile Include="PanelServer\PanelServerDeviceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PanelServerSmartObject.cs" />
     <Compile Include="PanelServerSmartObjectCollection.cs" />
@@ -87,6 +93,14 @@
     <ProjectReference Include="..\..\ICD.Connect.Devices\ICD.Connect.Devices\ICD.Connect.Devices_SimplSharp.csproj">
       <Project>{FD46A717-5836-4B73-ADD0-2706639DA8ED}</Project>
       <Name>ICD.Connect.Devices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ICD.Connect.Routing\ICD.Connect.Routing.Mock\ICD.Connect.Routing.Mock_SimplSharp.csproj">
+      <Project>{97A3B247-7928-461D-A083-077B4C875FFB}</Project>
+      <Name>ICD.Connect.Routing.Mock_SimplSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ICD.Connect.Routing\ICD.Connect.Routing\ICD.Connect.Routing_SimplSharp.csproj">
+      <Project>{B0C0CA1C-FA55-4BEA-8A8B-EDB2141C523E}</Project>
+      <Name>ICD.Connect.Routing_SimplSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\ICD.Connect.Panels\ICD.Connect.Panels_SimplSharp.csproj">
       <Project>{A441FE98-6A8E-4EF3-98F0-D17041D2E118}</Project>
