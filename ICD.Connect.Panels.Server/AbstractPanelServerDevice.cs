@@ -90,7 +90,7 @@ namespace ICD.Connect.Panels.Server
 			};
 			Subscribe(m_Server);
 
-			m_Buffers = new TcpServerBufferManager(() => new JsonSerialBuffer());
+			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(0xFF));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
 		}
@@ -113,7 +113,7 @@ namespace ICD.Connect.Panels.Server
 					return;
 
 				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
-				m_Server.Send(serial);
+				m_Server.Send(serial + 0xFF);
 			}
 			finally
 			{

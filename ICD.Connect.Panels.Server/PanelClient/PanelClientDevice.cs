@@ -25,7 +25,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		private const long CONNECTION_CHECK_MILLISECONDS = 30 * 1000;
 
 		private readonly AsyncTcpClient m_Client;
-		private readonly JsonSerialBuffer m_Buffer;
+		private readonly ISerialBuffer m_Buffer;
 		private readonly SafeTimer m_ConnectionTimer;
 
 		private IPanelDevice m_Panel;
@@ -43,7 +43,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			{
 				Name = GetType().Name
 			};
-			m_Buffer = new JsonSerialBuffer();
+			m_Buffer = new DelimiterSerialBuffer(0xFF);
 
 			m_ConnectionTimer = new SafeTimer(ConnectionTimerCallback, 0, CONNECTION_CHECK_MILLISECONDS);
 
@@ -290,7 +290,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// Subscribe to the buffer events.
 		/// </summary>
 		/// <param name="buffer"></param>
-		private void Subscribe(JsonSerialBuffer buffer)
+		private void Subscribe(ISerialBuffer buffer)
 		{
 			buffer.OnCompletedSerial += BufferOnCompletedSerial;
 		}
@@ -299,7 +299,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// Unsubscribe from the buffer events.
 		/// </summary>
 		/// <param name="buffer"></param>
-		private void Unsubscribe(JsonSerialBuffer buffer)
+		private void Unsubscribe(ISerialBuffer buffer)
 		{
 			buffer.OnCompletedSerial -= BufferOnCompletedSerial;
 		}
