@@ -24,6 +24,8 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		// How often to check the connection and reconnect if necessary.
 		private const long CONNECTION_CHECK_MILLISECONDS = 30 * 1000;
 
+		public const char DELIMITER = (char)0xFF;
+
 		private readonly AsyncTcpClient m_Client;
 		private readonly ISerialBuffer m_Buffer;
 		private readonly SafeTimer m_ConnectionTimer;
@@ -43,7 +45,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			{
 				Name = GetType().Name
 			};
-			m_Buffer = new DelimiterSerialBuffer(0xFF);
+			m_Buffer = new DelimiterSerialBuffer(DELIMITER);
 
 			m_ConnectionTimer = new SafeTimer(ConnectionTimerCallback, 0, CONNECTION_CHECK_MILLISECONDS);
 

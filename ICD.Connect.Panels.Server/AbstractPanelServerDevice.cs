@@ -7,6 +7,7 @@ using ICD.Common.Utils.Json;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
+using ICD.Connect.Panels.Server.PanelClient;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.EventArguments;
@@ -90,7 +91,7 @@ namespace ICD.Connect.Panels.Server
 			};
 			Subscribe(m_Server);
 
-			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(0xFF));
+			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
 		}
@@ -113,7 +114,7 @@ namespace ICD.Connect.Panels.Server
 					return;
 
 				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
-				m_Server.Send(serial + 0xFF);
+				m_Server.Send(serial + PanelClientDevice.DELIMITER);
 			}
 			finally
 			{
@@ -289,13 +290,15 @@ namespace ICD.Connect.Panels.Server
 			{
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
-					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
+					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE) + PanelClientDevice.DELIMITER);
 
 				// Inform the client of used smartobjects
 				foreach (uint so in m_SmartObjects.Select(kvp => kvp.Key))
 				{
 					uint closureSo = so;
-					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE));
+					m_Server.Send(args.ClientId,
+					              JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE) +
+					              PanelClientDevice.DELIMITER);
 				}
 			}
 			finally
