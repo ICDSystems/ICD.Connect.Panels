@@ -234,7 +234,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		private void PanelOnAnyOutput(object sender, SigInfoEventArgs args)
 		{
 			string json = JsonUtils.SerializeMessage(args.Data.Serialize, PanelServerDevice.SIG_MESSAGE);
-			m_Client.Send(json);
+			m_Client.Send(json + DELIMITER);
 		}
 
 		#endregion
