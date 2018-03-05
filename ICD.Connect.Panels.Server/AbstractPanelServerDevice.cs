@@ -350,7 +350,7 @@ namespace ICD.Connect.Panels.Server
 		{
 			switch (messageName)
 			{
-				case (SIG_MESSAGE):
+				case SIG_MESSAGE:
 					SigInfo sigInfo = SigInfo.Deserialize(reader);
 
 					if (sigInfo.SmartObject == 0)
@@ -359,6 +359,7 @@ namespace ICD.Connect.Panels.Server
 						m_SmartObjects[sigInfo.SmartObject].HandleOutputSig(sigInfo);
 
 					LastOutput = IcdEnvironment.GetLocalTime();
+
 
 					OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 
