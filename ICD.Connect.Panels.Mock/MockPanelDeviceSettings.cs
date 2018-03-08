@@ -4,6 +4,7 @@ using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.Mock
 {
+	[KrangSettings(FACTORY_NAME)]
 	public sealed class MockPanelDeviceSettings : AbstractPanelDeviceSettings
 	{
 		private const string FACTORY_NAME = "MockPanel";
@@ -16,19 +17,6 @@ namespace ICD.Connect.Panels.Mock
 		public override Type OriginatorType
 		{
 			get { return typeof(MockPanelDevice); }
-		}
-
-		/// <summary>
-		/// Loads the settings from XML.
-		/// </summary>
-		/// <param name="xml"></param>
-		/// <returns></returns>
-		[PublicAPI, XmlFactoryMethod(FACTORY_NAME)]
-		public static MockPanelDeviceSettings FromXml(string xml)
-		{
-			MockPanelDeviceSettings output = new MockPanelDeviceSettings();
-			ParseXml(output, xml);
-			return output;
 		}
 	}
 }
