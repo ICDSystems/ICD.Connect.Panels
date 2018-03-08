@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Properties;
+using ICD.Common.Utils;
 using ICD.Connect.Protocol.Sigs;
 
 namespace ICD.Connect.Panels.Mock
@@ -98,8 +99,28 @@ namespace ICD.Connect.Panels.Mock
 		/// <returns></returns>
 		public override string ToString()
 		{
-			return string.Format("{0} - Number {1}, Name {2}, String {3}, UShort {4}, Bool {5}", GetType().Name,
-			                     Number, Name, GetStringValue(), GetUShortValue(), GetBoolValue());
+			ReprBuilder builder = new ReprBuilder(this);
+
+			if (Number != 0)
+				builder.AppendProperty("Number", Number);
+
+			if (!string.IsNullOrEmpty(Name))
+				builder.AppendProperty("Name", Name);
+
+			switch (Type)
+			{
+				case eSigType.Serial:
+					builder.AppendProperty("String", GetStringValue());
+					break;
+				case eSigType.Analog:
+					builder.AppendProperty("UShort", GetUShortValue());
+					break;
+				case eSigType.Digital:
+					builder.AppendProperty("Bool", GetBoolValue());
+					break;
+			}
+
+			return builder.ToString();
 		}
 
 		#endregion

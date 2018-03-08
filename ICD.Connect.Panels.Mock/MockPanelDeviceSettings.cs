@@ -1,5 +1,4 @@
 using System;
-using ICD.Common.Properties;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.Mock
@@ -14,9 +13,6 @@ namespace ICD.Connect.Panels.Mock
 		/// </summary>
 		public override string FactoryName { get { return FACTORY_NAME; } }
 
-		public override Type OriginatorType
-		{
-			get { return typeof(MockPanelDevice); }
-		}
+		public override Type OriginatorType { get { return typeof(MockPanelDevice); } }
 	}
 }
