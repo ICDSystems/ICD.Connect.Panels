@@ -9,7 +9,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private const string IPID_ELEMENT = "IPID";
 
 		[IpIdSettingsProperty]
-		public byte Ipid { get; set; }
+		public byte? Ipid { get; set; }
 
 		/// <summary>
 		/// Writes property elements to xml.
@@ -19,7 +19,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.WriteElements(writer);
 
-			writer.WriteElementString(IPID_ELEMENT, StringUtils.ToIpIdString(Ipid));
+			writer.WriteElementString(IPID_ELEMENT, Ipid == null ? null : StringUtils.ToIpIdString(Ipid.Value));
 		}
 
 		/// <summary>

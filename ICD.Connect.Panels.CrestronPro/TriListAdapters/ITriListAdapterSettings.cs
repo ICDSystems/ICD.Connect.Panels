@@ -2,6 +2,6 @@
 {
 	public interface ITriListAdapterSettings : IPanelDeviceSettings
 	{
-		byte Ipid { get; set; }
+		byte? Ipid { get; set; }
 	}
 }
