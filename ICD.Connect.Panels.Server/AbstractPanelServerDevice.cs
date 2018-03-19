@@ -4,6 +4,7 @@ using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Panels.EventArguments;
@@ -337,7 +338,15 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="data"></param>
 		private void BuffersOnClientCompletedSerial(TcpServerBufferManager sender, uint clientId, string data)
 		{
-			JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), data);
+			try
+			{
+				JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), data);
+			}
+			catch (JsonReaderException e)
+			{
+				Logger.AddEntry(eSeverity.Error, "{0} failed to parse JSON - {1}{2}{3}", this, e.Message, IcdEnvironment.NewLine,
+				                JsonUtils.Format(data));
+			}
 		}
 
 		/// <summary>

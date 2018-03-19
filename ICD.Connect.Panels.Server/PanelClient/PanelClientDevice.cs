@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using ICD.Common.Utils;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
@@ -316,7 +317,15 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			if (m_Panel == null)
 				return;
 
-			JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), args.Data);
+			try
+			{
+				JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), args.Data);
+			}
+			catch (JsonReaderException e)
+			{
+				Logger.AddEntry(eSeverity.Error, "{0} failed to parse JSON - {1}{2}{3}", this, e.Message, IcdEnvironment.NewLine,
+				                JsonUtils.Format(args.Data));
+			}
 		}
 
 		/// <summary>
