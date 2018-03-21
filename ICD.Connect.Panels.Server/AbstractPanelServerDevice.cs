@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
@@ -115,7 +116,7 @@ namespace ICD.Connect.Panels.Server
 					return;
 
 				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
-				m_Server.Send(serial + PanelClientDevice.DELIMITER);
+				SendData(serial);
 			}
 			finally
 			{
@@ -253,6 +254,25 @@ namespace ICD.Connect.Panels.Server
 			return m_Server != null && m_Server.Active;
 		}
 
+		/// <summary>
+		/// Sends the given data to the given connected client.
+		/// </summary>
+		/// <param name="clientId"></param>
+		/// <param name="data"></param>
+		private void SendData(uint clientId, string data)
+		{
+			m_Server.Send(clientId, data + PanelClientDevice.DELIMITER);
+		}
+
+		/// <summary>
+		/// Sends the given data to all connected clients.
+		/// </summary>
+		/// <param name="data"></param>
+		private void SendData(string data)
+		{
+			m_Server.Send(data + PanelClientDevice.DELIMITER);
+		}
+
 		#endregion
 
 		#region Server Callbacks
@@ -291,15 +311,13 @@ namespace ICD.Connect.Panels.Server
 			{
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
-					m_Server.Send(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE) + PanelClientDevice.DELIMITER);
+					SendData(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
 
 				// Inform the client of used smartobjects
 				foreach (uint so in m_SmartObjects.Select(kvp => kvp.Key))
 				{
 					uint closureSo = so;
-					m_Server.Send(args.ClientId,
-					              JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE) +
-					              PanelClientDevice.DELIMITER);
+					SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE));
 				}
 			}
 			finally
@@ -419,7 +437,7 @@ namespace ICD.Connect.Panels.Server
 					return;
 
 				string serial = JsonUtils.SerializeMessage(w => w.WriteValue(smartObjectId), SMART_OBJECT_MESSAGE);
-				m_Server.Send(serial);
+				SendData(serial);
 			}
 			finally
 			{
@@ -430,6 +448,23 @@ namespace ICD.Connect.Panels.Server
 		#endregion
 
 		#region Console
+
+		public override IEnumerable<IConsoleNodeBase> GetConsoleNodes()
+		{
+			foreach (IConsoleNodeBase node in GetBaseConsoleNodes())
+				yield return node;
+
+			yield return m_Server;
+		}
+
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleNodeBase> GetBaseConsoleNodes()
+		{
+			return base.GetConsoleNodes();
+		}
 
 		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
 		{
