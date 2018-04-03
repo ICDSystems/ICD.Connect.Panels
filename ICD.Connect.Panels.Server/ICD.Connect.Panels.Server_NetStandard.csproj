@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<RootNamespace>ICD.Connect.Panels.Server</RootNamespace>
+	<AssemblyName>ICD.Connect.Panels.Server</AssemblyName>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<Deterministic>true</Deterministic>
   </PropertyGroup>
