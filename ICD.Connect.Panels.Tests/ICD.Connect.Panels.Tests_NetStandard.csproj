@@ -4,6 +4,7 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
 	<RootNamespace>ICD.Connect.Panels.Tests</RootNamespace>
+	<AssemblyName>ICD.Connect.Panels.Tests</AssemblyName>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<Deterministic>true</Deterministic>
   </PropertyGroup>
