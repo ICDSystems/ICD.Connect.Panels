@@ -8,5 +8,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [4.0.0] - 2018-04-23
 ### Changed
- - Removed suffic from assembly name
+ - Removed suffix from assembly name
  - Using new API event args
