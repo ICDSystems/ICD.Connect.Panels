@@ -1,25 +1,12 @@
-﻿using System;
-using ICD.Common.Utils.Xml;
+﻿using ICD.Common.Utils.Xml;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 {
-	[KrangSettings(FACTORY_NAME)]
+	[KrangSettings("CrestronApp", typeof(CrestronAppAdapter))]
 	public sealed class CrestronAppAdapterSettings : AbstractTriListAdapterSettings
 	{
 		private const string PROJECT_NAME_ELEMENT = "ProjectName";
-
-		private const string FACTORY_NAME = "CrestronApp";
-
-		/// <summary>
-		/// Gets the originator factory name.
-		/// </summary>
-		public override string FactoryName { get { return FACTORY_NAME; } }
-
-		/// <summary>
-		/// Gets the type of the originator for this settings instance.
-		/// </summary>
-		public override Type OriginatorType { get { return typeof(CrestronAppAdapter); } }
 
 		/// <summary>
 		/// The name of the VTPro file without extension.

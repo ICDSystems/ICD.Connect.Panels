@@ -1,5 +1,4 @@
-﻿using System;
-using ICD.Connect.Settings.Attributes;
+﻿using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
@@ -27,19 +26,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 	}
 #endif
 
-	[KrangSettings(FACTORY_NAME)]
+	[KrangSettings("Dge2", typeof(Dge2Adapter))]
 	public sealed class Dge2AdapterSettings : AbstractDge2BaseAdapterSettings
 	{
-		private const string FACTORY_NAME = "Dge2";
-
-		/// <summary>
-		/// Gets the originator factory name.
-		/// </summary>
-		public override string FactoryName { get { return FACTORY_NAME; } }
-
-		/// <summary>
-		/// Gets the type of the originator for this settings instance.
-		/// </summary>
-		public override Type OriginatorType { get { return typeof(Dge2Adapter); } }
 	}
 }
