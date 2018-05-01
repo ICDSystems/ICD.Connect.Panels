@@ -22,6 +22,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		where TVoIpSigs : VOIPReservedCues
 	{
 		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
+		public override event EventHandler<ConferenceSourceEventArgs> OnSourceRemoved;
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
@@ -75,6 +76,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		protected override void DisposeFinal(bool disposing)
 		{
 			base.DisposeFinal(disposing);
+
+			OnSourceAdded = null;
+			OnSourceRemoved = null;
 
 			Unsubscribe(Parent);
 			UnsubscribePanel();
@@ -425,6 +429,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			m_ActiveSource.Status = eConferenceSourceStatus.Disconnected;
 			m_ActiveSource.End = IcdEnvironment.GetLocalTime();
+
+			OnSourceRemoved.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
 
 			m_ActiveSource = null;
 		}
