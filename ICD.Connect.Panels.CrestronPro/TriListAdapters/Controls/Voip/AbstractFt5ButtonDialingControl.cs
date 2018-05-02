@@ -414,7 +414,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			UpdateActiveSource();
 
 			if (instantiated)
+			{
+				SourceSubscribe(m_ActiveSource);
 				OnSourceAdded.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
+			}
 		}
 
 		/// <summary>
@@ -430,6 +433,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			m_ActiveSource.Status = eConferenceSourceStatus.Disconnected;
 			m_ActiveSource.End = IcdEnvironment.GetLocalTime();
 
+			SourceUnsubscribe(m_ActiveSource);
 			OnSourceRemoved.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
 
 			m_ActiveSource = null;
