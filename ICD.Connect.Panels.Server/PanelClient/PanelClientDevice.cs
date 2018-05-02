@@ -9,6 +9,7 @@ using ICD.Common.Utils.Timers;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Devices.EventArguments;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelServer;
 using ICD.Connect.Panels.SmartObjects;
@@ -267,7 +268,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void ClientOnOnIsOnlineStateChanged(object sender, BoolEventArgs args)
+		private void ClientOnOnIsOnlineStateChanged(object sender, DeviceBaseOnlineStateApiEventArgs args)
 		{
 			if (!args.Data)
 				Clear();
