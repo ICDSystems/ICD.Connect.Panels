@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.API.Nodes;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Settings;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif

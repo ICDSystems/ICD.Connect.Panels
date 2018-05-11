@@ -16,7 +16,7 @@ using ICD.Connect.Protocol.EventArguments;
 using ICD.Connect.Protocol.Network.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Settings;
 using Newtonsoft.Json;
 
 namespace ICD.Connect.Panels.Server

@@ -7,7 +7,7 @@ using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Protocol.Sigs;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Settings;
 using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
