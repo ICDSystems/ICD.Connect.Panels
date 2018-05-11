@@ -29,9 +29,9 @@ namespace ICD.Connect.Panels.Server
 	{
 		public const string SIG_MESSAGE = "S";
 		public const string SMART_OBJECT_MESSAGE = "So";
-        private const string HEARTBEAT_MESSAGE = "H";
+		private const string HEARTBEAT_MESSAGE = "H";
 
-        public event EventHandler<SigInfoEventArgs> OnAnyOutput;
+		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
 		private readonly TcpServerBufferManager m_Buffers;
