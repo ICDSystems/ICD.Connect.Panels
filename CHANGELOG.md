@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.0] - 2018-05-09
+### Added
+ - Adding OnSourceRemoved event to dialers
+
+### Changed
+ - ThinConferenceSource uses delegate callbacks
+
 ## [4.0.0] - 2018-04-23
 ### Changed
  - Removed suffix from assembly name

@@ -1,5 +1,4 @@
-﻿using System;
-using ICD.Common.Utils.Xml;
+﻿using ICD.Common.Utils.Xml;
 using ICD.Connect.Devices;
 using ICD.Connect.Settings.Attributes;
 using ICD.Connect.Settings.Attributes.SettingsProperties;
@@ -41,13 +40,9 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		{
 			base.ParseXml(xml);
 
-			string address = XmlUtils.TryReadChildElementContentAsString(xml, ADDRESS_ELEMENT);
-			ushort port = XmlUtils.TryReadChildElementContentAsUShort(xml, PORT_ELEMENT) ?? 0;
-			int? panel = XmlUtils.TryReadChildElementContentAsInt(xml, PANEL_ELEMENT);
-
-			Address = address;
-			Port = port;
-			Panel = panel;
+			Address = XmlUtils.TryReadChildElementContentAsString(xml, ADDRESS_ELEMENT);
+			Port = XmlUtils.TryReadChildElementContentAsUShort(xml, PORT_ELEMENT) ?? 0;
+			Panel = XmlUtils.TryReadChildElementContentAsInt(xml, PANEL_ELEMENT);
 		}
 	}
 }
