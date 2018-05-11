@@ -6,21 +6,12 @@ using ICD.Connect.Settings.Attributes.SettingsProperties;
 
 namespace ICD.Connect.Panels.Server.PanelClient
 {
-	[KrangSettings(FACTORY_NAME)]
+	[KrangSettings("PanelClient", typeof(PanelClientDevice))]
 	public sealed class PanelClientDeviceSettings : AbstractDeviceSettings
 	{
-		private const string FACTORY_NAME = "PanelClient";
-
 		private const string ADDRESS_ELEMENT = "Address";
 		private const string PORT_ELEMENT = "Port";
 		private const string PANEL_ELEMENT = "Panel";
-
-		/// <summary>
-		/// Gets the originator factory name.
-		/// </summary>
-		public override string FactoryName { get { return FACTORY_NAME; } }
-
-		public override Type OriginatorType { get { return typeof(PanelClientDevice); } }
 
 		public string Address { get; set; }
 
