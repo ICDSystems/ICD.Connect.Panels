@@ -29,6 +29,7 @@ namespace ICD.Connect.Panels.Server
 	{
 		public const string SIG_MESSAGE = "S";
 		public const string SMART_OBJECT_MESSAGE = "So";
+		private const string HEARTBEAT_MESSAGE = "H";
 
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
@@ -358,7 +359,9 @@ namespace ICD.Connect.Panels.Server
 		{
 			try
 			{
-				JsonUtils.DeserializeMessage((r, m) => DeserializeJson(r, m), data);
+				var parsedData = JsonUtils.DeserializeMessage(DeserializeJson, data);
+				if(parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
+					m_Server.Send(clientId, JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE));
 			}
 			catch (JsonReaderException e)
 			{
@@ -391,7 +394,8 @@ namespace ICD.Connect.Panels.Server
 					OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 
 					return sigInfo;
-
+				case HEARTBEAT_MESSAGE:
+					return HEARTBEAT_MESSAGE;
 				default:
 					return null;
 			}
