@@ -361,7 +361,7 @@ namespace ICD.Connect.Panels.Server
 			{
 				object parsedData = JsonUtils.DeserializeMessage<object>(DeserializeJson, data);
 				if(parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
-					m_Server.Send(clientId, JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE));
+					m_Server.Send(clientId, JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) + PanelClientDevice.DELIMITER);
 			}
 			catch (JsonReaderException e)
 			{
