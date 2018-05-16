@@ -22,6 +22,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		where TVoIpSigs : VOIPReservedCues
 	{
 		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
+		public override event EventHandler<ConferenceSourceEventArgs> OnSourceRemoved;
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
@@ -75,6 +76,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		protected override void DisposeFinal(bool disposing)
 		{
 			base.DisposeFinal(disposing);
+
+			OnSourceAdded = null;
+			OnSourceRemoved = null;
 
 			Unsubscribe(Parent);
 			UnsubscribePanel();
@@ -410,7 +414,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			UpdateActiveSource();
 
 			if (instantiated)
+			{
+				SourceSubscribe(m_ActiveSource);
 				OnSourceAdded.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
+			}
 		}
 
 		/// <summary>
@@ -426,6 +433,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			m_ActiveSource.Status = eConferenceSourceStatus.Disconnected;
 			m_ActiveSource.End = IcdEnvironment.GetLocalTime();
 
+			SourceUnsubscribe(m_ActiveSource);
+			OnSourceRemoved.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
+
 			m_ActiveSource = null;
 		}
 
@@ -435,11 +445,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <param name="source"></param>
 		private void Subscribe(ThinConferenceSource source)
 		{
-			source.OnSendDtmfCallback += SendDtmfCallback;
-			source.OnHangupCallback += HangupCallback;
-			source.OnResumeCallback += ResumeCallback;
-			source.OnHoldCallback += HoldCallback;
-			source.OnAnswerCallback += AnswerCallback;
+			source.AnswerCallback += AnswerCallback;
+			source.HoldCallback += HoldCallback;
+			source.ResumeCallback += ResumeCallback;
+			source.SendDtmfCallback += SendDtmfCallback;
+			source.HangupCallback += HangupCallback;
 		}
 
 		/// <summary>
@@ -448,22 +458,46 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <param name="source"></param>
 		private void Unsubscribe(ThinConferenceSource source)
 		{
-			source.OnSendDtmfCallback -= SendDtmfCallback;
-			source.OnHangupCallback -= HangupCallback;
-			source.OnResumeCallback -= ResumeCallback;
-			source.OnHoldCallback -= HoldCallback;
-			source.OnAnswerCallback -= AnswerCallback;
+			source.AnswerCallback = null;
+			source.HoldCallback = null;
+			source.ResumeCallback = null;
+			source.SendDtmfCallback = null;
+			source.HangupCallback = null;
 		}
 
-		/// <summary>
-		/// Sends a DTMF string to the current source.
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="eventArgs"></param>
-		private void SendDtmfCallback(object sender, StringEventArgs eventArgs)
+		private void AnswerCallback(ThinConferenceSource sender)
 		{
-			foreach (char item in eventArgs.Data)
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Answer();
+		}
+
+		private void HoldCallback(ThinConferenceSource sender)
+		{
+			// Is this possible?
+			Logger.AddEntry(eSeverity.Warning, "{0} - Hold is unsupported", this);
+		}
+
+		private void ResumeCallback(ThinConferenceSource sender)
+		{
+			// Is this possible?
+			Logger.AddEntry(eSeverity.Warning, "{0} - Resume is unsupported", this);
+		}
+
+		private void SendDtmfCallback(ThinConferenceSource sender, string data)
+		{
+			foreach (char item in data)
 				SendDtmfCallback(item);
+		}
+
+		private void HangupCallback(ThinConferenceSource sender)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Reject();
+			Sigs.Hangup();
 		}
 
 		/// <summary>
@@ -525,47 +559,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 					Sigs.DialAsterisk();
 					break;
 			}
-		}
-
-		/// <summary>
-		/// Hangs-up the current source.
-		/// </summary>
-		private void HangupCallback(object sender, EventArgs eventArgs)
-		{
-			if (Sigs == null)
-				throw new InvalidOperationException("No VoIP extender");
-
-			Sigs.Reject();
-			Sigs.Hangup();
-		}
-
-		/// <summary>
-		/// Resumes the current source from hold.
-		/// </summary>
-		private void ResumeCallback(object sender, EventArgs eventArgs)
-		{
-			// Is this possible?
-			Logger.AddEntry(eSeverity.Warning, "{0} - Resume is unsupported", this);
-		}
-
-		/// <summary>
-		/// Places the current source on hold.
-		/// </summary>
-		private void HoldCallback(object sender, EventArgs eventArgs)
-		{
-			// Is this possible?
-			Logger.AddEntry(eSeverity.Warning, "{0} - Hold is unsupported", this);
-		}
-
-		/// <summary>
-		/// Answers the current incoming source.
-		/// </summary>
-		private void AnswerCallback(object sender, EventArgs eventArgs)
-		{
-			if (Sigs == null)
-				throw new InvalidOperationException("No VoIP extender");
-
-			Sigs.Answer();
 		}
 
 		#endregion
