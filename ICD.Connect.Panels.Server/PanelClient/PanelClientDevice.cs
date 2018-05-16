@@ -13,7 +13,7 @@ using ICD.Connect.Devices.EventArguments;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelServer;
 using ICD.Connect.Panels.SmartObjects;
-using ICD.Connect.Protocol.Network.Tcp;
+using ICD.Connect.Protocol.Network.Ports.Tcp;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
