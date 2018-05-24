@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.1] - 2018-05-24
+### Added
+ - Added heartbeat to maintain connection with Profound CUE
+ 
 ## [5.0.0] - 2018-05-09
 ### Added
  - Adding OnSourceRemoved event to dialers
