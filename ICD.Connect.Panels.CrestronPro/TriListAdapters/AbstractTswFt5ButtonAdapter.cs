@@ -1,6 +1,7 @@
 ﻿using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls;
+using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings.Core;
 #if SIMPLSHARP

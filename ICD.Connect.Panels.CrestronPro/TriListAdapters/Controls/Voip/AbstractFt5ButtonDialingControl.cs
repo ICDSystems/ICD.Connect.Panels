@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Conferencing.Controls.Dialing;
 #if SIMPLSHARP
 using System;
 using System.Collections.Generic;

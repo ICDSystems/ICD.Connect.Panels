@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Conferencing.Controls.Dialing;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Devices.Controls;
