@@ -1,6 +1,6 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Conferencing.Controls.Dialing;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
-using ICD.Connect.Conferencing.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 #endif
 
