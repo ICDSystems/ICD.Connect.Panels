@@ -440,6 +440,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			source.OnResumeCallback += ResumeCallback;
 			source.OnHoldCallback += HoldCallback;
 			source.OnAnswerCallback += AnswerCallback;
+			source.OnRejectCallback += RejectCallback;
 		}
 
 		/// <summary>
@@ -453,6 +454,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			source.OnResumeCallback -= ResumeCallback;
 			source.OnHoldCallback -= HoldCallback;
 			source.OnAnswerCallback -= AnswerCallback;
+			source.OnRejectCallback += RejectCallback;
 		}
 
 		/// <summary>
@@ -535,7 +537,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
 
-			Sigs.Reject();
 			Sigs.Hangup();
 		}
 
@@ -566,6 +567,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				throw new InvalidOperationException("No VoIP extender");
 
 			Sigs.Answer();
+		}
+
+		/// <summary>
+		/// Rejects the current incoming source.
+		/// </summary>
+		private void RejectCallback(object sender, EventArgs eventArgs)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Reject();
 		}
 
 		#endregion
