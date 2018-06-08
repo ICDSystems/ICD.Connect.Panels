@@ -445,6 +445,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void Subscribe(ThinConferenceSource source)
 		{
 			source.AnswerCallback += AnswerCallback;
+			source.RejectCallback += RejectCallback;
 			source.HoldCallback += HoldCallback;
 			source.ResumeCallback += ResumeCallback;
 			source.SendDtmfCallback += SendDtmfCallback;
@@ -458,6 +459,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void Unsubscribe(ThinConferenceSource source)
 		{
 			source.AnswerCallback = null;
+			source.RejectCallback = null;
 			source.HoldCallback = null;
 			source.ResumeCallback = null;
 			source.SendDtmfCallback = null;
@@ -470,6 +472,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				throw new InvalidOperationException("No VoIP extender");
 
 			Sigs.Answer();
+		}
+
+		/// <summary>
+		/// Rejects the current incoming source.
+		/// </summary>
+		private void RejectCallback(ThinConferenceSource sender)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Reject();
 		}
 
 		private void HoldCallback(ThinConferenceSource sender)
