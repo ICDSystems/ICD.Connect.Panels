@@ -155,6 +155,7 @@
     <Compile Include="TriListAdapters\AbstractTriListAdapter.cs" />
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonSystemDialingControl.cs" />
+    <Compile Include="TriListAdapters\Xpanel\XPanelForSmartGraphicsAdapter.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>
