@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.1.1] - 2018-06-26
+
+### Changed
+ - Changed Mock Panel Inputs to Public
+ - MockSmartObjects now implements LastOuput
+ - OnAnyOutput now works for MockSmartObjects
+ - MockPanelDevice now subcribes and unsubcribes to smartObjects
+
 ## [5.1.0] - 2018-06-19
 ### Added
  - Added Xpanel adapter

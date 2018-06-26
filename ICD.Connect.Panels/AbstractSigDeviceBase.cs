@@ -37,17 +37,17 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceBooleanInputCollection BooleanInput { get; }
+		public abstract IDeviceBooleanInputCollection BooleanInput { get; }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceUShortInputCollection UShortInput { get; }
+		public abstract IDeviceUShortInputCollection UShortInput { get; }
 
 		/// <summary>
 		/// Collection of String Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceStringInputCollection StringInput { get; }
+		public abstract IDeviceStringInputCollection StringInput { get; }
 
 		#endregion
 
