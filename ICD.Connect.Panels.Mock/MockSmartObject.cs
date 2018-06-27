@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Common.Properties;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
@@ -47,7 +48,7 @@ namespace ICD.Connect.Panels.Mock
 		/// <summary>
 		/// Gets the time that the user last interacted with the panel.
 		/// </summary>
-		public override DateTime? LastOutput { get { throw new NotImplementedException(); } }
+		public override DateTime? LastOutput { get { return m_SigCallbacks.LastOutput; } }
 
 		#endregion
 
@@ -61,7 +62,8 @@ namespace ICD.Connect.Panels.Mock
 			m_StringInput = new MockStringInputCollection();
 
 			m_SigCallbacks = new SigCallbackManager();
-		}
+		    m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
+        }
 
 		#region Methods
 
@@ -220,5 +222,23 @@ namespace ICD.Connect.Panels.Mock
 		{
 			sig.SetBoolValue(value);
 		}
-	}
+
+	    /// <summary>
+	    /// Called when a sig changes state.
+	    /// </summary>
+	    /// <param name="sender"></param>
+	    /// <param name="sigInfoEventArgs"></param>
+	    private void SigCallbacksOnAnyCallback(object sender, SigInfoEventArgs sigInfoEventArgs)
+	    {
+	        RaiseOnAnyOutput(sigInfoEventArgs.Data);
+	    }
+
+	    /// <summary>
+	    /// Raises the OnAnyOutput event.
+	    /// </summary>
+	    private void RaiseOnAnyOutput(SigInfo sigInfo)
+	    {
+	        OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+	    }
+    }
 }
