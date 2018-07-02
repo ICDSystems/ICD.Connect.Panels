@@ -6,8 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [5.1.1] - 2018-06-26
-
+## [5.2.0] - 2018-07-02
 ### Changed
  - Changed Mock Panel Inputs to Public
  - MockSmartObjects now implements LastOuput
