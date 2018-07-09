@@ -16,11 +16,11 @@ namespace ICD.Connect.Panels.Mock.Tests
 	    {
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-	        MockSmartObject MockSmartObject = new MockSmartObject();
-	        MockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
+	        MockSmartObject mockSmartObject = new MockSmartObject();
+	        mockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
 
 			SigInfo info = new SigInfo(1, 1, true);
-	        MockSmartObject.RaiseOutputSigChange(info);
+	        mockSmartObject.RaiseOutputSigChange(info);
 
 			Assert.AreEqual(1, callbackArgs.Count);
 			Assert.AreEqual(info, callbackArgs.Select(a => a.Data).First());
@@ -29,12 +29,12 @@ namespace ICD.Connect.Panels.Mock.Tests
 	    [Test]
 	    public void LastOutputTest()
 	    {
-		    MockSmartObject MockSmartObject = new MockSmartObject();
-			Assert.AreEqual(null, MockSmartObject.LastOutput);
+		    MockSmartObject mockSmartObject = new MockSmartObject();
+			Assert.AreEqual(null, mockSmartObject.LastOutput);
 
-			MockSmartObject.RaiseOutputSigChange(new SigInfo());
+			mockSmartObject.RaiseOutputSigChange(new SigInfo());
 			
-			Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)MockSmartObject.LastOutput).TotalSeconds, 1);
+			Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)mockSmartObject.LastOutput).TotalSeconds, 1);
 	    }
 
 	    [Test]
@@ -42,18 +42,18 @@ namespace ICD.Connect.Panels.Mock.Tests
 		{
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-			MockSmartObject MockSmartObject = new MockSmartObject();
+			MockSmartObject mockSmartObject = new MockSmartObject();
 			Action<SigCallbackManager, SigInfoEventArgs> callback = (callbackManager, args) => callbackArgs.Add(args);
-			MockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
+			mockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
 
 			SigInfo info = new SigInfo(1, 1, true);
-			MockSmartObject.RaiseOutputSigChange(info);
+			mockSmartObject.RaiseOutputSigChange(info);
 
 		    SigInfo info2 = new SigInfo(2, 1, true);
-		    MockSmartObject.RaiseOutputSigChange(info2);
+		    mockSmartObject.RaiseOutputSigChange(info2);
 
 		    SigInfo info3 = new SigInfo(1, 1, "false");
-		    MockSmartObject.RaiseOutputSigChange(info3);
+		    mockSmartObject.RaiseOutputSigChange(info3);
 
             Assert.AreEqual(1, callbackArgs.Count);
 			Assert.AreEqual(info, callbackArgs.Select(a => a.Data).First());
@@ -64,14 +64,14 @@ namespace ICD.Connect.Panels.Mock.Tests
 		{
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-			MockSmartObject MockSmartObject = new MockSmartObject();
+			MockSmartObject mockSmartObject = new MockSmartObject();
 			Action<SigCallbackManager, SigInfoEventArgs> callback = (callbackManager, args) => callbackArgs.Add(args);
 
-			MockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
-			MockSmartObject.UnregisterOutputSigChangeCallback(1, eSigType.Digital, callback);
+			mockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
+			mockSmartObject.UnregisterOutputSigChangeCallback(1, eSigType.Digital, callback);
 
 			SigInfo info = new SigInfo(1, 1, true);
-			MockSmartObject.RaiseOutputSigChange(info);
+			mockSmartObject.RaiseOutputSigChange(info);
 
 			Assert.AreEqual(0, callbackArgs.Count);
 		}
@@ -81,11 +81,11 @@ namespace ICD.Connect.Panels.Mock.Tests
         {
             List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-            MockSmartObject MockSmartObject = new MockSmartObject();
-            MockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
+            MockSmartObject mockSmartObject = new MockSmartObject();
+            mockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
 
             SigInfo info = new SigInfo(1, 1, true);
-            MockSmartObject.RaiseOutputSigChange(info);
+            mockSmartObject.RaiseOutputSigChange(info);
 
             Assert.AreEqual(1, callbackArgs.Count);
             Assert.AreEqual(info, callbackArgs.Select(a => a.Data).First());
@@ -94,12 +94,12 @@ namespace ICD.Connect.Panels.Mock.Tests
         [Test]
         public void ClearTest()
         {
-            MockSmartObject MockSmartObject = new MockSmartObject();
+            MockSmartObject mockSmartObject = new MockSmartObject();
 
-            MockSmartObject.SendInputDigital(1,true);
-            MockSmartObject.Clear();
+            mockSmartObject.SendInputDigital(1,true);
+            mockSmartObject.Clear();
 
-            Assert.AreEqual(false, MockSmartObject.BooleanInput[1].GetBoolValue());
+            Assert.AreEqual(false, mockSmartObject.BooleanInput[1].GetBoolValue());
         }
 
 
