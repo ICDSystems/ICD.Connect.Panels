@@ -404,7 +404,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			if (m_ActiveSource == null)
 			{
-				m_ActiveSource = new ThinConferenceSource();
+				m_ActiveSource = new ThinConferenceSource {SourceType = eConferenceSourceType.Audio};
 				instantiated = true;
 
 				Subscribe(m_ActiveSource);
