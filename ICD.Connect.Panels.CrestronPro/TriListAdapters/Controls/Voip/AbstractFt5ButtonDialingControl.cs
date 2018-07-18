@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Services.Logging;
+﻿using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Conferencing.Controls;
 #if SIMPLSHARP
 using System;
