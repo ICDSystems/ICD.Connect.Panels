@@ -488,13 +488,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void HoldCallback(ThinConferenceSource sender)
 		{
 			// Is this possible?
-			Logger.AddEntry(eSeverity.Warning, "{0} - Hold is unsupported", this);
+			Log(eSeverity.Warning, "Hold is unsupported");
 		}
 
 		private void ResumeCallback(ThinConferenceSource sender)
 		{
 			// Is this possible?
-			Logger.AddEntry(eSeverity.Warning, "{0} - Resume is unsupported", this);
+			Log(eSeverity.Warning, "Resume is unsupported");
 		}
 
 		private void SendDtmfCallback(ThinConferenceSource sender, string data)
