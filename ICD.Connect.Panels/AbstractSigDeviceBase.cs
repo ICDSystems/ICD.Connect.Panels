@@ -126,7 +126,7 @@ namespace ICD.Connect.Panels
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send serial sig {0}", number);
+				Log(eSeverity.Error, "Unable to send serial sig {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -143,7 +143,7 @@ namespace ICD.Connect.Panels
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send analog sig {0}", number);
+				Log(eSeverity.Error, "Unable to send analog sig {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -160,7 +160,7 @@ namespace ICD.Connect.Panels
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send digital sig {0}", number);
+				Log(eSeverity.Error, "Unable to send digital sig {0} - {1}", number, e.Message);
 			}
 		}
 
