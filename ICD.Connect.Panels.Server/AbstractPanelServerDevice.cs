@@ -111,9 +111,10 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
-				m_Cache.Add(sigInfo);
+				if (!m_Cache.Add(sigInfo))
+					return;
 
-				if (!m_Server.GetClients().Any())
+				if (m_Server.NumberOfClients == 0)
 					return;
 
 				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
