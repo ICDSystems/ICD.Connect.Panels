@@ -122,7 +122,7 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendSerial(StringInput[number], text);
+				StringInput[number].SetStringValue(text);
 			}
 			catch (Exception e)
 			{
@@ -139,7 +139,7 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendAnalog(UShortInput[number], value);
+				UShortInput[number].SetUShortValue(value);
 			}
 			catch (Exception e)
 			{
@@ -156,7 +156,7 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendDigital(BooleanInput[number], value);
+				BooleanInput[number].SetBoolValue(value);
 			}
 			catch (Exception e)
 			{
@@ -167,36 +167,6 @@ namespace ICD.Connect.Panels
 		#endregion
 
 		#region Private Methods
-
-		/// <summary>
-		/// Sends the serial data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="text"></param>
-		private static void SendSerial(IStringInputSig sig, string text)
-		{
-			sig.SetStringValue(text);
-		}
-
-		/// <summary>
-		/// Sends the analog data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendAnalog(IUShortInputSig sig, ushort value)
-		{
-			sig.SetUShortValue(value);
-		}
-
-		/// <summary>
-		/// Sends the digital data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendDigital(IBoolInputSig sig, bool value)
-		{
-			sig.SetBoolValue(value);
-		}
 
 		/// <summary>
 		/// Raises the callbacks registered with the signature.
