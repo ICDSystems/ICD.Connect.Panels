@@ -36,9 +36,14 @@ namespace ICD.Connect.Panels.Mock
 
 				try
 				{
-					if (!m_SigCache.ContainsKey(sigNumber))
-						m_SigCache[sigNumber] = InstantiateSig(sigNumber);
-					return m_SigCache[sigNumber];
+					T sig;
+					if (!m_SigCache.TryGetValue(sigNumber, out sig))
+					{
+						sig = InstantiateSig(sigNumber);
+						m_SigCache[sigNumber] = sig;
+					}
+
+					return sig;
 				}
 				finally
 				{
