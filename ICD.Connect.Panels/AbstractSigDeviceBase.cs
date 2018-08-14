@@ -212,9 +212,10 @@ namespace ICD.Connect.Panels
 				yield return command;
 
 			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
-			yield return new GenericConsoleCommand<uint, ushort>("SendAnalogSig", "SendAnalogSig <Number> <Value>", (n, v) => SendInputAnalog(n, v));
-			yield return new GenericConsoleCommand<uint, bool>("SendDigitalSig", "SendDigitalSig <Number> <Value>", (n, v) => SendInputDigital(n, v));
-			yield return new GenericConsoleCommand<uint, string>("SendSerialSig", "SendSerialSig <Number> <Value>", (n, v) => SendInputSerial(n, v));
+
+			yield return new GenericConsoleCommand<uint, ushort>("SendInputAnalog", "SendInputAnalog <Number> <Value>", (n, v) => SendInputAnalog(n, v));
+			yield return new GenericConsoleCommand<uint, bool>("SendInputDigital", "SendInputDigital <Number> <Value>", (n, v) => SendInputDigital(n, v));
+			yield return new GenericConsoleCommand<uint, string>("SendInputSerial", "SendInputSerial <Number> <Value>", (n, v) => SendInputSerial(n, v));
 		}
 
 		/// <summary>
