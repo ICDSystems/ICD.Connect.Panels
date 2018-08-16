@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
+using ICD.Common.Utils.Collections;
+using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Services.Logging;
@@ -31,6 +33,9 @@ namespace ICD.Connect.Panels.Server
 		public const string SMART_OBJECT_MESSAGE = "So";
 		private const string HEARTBEAT_MESSAGE = "H";
 
+		/// <summary>
+		/// Raised when the user interacts with the panel.
+		/// </summary>
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
@@ -39,6 +44,7 @@ namespace ICD.Connect.Panels.Server
 		private readonly SafeCriticalSection m_SendSection;
 		private readonly SigCallbackManager m_SigCallbacks;
 		private readonly PanelServerSmartObjectCollection m_SmartObjects;
+		private readonly AsyncEventQueue<SigInfo> m_InputSigs; 
 
 		#region Properties
 
@@ -82,8 +88,11 @@ namespace ICD.Connect.Panels.Server
 		{
 			m_Cache = new SigCache();
 			m_SendSection = new SafeCriticalSection();
-
 			m_SigCallbacks = new SigCallbackManager();
+
+			m_InputSigs = new AsyncEventQueue<SigInfo>();
+			m_InputSigs.OnItemDequeued += InputSigsOnItemDequeued;
+
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
@@ -107,23 +116,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="sigInfo"></param>
 		public void SendSig(SigInfo sigInfo)
 		{
-			m_SendSection.Enter();
-
-			try
-			{
-				if (!m_Cache.Add(sigInfo))
-					return;
-
-				if (m_Server.NumberOfClients == 0)
-					return;
-
-				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
-				SendData(serial);
-			}
-			finally
-			{
-				m_SendSection.Leave();
-			}
+			m_InputSigs.Enqueue(sigInfo);
 		}
 
 		/// <summary>
@@ -165,7 +158,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="text"></param>
 		public void SendInputSerial(uint number, string text)
 		{
-			SendSig(new SigInfo(number, 0, text));
+			m_InputSigs.Enqueue(new SigInfo(number, 0, text));
 		}
 
 		/// <summary>
@@ -175,7 +168,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputAnalog(uint number, ushort value)
 		{
-			SendSig(new SigInfo(number, 0, value));
+			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
 		}
 
 		/// <summary>
@@ -185,7 +178,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputDigital(uint number, bool value)
 		{
-			SendSig(new SigInfo(number, 0, value));
+			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
 		}
 
 		#endregion
@@ -236,6 +229,8 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		protected override void DisposeFinal(bool disposing)
 		{
+			m_InputSigs.Dispose();
+
 			base.DisposeFinal(disposing);
 
 			Unsubscribe(m_SmartObjects);
@@ -254,6 +249,29 @@ namespace ICD.Connect.Panels.Server
 		protected override bool GetIsOnlineStatus()
 		{
 			return m_Server != null && m_Server.Active;
+		}
+
+		private void InputSigsOnItemDequeued(object sender, GenericEventArgs<SigInfo> eventArgs)
+		{
+			SigInfo info = eventArgs.Data;
+
+			m_SendSection.Enter();
+
+			try
+			{
+				if (!m_Cache.Add(info))
+					return;
+
+				if (m_Server.NumberOfClients == 0)
+					return;
+
+				string serial = JsonUtils.SerializeMessage(info.Serialize, SIG_MESSAGE);
+				SendData(serial);
+			}
+			finally
+			{
+				m_SendSection.Leave();
+			}
 		}
 
 		/// <summary>
@@ -361,13 +379,14 @@ namespace ICD.Connect.Panels.Server
 			try
 			{
 				object parsedData = JsonUtils.DeserializeMessage<object>(DeserializeJson, data);
-				if(parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
-					m_Server.Send(clientId, JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) + PanelClientDevice.DELIMITER);
+				if (parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
+					m_Server.Send(clientId,
+					              JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) +
+					              PanelClientDevice.DELIMITER);
 			}
 			catch (JsonReaderException e)
 			{
-				Logger.AddEntry(eSeverity.Error, "{0} failed to parse JSON - {1}{2}{3}", this, e.Message, IcdEnvironment.NewLine,
-				                JsonUtils.Format(data));
+				Log(eSeverity.Error, "Failed to parse JSON - {0}{1}{2}", e.Message, IcdEnvironment.NewLine, JsonUtils.Format(data));
 			}
 		}
 
