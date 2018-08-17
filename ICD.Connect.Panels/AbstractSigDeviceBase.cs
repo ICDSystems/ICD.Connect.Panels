@@ -128,7 +128,7 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="text"></param>
-		public void SendInputSerial(uint number, string text)
+		public virtual void SendInputSerial(uint number, string text)
 		{
 			m_InputSigs.Enqueue(new SigInfo(number, 0, text));
 		}
@@ -138,7 +138,7 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="value"></param>
-		public void SendInputAnalog(uint number, ushort value)
+		public virtual void SendInputAnalog(uint number, ushort value)
 		{
 			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
 		}
@@ -148,7 +148,7 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="value"></param>
-		public void SendInputDigital(uint number, bool value)
+		public virtual void SendInputDigital(uint number, bool value)
 		{
 			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
 		}

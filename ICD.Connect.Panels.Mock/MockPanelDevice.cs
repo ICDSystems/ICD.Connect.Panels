@@ -1,4 +1,6 @@
-﻿using ICD.Common.Properties;
+﻿using System;
+using ICD.Common.Properties;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -65,7 +67,58 @@ namespace ICD.Connect.Panels.Mock
             Unsubscribe(m_SmartObjects);
 	    }
 
-	    /// <summary>
+		/// <summary>
+		/// Sends the serial data to the panel.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="text"></param>
+		public override void SendInputSerial(uint number, string text)
+		{
+			try
+			{
+				StringInput[number].SetStringValue(text);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send serial sig {0}", number);
+			}
+		}
+
+		/// <summary>
+		/// Sends the analog data to the panel.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="value"></param>
+		public override void SendInputAnalog(uint number, ushort value)
+		{
+			try
+			{
+				UShortInput[number].SetUShortValue(value);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send analog sig {0}", number);
+			}
+		}
+
+		/// <summary>
+		/// Sends the digital data to the panel.
+		/// </summary>
+		/// <param name="number"></param>
+		/// <param name="value"></param>
+		public override void SendInputDigital(uint number, bool value)
+		{
+			try
+			{
+				BooleanInput[number].SetBoolValue(value);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send digital sig {0}", number);
+			}
+		}
+
+		/// <summary>
 		/// Raises the sig change callbacks.
 		/// </summary>
 		/// <param name="sigInfo"></param>
