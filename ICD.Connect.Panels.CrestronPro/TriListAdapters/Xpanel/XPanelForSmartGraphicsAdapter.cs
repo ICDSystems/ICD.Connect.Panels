@@ -1,9 +1,10 @@
 ﻿#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
+
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.XPanel
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Xpanel
 {
 #if SIMPLSHARP
 	public sealed class XpanelForSmartGraphicsAdapter : AbstractTriListAdapter<XpanelForSmartGraphics, XpanelForSmartGraphicsAdapterSettings>
