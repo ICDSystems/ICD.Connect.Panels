@@ -7,6 +7,7 @@ using System;
 using Crestron.SimplSharpPro;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.Sigs;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
@@ -239,8 +240,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="smartObjectEventArgs"></param>
 		private void SmartObjectOnSigChange(GenericBase currentDevice, SmartObjectEventArgs smartObjectEventArgs)
 		{
-			ISig sigAdapter = SigAdapterFactory.GetSigAdapter(smartObjectEventArgs.Sig);
-			SigInfo sigInfo = new SigInfo(sigAdapter, (ushort)SmartObjectId);
+			SigInfo sigInfo = smartObjectEventArgs.Sig.ToSigInfo((ushort)SmartObjectId);
 
 			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
