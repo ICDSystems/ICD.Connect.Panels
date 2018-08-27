@@ -1,6 +1,4 @@
-﻿using ICD.Common.Utils.Collections;
-using ICD.Common.Utils.EventArguments;
-using ICD.Common.Utils.Services.Logging;
+﻿using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
 #if SIMPLSHARP
 using System;
@@ -21,7 +19,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		private readonly SmartObject m_SmartObject;
 
-		private readonly AsyncEventQueue<SigInfo> m_InputSigs; 
 		private readonly SigCallbackManager m_SigCallbacks;
 
 		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
@@ -67,9 +64,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_UShortInput = new DeviceUShortInputCollectionAdapter();
 			m_StringInput = new DeviceStringInputCollectionAdapter();
 
-			m_InputSigs = new AsyncEventQueue<SigInfo>();
-			m_InputSigs.OnItemDequeued += InputSigsOnItemDequeued;
-
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
 
@@ -91,7 +85,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			Unsubscribe(m_SmartObject);
 
-			m_InputSigs.Clear();
 			m_SigCallbacks.Clear();
 		}
 
@@ -100,8 +93,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		public override void Clear()
 		{
-			m_InputSigs.Clear();
-
 			foreach (IBoolInputSig item in BooleanInput)
 				SendInputDigital(item.Number, false);
 
@@ -143,7 +134,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="text"></param>
 		public override void SendInputSerial(uint number, string text)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, (ushort)SmartObjectId, text));
+			try
+			{
+				StringInput[number].SetStringValue(text);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input serial {0} - {1}", number, e.Message);
+			}
 		}
 
 		/// <summary>
@@ -153,7 +151,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="value"></param>
 		public override void SendInputAnalog(uint number, ushort value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, (ushort)SmartObjectId, value));
+			try
+			{
+				UShortInput[number].SetUShortValue(value);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input analog {0} - {1}", number, e.Message);
+			}
 		}
 
 		/// <summary>
@@ -163,42 +168,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="value"></param>
 		public override void SendInputDigital(uint number, bool value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, (ushort)SmartObjectId, value));
+			try
+			{
+				BooleanInput[number].SetBoolValue(value);
+			}
+			catch (Exception e)
+			{
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input digital {0} - {1}", number, e.Message);
+			}
 		}
 
 		#endregion
 
 		#region Private Methods
-
-		private void InputSigsOnItemDequeued(object sender, GenericEventArgs<SigInfo> eventArgs)
-		{
-			SigInfo info = eventArgs.Data;
-
-			try
-			{
-				switch (info.Type)
-				{
-					case eSigType.Digital:
-						BooleanInput[info.Number].SetBoolValue(info.GetBoolValue());
-						break;
-
-					case eSigType.Analog:
-						UShortInput[info.Number].SetUShortValue(info.GetUShortValue());
-						break;
-
-					case eSigType.Serial:
-						StringInput[info.Number].SetStringValue(info.GetStringValue());
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			catch (Exception e)
-			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send {0} - {1}", info, e.Message);
-			}
-		}
 
 		private void SigCallbacksOnAnyCallback(object sender, SigInfoEventArgs eventArgs)
 		{

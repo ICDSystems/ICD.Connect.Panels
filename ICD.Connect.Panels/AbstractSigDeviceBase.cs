@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Utils;
-using ICD.Common.Utils.Collections;
-using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Commands;
@@ -27,7 +25,6 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
-		private readonly AsyncEventQueue<SigInfo> m_InputSigs; 
 		private readonly SigCallbackManager m_SigCallbacks;
 
 		#region Properties
@@ -59,9 +56,6 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		protected AbstractSigDeviceBase()
 		{
-			m_InputSigs = new AsyncEventQueue<SigInfo>();
-			m_InputSigs.OnItemDequeued += InputSigsOnItemDequeued;
-
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
 		}
@@ -75,8 +69,6 @@ namespace ICD.Connect.Panels
 		{
 			OnAnyOutput = null;
 
-			m_InputSigs.Dispose();
-
 			base.DisposeFinal(disposing);
 
 			m_SigCallbacks.Clear();
@@ -87,8 +79,6 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		public virtual void Clear()
 		{
-			m_InputSigs.Clear();
-
 			foreach (IBoolInputSig item in BooleanInput)
 				SendInputDigital(item.Number, false);
 
@@ -128,9 +118,16 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="text"></param>
-		public virtual void SendInputSerial(uint number, string text)
+		public void SendInputSerial(uint number, string text)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, text));
+			try
+			{
+				StringInput[number].SetStringValue(text);
+			}
+			catch (Exception e)
+			{
+				Log(eSeverity.Error, "Unable to send input serial {0} - {1}", number, e.Message);
+			}
 		}
 
 		/// <summary>
@@ -138,9 +135,16 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="value"></param>
-		public virtual void SendInputAnalog(uint number, ushort value)
+		public void SendInputAnalog(uint number, ushort value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
+			try
+			{
+				UShortInput[number].SetUShortValue(value);
+			}
+			catch (Exception e)
+			{
+				Log(eSeverity.Error, "Unable to send input analog {0} - {1}", number, e.Message);
+			}
 		}
 
 		/// <summary>
@@ -148,44 +152,21 @@ namespace ICD.Connect.Panels
 		/// </summary>
 		/// <param name="number"></param>
 		/// <param name="value"></param>
-		public virtual void SendInputDigital(uint number, bool value)
+		public void SendInputDigital(uint number, bool value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
+			try
+			{
+				BooleanInput[number].SetBoolValue(value);
+			}
+			catch (Exception e)
+			{
+				Log(eSeverity.Error, "Unable to send input digital {0} - {1}", number, e.Message);
+			}
 		}
 
 		#endregion
 
 		#region Private Methods
-		
-		private void InputSigsOnItemDequeued(object sender, GenericEventArgs<SigInfo> eventArgs)
-		{
-			SigInfo info = eventArgs.Data;
-
-			try
-			{
-				switch (info.Type)
-				{
-					case eSigType.Digital:
-						BooleanInput[info.Number].SetBoolValue(info.GetBoolValue());
-						break;
-
-					case eSigType.Analog:
-						UShortInput[info.Number].SetUShortValue(info.GetUShortValue());
-						break;
-
-					case eSigType.Serial:
-						StringInput[info.Number].SetStringValue(info.GetStringValue());
-						break;
-
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-			catch (Exception e)
-			{
-				Log(eSeverity.Error, "Unable to send {0} - {1}", info, e.Message);
-			}
-		}
 
 		/// <summary>
 		/// Raises the callbacks registered with the signature.

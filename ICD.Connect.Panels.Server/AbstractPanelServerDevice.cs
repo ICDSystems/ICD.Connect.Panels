@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
-using ICD.Common.Utils.Collections;
-using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Services.Logging;
@@ -44,7 +42,6 @@ namespace ICD.Connect.Panels.Server
 		private readonly SafeCriticalSection m_SendSection;
 		private readonly SigCallbackManager m_SigCallbacks;
 		private readonly PanelServerSmartObjectCollection m_SmartObjects;
-		private readonly AsyncEventQueue<SigInfo> m_InputSigs; 
 
 		#region Properties
 
@@ -90,9 +87,6 @@ namespace ICD.Connect.Panels.Server
 			m_SendSection = new SafeCriticalSection();
 			m_SigCallbacks = new SigCallbackManager();
 
-			m_InputSigs = new AsyncEventQueue<SigInfo>();
-			m_InputSigs.OnItemDequeued += InputSigsOnItemDequeued;
-
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
@@ -116,7 +110,23 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="sigInfo"></param>
 		public void SendSig(SigInfo sigInfo)
 		{
-			m_InputSigs.Enqueue(sigInfo);
+			m_SendSection.Enter();
+
+			try
+			{
+				if (!m_Cache.Add(sigInfo))
+					return;
+
+				if (m_Server.NumberOfClients == 0)
+					return;
+
+				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, SIG_MESSAGE);
+				SendData(serial);
+			}
+			finally
+			{
+				m_SendSection.Leave();
+			}
 		}
 
 		/// <summary>
@@ -158,7 +168,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="text"></param>
 		public void SendInputSerial(uint number, string text)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, text));
+			SendSig(new SigInfo(number, 0, text));
 		}
 
 		/// <summary>
@@ -168,7 +178,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputAnalog(uint number, ushort value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
+			SendSig(new SigInfo(number, 0, value));
 		}
 
 		/// <summary>
@@ -178,7 +188,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="value"></param>
 		public void SendInputDigital(uint number, bool value)
 		{
-			m_InputSigs.Enqueue(new SigInfo(number, 0, value));
+			SendSig(new SigInfo(number, 0, value));
 		}
 
 		#endregion
@@ -229,8 +239,6 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		protected override void DisposeFinal(bool disposing)
 		{
-			m_InputSigs.Dispose();
-
 			base.DisposeFinal(disposing);
 
 			Unsubscribe(m_SmartObjects);
@@ -249,29 +257,6 @@ namespace ICD.Connect.Panels.Server
 		protected override bool GetIsOnlineStatus()
 		{
 			return m_Server != null && m_Server.Active;
-		}
-
-		private void InputSigsOnItemDequeued(object sender, GenericEventArgs<SigInfo> eventArgs)
-		{
-			SigInfo info = eventArgs.Data;
-
-			m_SendSection.Enter();
-
-			try
-			{
-				if (!m_Cache.Add(info))
-					return;
-
-				if (m_Server.NumberOfClients == 0)
-					return;
-
-				string serial = JsonUtils.SerializeMessage(info.Serialize, SIG_MESSAGE);
-				SendData(serial);
-			}
-			finally
-			{
-				m_SendSection.Leave();
-			}
 		}
 
 		/// <summary>
