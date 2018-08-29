@@ -10,7 +10,7 @@ namespace ICD.Connect.Panels.Server.Osd
 		/// </summary>
 		public OsdPanelDevice()
 		{
-			MockRouteSourceControl routingControl = new MockRouteSourceControl(this, 0);
+			MockRouteSourceControl routingControl = new MockRouteSourceControl(this, 1);
 			routingControl.SetActiveTransmissionState(1, eConnectionType.Video, true);
 
 			Controls.Add(routingControl);
