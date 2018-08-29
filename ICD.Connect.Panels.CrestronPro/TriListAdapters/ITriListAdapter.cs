@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.Devices;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
 

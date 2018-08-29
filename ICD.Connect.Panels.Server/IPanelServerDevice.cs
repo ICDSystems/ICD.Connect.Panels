@@ -1,3 +1,4 @@
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Protocol.Sigs;
 
 namespace ICD.Connect.Panels.Server

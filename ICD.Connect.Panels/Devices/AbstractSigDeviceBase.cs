@@ -12,7 +12,7 @@ using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
 
-namespace ICD.Connect.Panels
+namespace ICD.Connect.Panels.Devices
 {
 	/// <summary>
 	/// AbstractPanelBase represents shared functionality between the PanelDevice and the SmartObject.

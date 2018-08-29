@@ -68,17 +68,17 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractPanelDeviceSettings.cs" />
-    <Compile Include="AbstractSigDevice.cs" />
+    <Compile Include="Devices\AbstractPanelDeviceSettings.cs" />
+    <Compile Include="Devices\AbstractSigDevice.cs" />
     <Compile Include="CommonJoins.cs" />
     <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
     <Compile Include="Controls\IHardButtonBacklightControl.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
-    <Compile Include="AbstractPanelDevice.cs" />
-    <Compile Include="AbstractSigDeviceBase.cs" />
-    <Compile Include="IPanelDevice.cs" />
-    <Compile Include="IPanelDeviceSettings.cs" />
-    <Compile Include="ISigDevice.cs" />
+    <Compile Include="Devices\AbstractPanelDevice.cs" />
+    <Compile Include="Devices\AbstractSigDeviceBase.cs" />
+    <Compile Include="Devices\IPanelDevice.cs" />
+    <Compile Include="Devices\IPanelDeviceSettings.cs" />
+    <Compile Include="Devices\ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="SigCallbackManager.cs" />

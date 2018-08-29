@@ -1,5 +1,6 @@
 ﻿using ICD.Common.Utils;
 using ICD.Common.Utils.Xml;
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Settings.Attributes.SettingsProperties;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
