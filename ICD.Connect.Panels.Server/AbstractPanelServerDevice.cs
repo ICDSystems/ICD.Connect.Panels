@@ -102,7 +102,7 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
 
-			Controls.Add(new PanelControl(this, 0));
+			Controls.Add(new PanelControl(this, 1));
 		}
 
 		#region Methods
