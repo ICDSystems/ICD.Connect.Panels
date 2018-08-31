@@ -31,5 +31,8 @@
     <None Remove="ICD.Connect.Panels.projectinfo" />
     <None Remove="Properties\ControlSystem.cfg" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ICD.Connect.Panels\ICD.Connect.Panels_NetStandard.csproj" />
+  </ItemGroup>
 
 </Project>
