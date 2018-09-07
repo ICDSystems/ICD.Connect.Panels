@@ -30,6 +30,7 @@ namespace ICD.Connect.Panels.Server
 		public const string SIG_MESSAGE = "S";
 		public const string SMART_OBJECT_MESSAGE = "So";
 		private const string HEARTBEAT_MESSAGE = "H";
+		private const string TIME_MESSAGE = "T";
 
 		/// <summary>
 		/// Raised when the user interacts with the panel.
@@ -314,6 +315,9 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
+				// Inform the client of the processor time
+				SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(IcdEnvironment.GetLocalTime()), TIME_MESSAGE));
+
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
 					SendData(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
