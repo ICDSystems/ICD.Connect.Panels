@@ -3,7 +3,7 @@ using System.Linq;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Panels.SmartObjects;
 
-namespace ICD.Connect.Panels
+namespace ICD.Connect.Panels.Devices
 {
 	public abstract class AbstractPanelDevice<T> : AbstractSigDeviceBase<T>, IPanelDevice
 		where T : IPanelDeviceSettings, new()

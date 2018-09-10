@@ -12,7 +12,7 @@ using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
 
-namespace ICD.Connect.Panels
+namespace ICD.Connect.Panels.Devices
 {
 	/// <summary>
 	/// AbstractPanelBase represents shared functionality between the PanelDevice and the SmartObject.
@@ -122,11 +122,11 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendSerial(StringInput[number], text);
+				StringInput[number].SetStringValue(text);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send serial sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input serial {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -139,11 +139,11 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendAnalog(UShortInput[number], value);
+				UShortInput[number].SetUShortValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send analog sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input analog {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -156,47 +156,17 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendDigital(BooleanInput[number], value);
+				BooleanInput[number].SetBoolValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send digital sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input digital {0} - {1}", number, e.Message);
 			}
 		}
 
 		#endregion
 
 		#region Private Methods
-
-		/// <summary>
-		/// Sends the serial data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="text"></param>
-		private static void SendSerial(IStringInputSig sig, string text)
-		{
-			sig.SetStringValue(text);
-		}
-
-		/// <summary>
-		/// Sends the analog data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendAnalog(IUShortInputSig sig, ushort value)
-		{
-			sig.SetUShortValue(value);
-		}
-
-		/// <summary>
-		/// Sends the digital data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendDigital(IBoolInputSig sig, bool value)
-		{
-			sig.SetBoolValue(value);
-		}
 
 		/// <summary>
 		/// Raises the callbacks registered with the signature.
@@ -242,9 +212,10 @@ namespace ICD.Connect.Panels
 				yield return command;
 
 			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
-			yield return new GenericConsoleCommand<uint, ushort>("SendAnalogSig", "SendAnalogSig <Number> <Value>", (n, v) => SendInputAnalog(n, v));
-			yield return new GenericConsoleCommand<uint, bool>("SendDigitalSig", "SendDigitalSig <Number> <Value>", (n, v) => SendInputDigital(n, v));
-			yield return new GenericConsoleCommand<uint, string>("SendSerialSig", "SendSerialSig <Number> <Value>", (n, v) => SendInputSerial(n, v));
+
+			yield return new GenericConsoleCommand<uint, ushort>("SendInputAnalog", "SendInputAnalog <Number> <Value>", (n, v) => SendInputAnalog(n, v));
+			yield return new GenericConsoleCommand<uint, bool>("SendInputDigital", "SendInputDigital <Number> <Value>", (n, v) => SendInputDigital(n, v));
+			yield return new GenericConsoleCommand<uint, string>("SendInputSerial", "SendInputSerial <Number> <Value>", (n, v) => SendInputSerial(n, v));
 		}
 
 		/// <summary>

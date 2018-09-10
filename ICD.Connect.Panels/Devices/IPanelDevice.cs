@@ -1,7 +1,7 @@
 ﻿using ICD.Common.Properties;
 using ICD.Connect.Panels.SmartObjectCollections;
 
-namespace ICD.Connect.Panels
+namespace ICD.Connect.Panels.Devices
 {
 	public interface IPanelDevice : ISigDevice
 	{

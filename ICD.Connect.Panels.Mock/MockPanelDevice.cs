@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Properties;
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -65,7 +66,7 @@ namespace ICD.Connect.Panels.Mock
             Unsubscribe(m_SmartObjects);
 	    }
 
-	    /// <summary>
+		/// <summary>
 		/// Raises the sig change callbacks.
 		/// </summary>
 		/// <param name="sigInfo"></param>

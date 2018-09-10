@@ -5,6 +5,7 @@ using System;
 using Crestron.SimplSharpPro;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.Sigs;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
@@ -17,6 +18,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly SmartObject m_SmartObject;
+
 		private readonly SigCallbackManager m_SigCallbacks;
 
 		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
@@ -134,11 +136,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			try
 			{
-				SendSerial(StringInput[number], text);
+				StringInput[number].SetStringValue(text);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send serial sig {0}", number);
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input serial {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -151,11 +153,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			try
 			{
-				SendAnalog(UShortInput[number], value);
+				UShortInput[number].SetUShortValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send analog sig {0}", number);
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input analog {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -168,11 +170,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			try
 			{
-				SendDigital(BooleanInput[number], value);
+				BooleanInput[number].SetBoolValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send digital sig {0}", number);
+				Logger.AddEntry(eSeverity.Error, e, "Unable to send input digital {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -183,36 +185,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private void SigCallbacksOnAnyCallback(object sender, SigInfoEventArgs eventArgs)
 		{
 			OnAnyOutput.Raise(this, new SigInfoEventArgs(eventArgs.Data));
-		}
-
-		/// <summary>
-		/// Sends the serial data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="text"></param>
-		private static void SendSerial(IStringInputSig sig, string text)
-		{
-			sig.SetStringValue(text);
-		}
-
-		/// <summary>
-		/// Sends the analog data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendAnalog(IUShortInputSig sig, ushort value)
-		{
-			sig.SetUShortValue(value);
-		}
-
-		/// <summary>
-		/// Sends the digital data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendDigital(IBoolInputSig sig, bool value)
-		{
-			sig.SetBoolValue(value);
 		}
 
 		#endregion
@@ -250,8 +222,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="smartObjectEventArgs"></param>
 		private void SmartObjectOnSigChange(GenericBase currentDevice, SmartObjectEventArgs smartObjectEventArgs)
 		{
-			ISig sigAdapter = SigAdapterFactory.GetSigAdapter(smartObjectEventArgs.Sig);
-			SigInfo sigInfo = new SigInfo(sigAdapter, (ushort)SmartObjectId);
+			SigInfo sigInfo = smartObjectEventArgs.Sig.ToSigInfo((ushort)SmartObjectId);
 
 			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}

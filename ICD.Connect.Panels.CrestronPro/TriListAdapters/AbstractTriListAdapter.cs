@@ -3,6 +3,7 @@ using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -14,6 +15,7 @@ using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
@@ -342,17 +344,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="args"></param>
 		private void PanelOnSigChange(BasicTriList currentDevice, SigEventArgs args)
 		{
-			try
-			{
-				ISig sig = SigAdapterFactory.GetSigAdapter(args.Sig);
-				SigInfo sigInfo = new SigInfo(sig);
+			SigInfo sigInfo = args.Sig.ToSigInfo();
 
-				RaiseOutputSigChangeCallback(sigInfo);
-			}
-			catch (Exception e)
-			{
-				Logger.AddEntry(eSeverity.Error, e, "{0} output sig change exception", this);
-			}
+			RaiseOutputSigChangeCallback(sigInfo);
 		}
 #endif
 

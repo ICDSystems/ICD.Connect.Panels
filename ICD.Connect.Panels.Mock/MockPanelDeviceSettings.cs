@@ -1,3 +1,4 @@
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.Mock
