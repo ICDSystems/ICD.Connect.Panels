@@ -190,7 +190,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 				eDeviceRegistrationUnRegistrationResponse result = Panel.Register();
 				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
-					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
+					Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 			}
 
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
