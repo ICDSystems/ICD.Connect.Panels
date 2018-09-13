@@ -141,10 +141,21 @@ namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 		void SetMuteButtonEnabled(bool enable);
 
 		/// <summary>
+		/// Select the mute button on this device.
+		/// </summary>
+		void SetMuteButtonSelected(bool select);
+
+		/// <summary>
 		/// Enable the power button on this device.
 		/// </summary>
 		/// <param name="enable"></param>
 		void SetPowerButtonEnabled(bool enable);
+
+		/// <summary>
+		/// Select the power button on this device.
+		/// </summary>
+		/// <param name="select"></param>
+		void SetPowerButtonSelected(bool select);
 
 		/// <summary>
 		/// Enable a given numerical button on this device.
@@ -153,6 +164,14 @@ namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 		/// <param name="enabled"></param>
 		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Button Number specified.</exception>
 		void SetNumericalButtonEnabled(uint buttonNumber, bool enabled);
+
+		/// <summary>
+		/// Select a given numerical button on this device.
+		/// </summary>
+		/// <param name="buttonNumber">1-6 on MPC3-201 Touchscreen panel.</param>
+		/// <param name="selected"></param>
+		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Button Number specified.</exception>
+		void SetNumericalButtonSelected(uint buttonNumber, bool selected);
 
 		/// <summary>
 		/// Enable automatic LED brightness adjustment based ambient light while the property is true.
