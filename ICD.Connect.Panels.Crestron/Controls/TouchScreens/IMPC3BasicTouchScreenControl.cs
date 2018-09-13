@@ -155,16 +155,6 @@ namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 		void SetNumericalButtonEnabled(uint buttonNumber, bool enabled);
 
 		/// <summary>
-		/// Enable the volume down button on this device.
-		/// </summary>
-		void SetVolumeDownButtonEnabled(bool enable);
-
-		/// <summary>
-		/// Enable the volume up button on this device.
-		/// </summary>
-		void SetVolumeUpButtonEnabled(bool enabled);
-
-		/// <summary>
 		/// Enable automatic LED brightness adjustment based ambient light while the property is true.
 		/// Setting the property to false will disable it.
 		/// </summary>

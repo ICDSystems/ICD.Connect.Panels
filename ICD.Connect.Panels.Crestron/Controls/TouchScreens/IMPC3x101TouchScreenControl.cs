@@ -59,6 +59,16 @@ namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 		#region Methods
 
 		/// <summary>
+		/// Enable the volume down button on this device.
+		/// </summary>
+		void SetVolumeDownButtonEnabled(bool enable);
+
+		/// <summary>
+		/// Enable the volume up button on this device.
+		/// </summary>
+		void SetVolumeUpButtonEnabled(bool enabled);
+
+		/// <summary>
 		/// Method to enable beeping for front panel button presses.
 		/// </summary>
 		void SetButtonPressBeepingEnabled(bool enable);
