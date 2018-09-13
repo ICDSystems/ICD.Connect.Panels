@@ -1,9 +1,15 @@
-﻿using ICD.Connect.Misc.Keypads;
+﻿using System;
+using ICD.Connect.Misc.Keypads;
 
 namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 {
 	public interface IMPC3BasicTouchScreenControl : IThreeSeriesTouchScreenControl
 	{
+		/// <summary>
+		/// Raised when a button state changes.
+		/// </summary>
+		event EventHandler<KeypadButtonPressedEventArgs> OnButtonStateChange;
+
 		#region Properties
 
 		/// <summary>
