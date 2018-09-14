@@ -6,7 +6,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060
 {
 #if SIMPLSHARP
 	public sealed class Tsw1060Adapter :
-		AbstractTswX60BaseClassAdapter<Crestron.SimplSharpPro.UI.Tsw1060, Tsw1060AdapterSettings>
+		AbstractTswX60BaseClassAdapter<global::Crestron.SimplSharpPro.UI.Tsw1060, Tsw1060AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -14,9 +14,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060
 		/// <param name="ipid"></param>
 		/// <param name="controlSystem"></param>
 		/// <returns></returns>
-		protected override Crestron.SimplSharpPro.UI.Tsw1060 InstantiateTriList(byte ipid, CrestronControlSystem controlSystem)
+		protected override global::Crestron.SimplSharpPro.UI.Tsw1060 InstantiateTriList(byte ipid, CrestronControlSystem controlSystem)
 		{
-			return new Crestron.SimplSharpPro.UI.Tsw1060(ipid, controlSystem);
+			return new global::Crestron.SimplSharpPro.UI.Tsw1060(ipid, controlSystem);
 		}
 	}
 #else

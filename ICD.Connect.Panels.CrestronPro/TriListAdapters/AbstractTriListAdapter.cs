@@ -1,13 +1,8 @@
-﻿using System;
-using ICD.Common.Properties;
-using ICD.Common.Utils;
-using ICD.Common.Utils.Services.Logging;
-using ICD.Connect.API.Nodes;
+﻿using ICD.Connect.API.Nodes;
 using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
-using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings.Core;
 using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 #if SIMPLSHARP
@@ -16,6 +11,12 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
 using ICD.Connect.Misc.CrestronPro.Extensions;
+using ICD.Common.Properties;
+using ICD.Common.Utils;
+using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Protocol.Sigs;
+#else
+using System;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
@@ -189,7 +190,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 				eDeviceRegistrationUnRegistrationResponse result = Panel.Register();
 				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
-					Logger.AddEntry(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
+					Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 			}
 
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);

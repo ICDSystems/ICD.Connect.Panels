@@ -13,5 +13,14 @@ namespace ICD.Connect.Panels.EventArguments
 			: base(sigInfo)
 		{
 		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		/// <param name="eventArgs"></param>
+		public SigInfoEventArgs(SigInfoEventArgs eventArgs)
+			: this(eventArgs.Data)
+		{
+		}
 	}
 }

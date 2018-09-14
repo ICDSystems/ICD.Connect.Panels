@@ -1,8 +1,6 @@
-﻿using ICD.Connect.Devices;
-
-namespace ICD.Connect.Panels.Devices
+﻿namespace ICD.Connect.Panels.Devices
 {
-	public interface ISigDevice : IDeviceBase, ISigInputOutput
+	public interface ISigDevice : ISigDeviceBase
 	{
 	}
 }

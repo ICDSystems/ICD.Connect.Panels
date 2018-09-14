@@ -6,7 +6,7 @@ using Crestron.SimplSharpPro;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {
 #if SIMPLSHARP
-	public sealed class Ts1542CAdapter : AbstractTs1542Adapter<Crestron.SimplSharpPro.UI.Ts1542C, Ts1542CAdapterSettings>
+	public sealed class Ts1542CAdapter : AbstractTs1542Adapter<global::Crestron.SimplSharpPro.UI.Ts1542C, Ts1542CAdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -14,9 +14,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 		/// <param name="ipid"></param>
 		/// <param name="controlSystem"></param>
 		/// <returns></returns>
-		protected override Crestron.SimplSharpPro.UI.Ts1542C InstantiateTriList(byte ipid, CrestronControlSystem controlSystem)
+		protected override global::Crestron.SimplSharpPro.UI.Ts1542C InstantiateTriList(byte ipid, CrestronControlSystem controlSystem)
 		{
-			return new Crestron.SimplSharpPro.UI.Ts1542C(ipid, controlSystem);
+			return new global::Crestron.SimplSharpPro.UI.Ts1542C(ipid, controlSystem);
 		}
 	}
 #else

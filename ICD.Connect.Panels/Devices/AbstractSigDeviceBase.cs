@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
@@ -17,9 +16,11 @@ namespace ICD.Connect.Panels.Devices
 	/// <summary>
 	/// AbstractPanelBase represents shared functionality between the PanelDevice and the SmartObject.
 	/// </summary>
-	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDevice
+	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDeviceBase
 		where TSettings : ISettings, new()
 	{
+		private const int PANEL_CONTROL_ID = 0;
+
 		/// <summary>
 		/// Raised when the user interacts with the panel.
 		/// </summary>
@@ -58,6 +59,19 @@ namespace ICD.Connect.Panels.Devices
 		{
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
+
+			ISigControl sigControl = InstantiateSigControl(PANEL_CONTROL_ID);
+			Controls.Add(sigControl);
+		}
+
+		/// <summary>
+		/// Override to determine the type of sig control to use with this device.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected virtual ISigControl InstantiateSigControl(int id)
+		{
+			return new SigControl(this, id);
 		}
 
 		#region Methods
@@ -199,23 +213,28 @@ namespace ICD.Connect.Panels.Devices
 
 		#region Console
 
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
 		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
 		{
 			base.BuildConsoleStatus(addRow);
 
-			addRow("Last Output", LastOutput);
+			SigDeviceBaseConsole.BuildConsoleStatus(this, addRow);
 		}
 
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns></returns>
 		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
 		{
 			foreach (IConsoleCommand command in GetBaseConsoleCommands())
 				yield return command;
 
-			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
-
-			yield return new GenericConsoleCommand<uint, ushort>("SendInputAnalog", "SendInputAnalog <Number> <Value>", (n, v) => SendInputAnalog(n, v));
-			yield return new GenericConsoleCommand<uint, bool>("SendInputDigital", "SendInputDigital <Number> <Value>", (n, v) => SendInputDigital(n, v));
-			yield return new GenericConsoleCommand<uint, string>("SendInputSerial", "SendInputSerial <Number> <Value>", (n, v) => SendInputSerial(n, v));
+			foreach (IConsoleCommand command in SigDeviceBaseConsole.GetConsoleCommands(this))
+				yield return command;
 		}
 
 		/// <summary>
@@ -227,23 +246,26 @@ namespace ICD.Connect.Panels.Devices
 			return base.GetConsoleCommands();
 		}
 
-		private string PrintSigs()
+		/// <summary>
+		/// Gets the child console nodes.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleNodeBase> GetConsoleNodes()
 		{
-			TableBuilder builder = new TableBuilder("Number", "Name", "Type", "Value");
+			foreach (IConsoleNodeBase node in GetBaseConsoleNodes())
+				yield return node;
 
-			IEnumerable<ISig> sigs = BooleanInput.Cast<ISig>()
-			                                     .Concat(UShortInput.Cast<ISig>())
-			                                     .Concat(StringInput.Cast<ISig>()
-			                                                        .Where(s => !string.IsNullOrEmpty(s.GetStringValue())))
-			                                     .Where(s => s.HasValue())
-												 .OrderBy(s => s.Type)
-												 .ThenBy(s => s.Number)
-												 .ThenBy(s => s.Name);
+			foreach (IConsoleNodeBase node in SigDeviceBaseConsole.GetConsoleNodes(this))
+				yield return node;
+		}
 
-			foreach (ISig item in sigs)
-				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
-
-			return builder.ToString();
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleNodeBase> GetBaseConsoleNodes()
+		{
+			return base.GetConsoleNodes();
 		}
 
 		#endregion

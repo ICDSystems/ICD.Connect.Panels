@@ -8,6 +8,7 @@ using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelClient;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -101,6 +102,8 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
+
+			Controls.Add(new PanelControl(this, 1));
 		}
 
 		#region Methods

@@ -1,14 +1,15 @@
-﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A441FE98-6A8E-4EF3-98F0-D17041D2E118}</ProjectGuid>
+    <ProjectGuid>{EF71F157-ED75-4B30-ABC9-1E7811615528}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ICD.Connect.Panels</RootNamespace>
-    <AssemblyName>ICD.Connect.Panels</AssemblyName>
+    <RootNamespace>ICD.Connect.Panels.Crestron</RootNamespace>
+    <AssemblyName>ICD.Connect.Panels.Crestron</AssemblyName>
     <ProjectTypeGuids>{0B4745B0-194B-4BB6-8E21-E9057CA92500};{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>WindowsCE</PlatformFamilyName>
     <PlatformID>E2BECB1F-8C8C-41ba-B736-9BE7D946A398</PlatformID>
@@ -18,6 +19,7 @@
     <NativePlatformName>Windows CE</NativePlatformName>
     <FormFactorID>
     </FormFactorID>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowedReferenceRelatedFileExtensions>.allowedReferenceRelatedFileExtensions</AllowedReferenceRelatedFileExtensions>
@@ -25,7 +27,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE;</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SIMPLSHARP</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <FileAlignment>512</FileAlignment>
@@ -44,6 +46,7 @@
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <GenerateSerializationAssemblies>off</GenerateSerializationAssemblies>
+    <DefineConstants>SIMPLSHARP</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -55,54 +58,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpHelperInterface.dll</HintPath>
     </Reference>
-    <Reference Include="SimplSharpNewtonsoft, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpNewtonsoft.dll</HintPath>
-    </Reference>
-    <Reference Include="SimplSharpReflectionInterface, Version=1.0.5583.25238, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\ProgramData\Crestron\SDK\SimplSharpReflectionInterface.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\AbstractPanelControl.cs" />
-    <Compile Include="Controls\AbstractSigControl.cs" />
-    <Compile Include="Controls\IPanelControl.cs" />
-    <Compile Include="Controls\ISigControl.cs" />
-    <Compile Include="Controls\PanelControl.cs" />
-    <Compile Include="Controls\SigControl.cs" />
-    <Compile Include="Controls\SigControlConsole.cs" />
-    <Compile Include="Devices\AbstractPanelDeviceSettings.cs" />
-    <Compile Include="Devices\AbstractSigDevice.cs" />
-    <Compile Include="CommonJoins.cs" />
-    <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
-    <Compile Include="Controls\IHardButtonBacklightControl.cs" />
-    <Compile Include="Devices\PanelDeviceConsole.cs" />
-    <Compile Include="Devices\ISigDeviceBase.cs" />
-    <Compile Include="Devices\SigDeviceBaseConsole.cs" />
-    <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
-    <Compile Include="Devices\AbstractPanelDevice.cs" />
-    <Compile Include="Devices\AbstractSigDeviceBase.cs" />
-    <Compile Include="Devices\IPanelDevice.cs" />
-    <Compile Include="Devices\IPanelDeviceSettings.cs" />
-    <Compile Include="Devices\ISigDevice.cs" />
-    <Compile Include="ISigInputOutput.cs" />
     <None Include="ObfuscationSettings.cs" />
-    <Compile Include="SigCallbackManager.cs" />
-    <Compile Include="SigCollections\IDeviceSigCollections.cs" />
-    <Compile Include="SigCollections\ISigCollectionBase.cs" />
-    <Compile Include="SigIo\AbstractSigOutput.cs" />
-    <Compile Include="SigIo\AnalogSigInputOutput.cs" />
-    <Compile Include="SigIo\DigitalSigInputOutput.cs" />
-    <Compile Include="SigIo\SerialSigInputOutput.cs" />
-    <Compile Include="SmartObjectCollections\ISmartObjectCollection.cs" />
-    <Compile Include="SmartObjects\AbstractSmartObject.cs" />
-    <Compile Include="SmartObjects\ISmartObject.cs" />
+    <Compile Include="Controls\TouchScreens\IFTTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3BasicTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3x101TouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3x102TouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3x201TouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3x30xTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IMPC3x3XXBaseTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\IThreeSeriesTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\ITPCSTouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\ITSCW730TouchScreenControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EventArguments\SigInfoEventArgs.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>
@@ -118,13 +90,13 @@
       <Project>{FD46A717-5836-4B73-ADD0-2706639DA8ED}</Project>
       <Name>ICD.Connect.Devices_SimplSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ICD.Connect.Protocol\ICD.Connect.Protocol\ICD.Connect.Protocol_SimplSharp.csproj">
-      <Project>{2E4E01B8-D4EA-4FB1-9FCE-0A0DC8D83C8A}</Project>
-      <Name>ICD.Connect.Protocol_SimplSharp</Name>
+    <ProjectReference Include="..\..\ICD.Connect.Misc\ICD.Connect.Misc\ICD.Connect.Misc_SimplSharp.csproj">
+      <Project>{3BAE6352-77B5-499A-9DA5-2AB198F53183}</Project>
+      <Name>ICD.Connect.Misc_SimplSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\ICD.Connect.Settings\ICD.Connect.Settings\ICD.Connect.Settings_SimplSharp.csproj">
-      <Project>{5B84EB3C-1C3A-4C4D-98C2-69F67CF51D5A}</Project>
-      <Name>ICD.Connect.Settings_SimplSharp</Name>
+    <ProjectReference Include="..\ICD.Connect.Panels\ICD.Connect.Panels_SimplSharp.csproj">
+      <Project>{A441FE98-6A8E-4EF3-98F0-D17041D2E118}</Project>
+      <Name>ICD.Connect.Panels_SimplSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.targets" />
@@ -132,4 +104,6 @@
     <PostBuildEvent>if /I "$(ConfigurationName)" == "Release" Eazfuscator.NET.exe "$(TargetPath)" --msbuild-project-path "$(ProjectPath)" --msbuild-project-configuration "$(ConfigurationName)" --msbuild-project-platform "$(PlatformName)" --msbuild-solution-path "$(SolutionPath)" -n --newline-flush -v 5.2 --configuration-file="$(ProjectDir)ObfuscationSettings.cs"
 rem S# Pro preparation will execute after these operations</PostBuildEvent>
   </PropertyGroup>
+  <Target Name="PlatformVerificationTask">
+  </Target>
 </Project>
