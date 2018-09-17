@@ -50,6 +50,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Constructor.
 		/// </summary>
 		public SmartObjectCollectionAdapter()
+			: this(null)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public SmartObjectCollectionAdapter(SmartObjectCollection collection)
 		{
 			m_SmartObjects = new Dictionary<uint, ISmartObject>();
 			m_SmartObjectsSection = new SafeCriticalSection();
