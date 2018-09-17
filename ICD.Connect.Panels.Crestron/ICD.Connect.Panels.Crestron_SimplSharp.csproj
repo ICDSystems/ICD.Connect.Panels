@@ -74,6 +74,8 @@
     <Compile Include="Controls\TouchScreens\IThreeSeriesTouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\ITPCSTouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\ITSCW730TouchScreenControl.cs" />
+    <Compile Include="Controls\TouchScreens\MPC3BasicTouchScreenControlConsole.cs" />
+    <Compile Include="Controls\TouchScreens\MPC3x101TouchScreenControlConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
