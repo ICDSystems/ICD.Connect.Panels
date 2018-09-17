@@ -124,6 +124,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		#endregion
 
+		/// <summary>
+		/// Constructor.
+		/// </summary>
 		protected AbstractTriListAdapter()
 		{
 #if SIMPLSHARP
