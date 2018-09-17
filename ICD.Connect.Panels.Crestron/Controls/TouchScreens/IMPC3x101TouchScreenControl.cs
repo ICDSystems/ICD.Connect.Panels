@@ -1,9 +1,16 @@
-﻿using ICD.Connect.Misc.Keypads;
+﻿using System;
+using ICD.Common.Utils.EventArguments;
+using ICD.Connect.Misc.Keypads;
 
 namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 {
 	public interface IMPC3x101TouchScreenControl : IMPC3BasicTouchScreenControl
 	{
+		/// <summary>
+		/// Raised when the proximity sensor detection state changes.
+		/// </summary>
+		event EventHandler<BoolEventArgs> OnProximityDetectedStateChange;
+
 		#region Properties
 
 		/// <summary>
