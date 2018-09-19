@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.0.0] - 2018-09-14
+### Added
+ - Added Crestron panels project
+ - Added panel control interfaces and abstractions
+ - Added interfaces for touchscreen controls
+
+### Changed
+ - Optimizations to panel devices
+
 ## [5.2.1] - 2018-07-19
 ### Changed
  - ThinConferenceSource SourceType now specified as Audio
