@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Calendaring.Booking;
 using ICD.Connect.Conferencing.Controls.Dialing;
 #if SIMPLSHARP
 using System;
@@ -128,6 +129,36 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			Dial(number);
+		}
+
+		/// <summary>
+		/// Returns the level of support the device has for the given booking.
+		/// </summary>
+		/// <param name="booking"></param>
+		/// <returns></returns>
+		public override eBookingSupport CanDial(IBooking booking)
+		{
+			var sipBooking = booking as ISipBooking;
+			if (sipBooking != null && sipBooking.IsValidSipUri())
+				return eBookingSupport.Supported;
+
+			return eBookingSupport.Unsupported;
+		}
+
+		/// <summary>
+		/// Dials the given booking.
+		/// </summary>
+		/// <param name="booking"></param>
+		public override void Dial(IBooking booking)
+		{
+			var sipBooking = booking as ISipBooking;
+			if (sipBooking != null && sipBooking.IsValidSipUri())
+			{
+				Dial(sipBooking.SipUri);
+				return;
+			}
+
+			Log(eSeverity.Error, "No supported methods for dialing the booking were found.");
 		}
 
 		/// <summary>
