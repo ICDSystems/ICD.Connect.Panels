@@ -134,12 +134,12 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <summary>
 		/// Returns the level of support the device has for the given booking.
 		/// </summary>
-		/// <param name="booking"></param>
+		/// <param name="bookingNumber"></param>
 		/// <returns></returns>
-		public override eBookingSupport CanDial(IBooking booking)
+		public override eBookingSupport CanDial(IBookingNumber bookingNumber)
 		{
-			var sipBooking = booking as ISipBooking;
-			if (sipBooking != null && sipBooking.IsValidSipUri())
+			var sipBookingNumber = bookingNumber as ISipBookingNumber;
+			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
 				return eBookingSupport.Supported;
 
 			return eBookingSupport.Unsupported;
@@ -148,13 +148,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <summary>
 		/// Dials the given booking.
 		/// </summary>
-		/// <param name="booking"></param>
-		public override void Dial(IBooking booking)
+		/// <param name="bookingNumber"></param>
+		public override void Dial(IBookingNumber bookingNumber)
 		{
-			var sipBooking = booking as ISipBooking;
-			if (sipBooking != null && sipBooking.IsValidSipUri())
+			var sipBookingNumber = bookingNumber as ISipBookingNumber;
+			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
 			{
-				Dial(sipBooking.SipUri);
+				Dial(sipBookingNumber.SipUri);
 				return;
 			}
 
