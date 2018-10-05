@@ -318,8 +318,8 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
-				// Inform the client of the processor time
-				SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(IcdEnvironment.GetLocalTime()), TIME_MESSAGE));
+				// Inform the client of the processor time in ISO8601
+				SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(IcdEnvironment.GetLocalTime().ToString("O")), TIME_MESSAGE));
 
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
