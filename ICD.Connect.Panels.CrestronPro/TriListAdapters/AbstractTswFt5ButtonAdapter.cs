@@ -1,5 +1,6 @@
 ﻿using ICD.Common.Properties;
 using ICD.Common.Utils.Xml;
+using ICD.Connect.Conferencing.Conferences;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings.Core;
@@ -22,7 +23,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private const int BACKLIGHT_CONTROL_ID = 2;
 		protected const int HARD_BUTTON_CONTROL_ID = 3;
 
-		private IDialingDeviceControl m_DialingControl;
+		private ITraditionalConferenceDeviceControl m_ConferenceControl;
 		private readonly IPowerDeviceControl m_BacklightControl;
 
 		// Used with settings
@@ -33,7 +34,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <summary>
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
-		public IDialingDeviceControl VoipDialingControl { get { return m_DialingControl; } }
+		public ITraditionalConferenceDeviceControl VoipConferenceControl { get { return m_ConferenceControl; } }
 
 		/// <summary>
 		/// Gets the backlight control for this panel.
@@ -63,9 +64,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_EnableVoip = false;
 
 			Controls.Remove(VOIP_DIALER_CONTROL_ID);
-			if (m_DialingControl != null)
-				m_DialingControl.Dispose();
-			m_DialingControl = null;
+			if (m_ConferenceControl != null)
+				m_ConferenceControl.Dispose();
+			m_ConferenceControl = null;
 		}
 
 		/// <summary>
@@ -95,8 +96,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			if (!m_EnableVoip)
 				return;
 
-			m_DialingControl = InstantiateDialingControl(VOIP_DIALER_CONTROL_ID);
-			Controls.Add(m_DialingControl);
+			m_ConferenceControl = InstantiateDialingControl(VOIP_DIALER_CONTROL_ID);
+			Controls.Add(m_ConferenceControl);
 		}
 
 #if SIMPLSHARP
@@ -139,11 +140,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		/// <summary>
 		/// Called from constructor.
-		/// Override to control the type of dialing control to instantiate.
+		/// Override to control the type of conference control to instantiate.
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected abstract IDialingDeviceControl InstantiateDialingControl(int id);
+		protected abstract ITraditionalConferenceDeviceControl InstantiateDialingControl(int id);
 
 		/// <summary>
 		/// Called from constructor.
@@ -192,7 +193,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Gets the VoIp dialer for this panel.
 		/// </summary>
 		[PublicAPI]
-		IDialingDeviceControl VoipDialingControl { get; }
+		ITraditionalConferenceDeviceControl VoipConferenceControl { get; }
 	}
 
 	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings
