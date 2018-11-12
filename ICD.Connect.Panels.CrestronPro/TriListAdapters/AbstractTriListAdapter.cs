@@ -267,7 +267,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 #if SIMPLSHARP
 			settings.Ipid = Panel == null ? (byte)0 : (byte)Panel.ID;
 #else
-            settings.Ipid = 0;
+			settings.Ipid = 0;
 #endif
 		}
 
@@ -286,7 +286,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 							 : InstantiateTriList(settings.Ipid.Value, ProgramInfo.ControlSystem);
 			SetPanel(triList);
 #else
-            throw new NotImplementedException();
+			throw new NotSupportedException();
 #endif
 		}
 
