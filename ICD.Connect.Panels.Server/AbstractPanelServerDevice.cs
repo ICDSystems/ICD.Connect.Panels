@@ -8,6 +8,7 @@ using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelClient;
 using ICD.Connect.Panels.SmartObjectCollections;
@@ -30,7 +31,11 @@ namespace ICD.Connect.Panels.Server
 		public const string SIG_MESSAGE = "S";
 		public const string SMART_OBJECT_MESSAGE = "So";
 		private const string HEARTBEAT_MESSAGE = "H";
+		private const string TIME_MESSAGE = "T";
 
+		/// <summary>
+		/// Raised when the user interacts with the panel.
+		/// </summary>
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
 		private readonly AsyncTcpServer m_Server;
@@ -82,8 +87,8 @@ namespace ICD.Connect.Panels.Server
 		{
 			m_Cache = new SigCache();
 			m_SendSection = new SafeCriticalSection();
-
 			m_SigCallbacks = new SigCallbackManager();
+
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
@@ -97,6 +102,8 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
+
+			Controls.Add(new PanelControl(this, 1));
 		}
 
 		#region Methods
@@ -111,12 +118,13 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
-				m_Cache.Add(sigInfo);
-
-				if (!m_Server.GetClients().Any())
+				if (!m_Cache.Add(sigInfo))
 					return;
 
-				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, "S");
+				if (m_Server.NumberOfClients == 0)
+					return;
+
+				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, SIG_MESSAGE);
 				SendData(serial);
 			}
 			finally
@@ -310,6 +318,9 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
+				// Inform the client of the processor time in ISO8601
+				SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(IcdEnvironment.GetLocalTime().ToString("O")), TIME_MESSAGE));
+
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
 					SendData(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
@@ -360,13 +371,14 @@ namespace ICD.Connect.Panels.Server
 			try
 			{
 				object parsedData = JsonUtils.DeserializeMessage<object>(DeserializeJson, data);
-				if(parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
-					m_Server.Send(clientId, JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) + PanelClientDevice.DELIMITER);
+				if (parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
+					m_Server.Send(clientId,
+					              JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) +
+					              PanelClientDevice.DELIMITER);
 			}
 			catch (JsonReaderException e)
 			{
-				Logger.AddEntry(eSeverity.Error, "{0} failed to parse JSON - {1}{2}{3}", this, e.Message, IcdEnvironment.NewLine,
-				                JsonUtils.Format(data));
+				Log(eSeverity.Error, "Failed to parse JSON - {0}{1}{2}", e.Message, IcdEnvironment.NewLine, JsonUtils.Format(data));
 			}
 		}
 

@@ -20,7 +20,7 @@ namespace ICD.Connect.Panels.Mock
 		/// Returns the number of sig objects in the collection.
 		/// </summary>
 		[PublicAPI]
-		public int NumberOfSigs { get { return m_SigCache.Count; } }
+		public int NumberOfSigs { get { return m_SigCacheSection.Execute(() => m_SigCache.Count); } }
 
 		/// <summary>
 		/// Get the sig with the specified number.
@@ -36,9 +36,14 @@ namespace ICD.Connect.Panels.Mock
 
 				try
 				{
-					if (!m_SigCache.ContainsKey(sigNumber))
-						m_SigCache[sigNumber] = InstantiateSig(sigNumber);
-					return m_SigCache[sigNumber];
+					T sig;
+					if (!m_SigCache.TryGetValue(sigNumber, out sig))
+					{
+						sig = InstantiateSig(sigNumber);
+						m_SigCache[sigNumber] = sig;
+					}
+
+					return sig;
 				}
 				finally
 				{
@@ -61,14 +66,14 @@ namespace ICD.Connect.Panels.Mock
 		[PublicAPI]
 		public void AddSig(ushort number, T sig)
 		{
-			m_SigCache[number] = sig;
+			m_SigCacheSection.Execute(() => m_SigCache[number] = sig);
 		}
 
 		protected abstract T InstantiateSig(uint sigNumber);
 
 		public IEnumerator<T> GetEnumerator()
 		{
-			return m_SigCacheSection.Execute(() => m_SigCache.Values).ToList().GetEnumerator();
+			return m_SigCacheSection.Execute(() => m_SigCache.Values.ToList()).GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

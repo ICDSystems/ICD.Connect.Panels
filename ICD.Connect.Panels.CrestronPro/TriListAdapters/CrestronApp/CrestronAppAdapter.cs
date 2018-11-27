@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 {
 #if SIMPLSHARP
 	public sealed class CrestronAppAdapter :
-		AbstractTriListAdapter<Crestron.SimplSharpPro.UI.CrestronApp, CrestronAppAdapterSettings>
+		AbstractTriListAdapter<global::Crestron.SimplSharpPro.UI.CrestronApp, CrestronAppAdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -16,10 +16,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 		/// <param name="ipid"></param>
 		/// <param name="controlSystem"></param>
 		/// <returns></returns>
-		protected override Crestron.SimplSharpPro.UI.CrestronApp InstantiateTriList(byte ipid,
+		protected override global::Crestron.SimplSharpPro.UI.CrestronApp InstantiateTriList(byte ipid,
 		                                                                            CrestronControlSystem controlSystem)
 		{
-			return new Crestron.SimplSharpPro.UI.CrestronApp(ipid, controlSystem);
+			return new global::Crestron.SimplSharpPro.UI.CrestronApp(ipid, controlSystem);
 		}
 
 		/// <summary>

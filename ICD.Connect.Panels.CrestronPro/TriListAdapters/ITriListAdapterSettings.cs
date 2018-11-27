@@ -1,4 +1,6 @@
-﻿namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+﻿using ICD.Connect.Panels.Devices;
+
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public interface ITriListAdapterSettings : IPanelDeviceSettings
 	{

@@ -1,6 +1,9 @@
 ﻿using ICD.Common.Properties;
+using ICD.Connect.Panels.Devices;
+using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
+using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
 
 namespace ICD.Connect.Panels.Mock
@@ -20,17 +23,17 @@ namespace ICD.Connect.Panels.Mock
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the device.
 		/// </summary>
-		protected override IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
+		public override IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the device.
 		/// </summary>
-		protected override IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
+		public override IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
 
 		/// <summary>
 		/// Collection of String Inputs sent to the device.
 		/// </summary>
-		protected override IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
+		public override IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
 
 		/// <summary>
 		/// Collection containing the loaded SmartObjects of this device.
@@ -39,13 +42,29 @@ namespace ICD.Connect.Panels.Mock
 
 		#endregion
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
 		public MockPanelDevice()
 		{
 			m_BooleanInput = new MockBooleanInputCollection();
 			m_UShortInput = new MockUShortInputCollection();
 			m_StringInput = new MockStringInputCollection();
 			m_SmartObjects = new MockSmartObjectCollection();
+
+            Subscribe(m_SmartObjects);
 		}
+
+        /// <summary>
+        /// Release resources.
+        /// </summary>
+        /// <param name="disposing"></param>
+	    protected override void DisposeFinal(bool disposing)
+	    {
+	        base.DisposeFinal(disposing);
+
+            Unsubscribe(m_SmartObjects);
+	    }
 
 		/// <summary>
 		/// Raises the sig change callbacks.
@@ -65,5 +84,51 @@ namespace ICD.Connect.Panels.Mock
 		{
 			return true;
 		}
-	}
+
+	    #region SmartObject Callbacks
+
+	    private void Subscribe(ISmartObjectCollection smartObjects)
+	    {
+	        smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+	        smartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+	    }
+
+	    private void Unsubscribe(ISmartObjectCollection smartObjects)
+	    {
+	        smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+	        smartObjects.OnSmartObjectUnsubscribe -= SmartObjectsOnSmartObjectUnsubscribe;
+	    }
+
+	    /// <summary>
+	    /// Subscribes to SmartObject Touch Events
+	    /// </summary>
+	    /// <param name="sender"></param>
+	    /// <param name="smartObject"></param>
+	    private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+	    {
+	        smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
+	    }
+
+	    /// <summary>
+	    /// Unsubscribes from SmartObject Touch Events
+	    /// </summary>
+	    /// <param name="sender"></param>
+	    /// <param name="smartObject"></param>
+	    private void SmartObjectsOnSmartObjectUnsubscribe(object sender, ISmartObject smartObject)
+	    {
+	        smartObject.OnAnyOutput -= SmartObjectOnAnyOutput;
+	    }
+
+	    /// <summary>
+	    /// Called when the user interacts with a SmartObject.
+	    /// </summary>
+	    /// <param name="sender"></param>
+	    /// <param name="eventArgs"></param>
+	    private void SmartObjectOnAnyOutput(object sender, SigInfoEventArgs eventArgs)
+	    {
+	        RaiseOnAnyOutput(eventArgs.Data);
+	    }
+
+	    #endregion
+    }
 }

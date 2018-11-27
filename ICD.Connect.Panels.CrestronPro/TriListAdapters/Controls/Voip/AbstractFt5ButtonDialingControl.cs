@@ -1,5 +1,4 @@
-﻿using ICD.Common.Utils.Services.Logging;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
@@ -7,8 +6,10 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Calendaring.Booking;
 using ICD.Connect.Conferencing.ConferenceSources;
-using ICD.Connect.Conferencing.Controls;
+using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Conferencing.EventArguments;
 using ICD.Connect.Conferencing.Utils;
 
@@ -128,6 +129,36 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			Dial(number);
+		}
+
+		/// <summary>
+		/// Returns the level of support the device has for the given booking.
+		/// </summary>
+		/// <param name="bookingNumber"></param>
+		/// <returns></returns>
+		public override eBookingSupport CanDial(IBookingNumber bookingNumber)
+		{
+			var sipBookingNumber = bookingNumber as ISipBookingNumber;
+			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
+				return eBookingSupport.Supported;
+
+			return eBookingSupport.Unsupported;
+		}
+
+		/// <summary>
+		/// Dials the given booking.
+		/// </summary>
+		/// <param name="bookingNumber"></param>
+		public override void Dial(IBookingNumber bookingNumber)
+		{
+			var sipBookingNumber = bookingNumber as ISipBookingNumber;
+			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
+			{
+				Dial(sipBookingNumber.SipUri);
+				return;
+			}
+
+			Log(eSeverity.Error, "No supported methods for dialing the booking were found.");
 		}
 
 		/// <summary>
@@ -404,7 +435,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			if (m_ActiveSource == null)
 			{
-				m_ActiveSource = new ThinConferenceSource();
+				m_ActiveSource = new ThinConferenceSource {SourceType = eConferenceSourceType.Audio};
 				instantiated = true;
 
 				Subscribe(m_ActiveSource);
@@ -445,6 +476,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void Subscribe(ThinConferenceSource source)
 		{
 			source.AnswerCallback += AnswerCallback;
+			source.RejectCallback += RejectCallback;
 			source.HoldCallback += HoldCallback;
 			source.ResumeCallback += ResumeCallback;
 			source.SendDtmfCallback += SendDtmfCallback;
@@ -458,6 +490,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void Unsubscribe(ThinConferenceSource source)
 		{
 			source.AnswerCallback = null;
+			source.RejectCallback = null;
 			source.HoldCallback = null;
 			source.ResumeCallback = null;
 			source.SendDtmfCallback = null;
@@ -470,6 +503,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				throw new InvalidOperationException("No VoIP extender");
 
 			Sigs.Answer();
+		}
+
+		/// <summary>
+		/// Rejects the current incoming source.
+		/// </summary>
+		private void RejectCallback(ThinConferenceSource sender)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Reject();
 		}
 
 		private void HoldCallback(ThinConferenceSource sender)

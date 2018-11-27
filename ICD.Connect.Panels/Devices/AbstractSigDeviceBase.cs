@@ -1,25 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
 
-namespace ICD.Connect.Panels
+namespace ICD.Connect.Panels.Devices
 {
 	/// <summary>
 	/// AbstractPanelBase represents shared functionality between the PanelDevice and the SmartObject.
 	/// </summary>
-	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDevice
+	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDeviceBase
 		where TSettings : ISettings, new()
 	{
+		private const int PANEL_CONTROL_ID = 0;
+
 		/// <summary>
 		/// Raised when the user interacts with the panel.
 		/// </summary>
@@ -37,17 +38,17 @@ namespace ICD.Connect.Panels
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceBooleanInputCollection BooleanInput { get; }
+		public abstract IDeviceBooleanInputCollection BooleanInput { get; }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceUShortInputCollection UShortInput { get; }
+		public abstract IDeviceUShortInputCollection UShortInput { get; }
 
 		/// <summary>
 		/// Collection of String Inputs sent to the device.
 		/// </summary>
-		protected abstract IDeviceStringInputCollection StringInput { get; }
+		public abstract IDeviceStringInputCollection StringInput { get; }
 
 		#endregion
 
@@ -58,6 +59,19 @@ namespace ICD.Connect.Panels
 		{
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
+
+			ISigControl sigControl = InstantiateSigControl(PANEL_CONTROL_ID);
+			Controls.Add(sigControl);
+		}
+
+		/// <summary>
+		/// Override to determine the type of sig control to use with this device.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		protected virtual ISigControl InstantiateSigControl(int id)
+		{
+			return new SigControl(this, id);
 		}
 
 		#region Methods
@@ -122,11 +136,11 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendSerial(StringInput[number], text);
+				StringInput[number].SetStringValue(text);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send serial sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input serial {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -139,11 +153,11 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendAnalog(UShortInput[number], value);
+				UShortInput[number].SetUShortValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send analog sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input analog {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -156,47 +170,17 @@ namespace ICD.Connect.Panels
 		{
 			try
 			{
-				SendDigital(BooleanInput[number], value);
+				BooleanInput[number].SetBoolValue(value);
 			}
 			catch (Exception e)
 			{
-				Logger.AddEntry(eSeverity.Error, e, "Unable to send digital sig {0}", number);
+				Log(eSeverity.Error, "Unable to send input digital {0} - {1}", number, e.Message);
 			}
 		}
 
 		#endregion
 
 		#region Private Methods
-
-		/// <summary>
-		/// Sends the serial data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="text"></param>
-		private static void SendSerial(IStringInputSig sig, string text)
-		{
-			sig.SetStringValue(text);
-		}
-
-		/// <summary>
-		/// Sends the analog data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendAnalog(IUShortInputSig sig, ushort value)
-		{
-			sig.SetUShortValue(value);
-		}
-
-		/// <summary>
-		/// Sends the digital data to the panel.
-		/// </summary>
-		/// <param name="sig"></param>
-		/// <param name="value"></param>
-		private static void SendDigital(IBoolInputSig sig, bool value)
-		{
-			sig.SetBoolValue(value);
-		}
 
 		/// <summary>
 		/// Raises the callbacks registered with the signature.
@@ -229,22 +213,28 @@ namespace ICD.Connect.Panels
 
 		#region Console
 
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
 		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
 		{
 			base.BuildConsoleStatus(addRow);
 
-			addRow("Last Output", LastOutput);
+			SigDeviceBaseConsole.BuildConsoleStatus(this, addRow);
 		}
 
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns></returns>
 		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
 		{
 			foreach (IConsoleCommand command in GetBaseConsoleCommands())
 				yield return command;
 
-			yield return new ConsoleCommand("PrintSigs", "Prints sigs that have a value assigned", () => PrintSigs());
-			yield return new GenericConsoleCommand<uint, ushort>("SendAnalogSig", "SendAnalogSig <Number> <Value>", (n, v) => SendInputAnalog(n, v));
-			yield return new GenericConsoleCommand<uint, bool>("SendDigitalSig", "SendDigitalSig <Number> <Value>", (n, v) => SendInputDigital(n, v));
-			yield return new GenericConsoleCommand<uint, string>("SendSerialSig", "SendSerialSig <Number> <Value>", (n, v) => SendInputSerial(n, v));
+			foreach (IConsoleCommand command in SigDeviceBaseConsole.GetConsoleCommands(this))
+				yield return command;
 		}
 
 		/// <summary>
@@ -256,23 +246,26 @@ namespace ICD.Connect.Panels
 			return base.GetConsoleCommands();
 		}
 
-		private string PrintSigs()
+		/// <summary>
+		/// Gets the child console nodes.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleNodeBase> GetConsoleNodes()
 		{
-			TableBuilder builder = new TableBuilder("Number", "Name", "Type", "Value");
+			foreach (IConsoleNodeBase node in GetBaseConsoleNodes())
+				yield return node;
 
-			IEnumerable<ISig> sigs = BooleanInput.Cast<ISig>()
-			                                     .Concat(UShortInput.Cast<ISig>())
-			                                     .Concat(StringInput.Cast<ISig>()
-			                                                        .Where(s => !string.IsNullOrEmpty(s.GetStringValue())))
-			                                     .Where(s => s.HasValue())
-												 .OrderBy(s => s.Type)
-												 .ThenBy(s => s.Number)
-												 .ThenBy(s => s.Name);
+			foreach (IConsoleNodeBase node in SigDeviceBaseConsole.GetConsoleNodes(this))
+				yield return node;
+		}
 
-			foreach (ISig item in sigs)
-				builder.AddRow(item.Number, item.Name, item.Type, item.GetValue());
-
-			return builder.ToString();
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleNodeBase> GetBaseConsoleNodes()
+		{
+			return base.GetConsoleNodes();
 		}
 
 		#endregion

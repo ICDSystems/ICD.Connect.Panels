@@ -50,6 +50,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Constructor.
 		/// </summary>
 		public SmartObjectCollectionAdapter()
+			: this(null)
+		{
+		}
+
+		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public SmartObjectCollectionAdapter(SmartObjectCollection collection)
 		{
 			m_SmartObjects = new Dictionary<uint, ISmartObject>();
 			m_SmartObjectsSection = new SafeCriticalSection();
@@ -131,14 +139,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			if (m_Collection == null)
 				throw new InvalidOperationException("No internal collection");
 
-			if (!m_SmartObjects.ContainsKey(key))
+			ISmartObject adapter;
+			if (!m_SmartObjects.TryGetValue(key, out adapter))
 			{
-				m_SmartObjects[key] = new SmartObjectAdapter(m_Collection[key]);
+				adapter = new SmartObjectAdapter(m_Collection[key]);
+				m_SmartObjects[key] = adapter;
+
 				if (OnSmartObjectSubscribe != null)
-					OnSmartObjectSubscribe(this, m_SmartObjects[key]);
+					OnSmartObjectSubscribe(this, adapter);
 			}
 
-			return m_SmartObjects[key];
+			return adapter;
 		}
 
 		#endregion

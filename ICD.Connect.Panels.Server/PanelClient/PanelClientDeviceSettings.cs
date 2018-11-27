@@ -1,5 +1,6 @@
 ﻿using ICD.Common.Utils.Xml;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Devices;
 using ICD.Connect.Settings.Attributes;
 using ICD.Connect.Settings.Attributes.SettingsProperties;
 

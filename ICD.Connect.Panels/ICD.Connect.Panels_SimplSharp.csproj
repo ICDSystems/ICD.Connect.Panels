@@ -1,4 +1,5 @@
-﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -68,17 +69,27 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbstractPanelDeviceSettings.cs" />
-    <Compile Include="AbstractSigDevice.cs" />
+    <Compile Include="Controls\AbstractPanelControl.cs" />
+    <Compile Include="Controls\AbstractSigControl.cs" />
+    <Compile Include="Controls\IPanelControl.cs" />
+    <Compile Include="Controls\ISigControl.cs" />
+    <Compile Include="Controls\PanelControl.cs" />
+    <Compile Include="Controls\SigControl.cs" />
+    <Compile Include="Controls\SigControlConsole.cs" />
+    <Compile Include="Devices\AbstractPanelDeviceSettings.cs" />
+    <Compile Include="Devices\AbstractSigDevice.cs" />
     <Compile Include="CommonJoins.cs" />
     <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
     <Compile Include="Controls\IHardButtonBacklightControl.cs" />
+    <Compile Include="Devices\PanelDeviceConsole.cs" />
+    <Compile Include="Devices\ISigDeviceBase.cs" />
+    <Compile Include="Devices\SigDeviceBaseConsole.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
-    <Compile Include="AbstractPanelDevice.cs" />
-    <Compile Include="AbstractSigDeviceBase.cs" />
-    <Compile Include="IPanelDevice.cs" />
-    <Compile Include="IPanelDeviceSettings.cs" />
-    <Compile Include="ISigDevice.cs" />
+    <Compile Include="Devices\AbstractPanelDevice.cs" />
+    <Compile Include="Devices\AbstractSigDeviceBase.cs" />
+    <Compile Include="Devices\IPanelDevice.cs" />
+    <Compile Include="Devices\IPanelDeviceSettings.cs" />
+    <Compile Include="Devices\ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
     <None Include="ObfuscationSettings.cs" />
     <Compile Include="SigCallbackManager.cs" />
