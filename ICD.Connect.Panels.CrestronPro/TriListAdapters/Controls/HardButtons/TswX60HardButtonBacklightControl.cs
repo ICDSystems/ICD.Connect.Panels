@@ -1,6 +1,6 @@
 ﻿using ICD.Common.Utils;
+using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Services.Logging;
-using ICD.Connect.Devices.EventArguments;
 #if SIMPLSHARP
 using System;
 using System.Collections.Generic;
@@ -124,7 +124,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void ParentOnIsOnlineStateChanged(object sender, DeviceBaseOnlineStateApiEventArgs eventArgs)
+		private void ParentOnIsOnlineStateChanged(object sender, BoolEventArgs eventArgs)
 		{
 			if (!eventArgs.Data)
 				return;
