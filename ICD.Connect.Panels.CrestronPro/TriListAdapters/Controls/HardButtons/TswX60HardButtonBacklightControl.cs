@@ -1,4 +1,6 @@
-﻿using ICD.Common.Utils.Services.Logging;
+﻿using ICD.Common.Utils;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Services.Logging;
 #if SIMPLSHARP
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 {
 	public sealed class TswX60HardButtonBacklightControl : AbstractHardButtonBacklightControl<ITswX60BaseClassAdapter>
 	{
+		private readonly Dictionary<int, bool> m_CachedBacklightState;
+		private readonly SafeCriticalSection m_CriticalSection;
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -19,6 +24,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		public TswX60HardButtonBacklightControl(ITswX60BaseClassAdapter parent, int id)
 			: base(parent, id)
 		{
+			m_CachedBacklightState = new Dictionary<int, bool>();
+			m_CriticalSection = new SafeCriticalSection();
+
+			parent.OnIsOnlineStateChanged += ParentOnIsOnlineStateChanged;
+		}
+
+		/// <summary>
+		/// Override to release resources.
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void DisposeFinal(bool disposing)
+		{
+			base.DisposeFinal(disposing);
+
+			Parent.OnIsOnlineStateChanged -= ParentOnIsOnlineStateChanged;
 		}
 
 		/// <summary>
@@ -28,6 +48,25 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		/// <param name="address"></param>
 		/// <param name="enabled"></param>
 		public override void SetBacklightEnabled(int address, bool enabled)
+		{
+			if (address < 1 || address > 5)
+				throw new ArgumentOutOfRangeException("address", "No button at address " + address);
+
+			m_CriticalSection.Enter();
+
+			try
+			{
+				m_CachedBacklightState[address] = enabled;
+
+				SetBacklightEnabledInternal(address, enabled);
+			}
+			finally
+			{
+				m_CriticalSection.Leave();
+			}
+		}
+
+		private void SetBacklightEnabledInternal(int address, bool enabled)
 		{
 			TswX60BaseClass panel = Parent.Panel as TswX60BaseClass;
 			if (panel == null)
@@ -81,6 +120,31 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		}
 
 		/// <summary>
+		/// Called when the panel online state changes.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="eventArgs"></param>
+		private void ParentOnIsOnlineStateChanged(object sender, BoolEventArgs eventArgs)
+		{
+			if (!eventArgs.Data)
+				return;
+
+			m_CriticalSection.Enter();
+
+			try
+			{
+				foreach (var kvp in m_CachedBacklightState)
+					SetBacklightEnabledInternal(kvp.Key, kvp.Value);
+			}
+			finally
+			{
+				m_CriticalSection.Leave();
+			}
+		}
+
+		#region Console
+
+		/// <summary>
 		/// Gets the child console commands.
 		/// </summary>
 		/// <returns></returns>
@@ -102,6 +166,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		{
 			return base.GetConsoleCommands();
 		}
+
+		#endregion
 	}
 }
 
