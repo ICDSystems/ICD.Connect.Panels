@@ -1,6 +1,6 @@
 ﻿using ICD.Common.Utils;
-using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Devices.EventArguments;
 #if SIMPLSHARP
 using System;
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 			TswX60BaseClass panel = Parent.Panel as TswX60BaseClass;
 			if (panel == null)
 			{
-				Logger.AddEntry(eSeverity.Error, "{0} unable to set button backlight state - internal panel is null");
+				Log(eSeverity.Error, "Unable to set button backlight state - internal panel is null");
 				return;
 			}
 
@@ -124,7 +124,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="eventArgs"></param>
-		private void ParentOnIsOnlineStateChanged(object sender, BoolEventArgs eventArgs)
+		private void ParentOnIsOnlineStateChanged(object sender, DeviceBaseOnlineStateApiEventArgs eventArgs)
 		{
 			if (!eventArgs.Data)
 				return;
