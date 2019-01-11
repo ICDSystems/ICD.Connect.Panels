@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.2.1] - 2019-01-10
+### Changed
+ - Fixed bug with hard button selection states
+
 ## [6.2.0] - 2018-10-18
 ### Added
  - PanelServer reports local time in ISO8601

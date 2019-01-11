@@ -3,7 +3,8 @@ using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Panels.SmartObjectCollections;
-using ICD.Connect.Settings.Core;
+using ICD.Connect.Protocol.Sigs;
+using ICD.Connect.Settings;
 using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
@@ -14,7 +15,6 @@ using ICD.Connect.Misc.CrestronPro.Extensions;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Services.Logging;
-using ICD.Connect.Protocol.Sigs;
 #else
 using System;
 #endif
