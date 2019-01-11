@@ -25,9 +25,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected override IDialingDeviceControl InstantiateDialingControl(int id)
+		protected override ITraditionalConferenceDeviceControl InstantiateDialingControl(int id)
 		{
-			return new TswFt5ButtonSystemDialingControl(this, id);
+			return new TswFt5ButtonSystemConferenceControl(this, id);
 		}
 
 		/// <summary>

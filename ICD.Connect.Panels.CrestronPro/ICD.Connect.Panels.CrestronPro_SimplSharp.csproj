@@ -102,9 +102,10 @@
     <Compile Include="TriListAdapters\Controls\Backlight\TswFt5ButtonSystemBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswX60BaseBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\HardButtons\TswX60HardButtonBacklightControl.cs" />
-    <Compile Include="TriListAdapters\Controls\Voip\AbstractFt5ButtonDialingControl.cs" />
-    <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonDialingControl.cs" />
-    <Compile Include="TriListAdapters\Controls\Voip\TswX52ButtonVoiceControlDialingControl.cs" />
+    <Compile Include="TriListAdapters\Controls\Voip\AbstractFt5ButtonTraditionalConferenceControl.cs" />
+    <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonTraditionalConferenceControl.cs" />
+    <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonTraditionalSystemConferenceControl.cs" />
+    <Compile Include="TriListAdapters\Controls\Voip\TswX52ButtonVoiceControlConferenceControl.cs" />
     <Compile Include="TriListAdapters\AbstractFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonSystemAdapter.cs" />
     <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapter.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TriListAdapters\AbstractTriListAdapter.cs" />
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonAdapter.cs" />
-    <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonSystemDialingControl.cs" />
     <Compile Include="TriListAdapters\Xpanel\XPanelForSmartGraphicsAdapter.cs" />
     <Compile Include="TriListAdapters\Xpanel\XpanelForSmartGraphicsAdapterSettings.cs" />
     <None Include="Properties\ControlSystem.cfg" />

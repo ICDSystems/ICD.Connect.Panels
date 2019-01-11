@@ -5,8 +5,8 @@ using Crestron.SimplSharpPro.DeviceSupport;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
-	public sealed class TswFt5ButtonDialingControl :
-		AbstractFt5ButtonDialingControl<ITswFt5ButtonAdapter, TswFt5Button, TsxVoipReservedSigs>
+	public sealed class TswFt5ButtonTraditionalConferenceControl :
+		AbstractFt5ButtonTraditionalConferenceControl<ITswFt5ButtonAdapter, TswFt5Button, TsxVoipReservedSigs>
 	{
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
@@ -18,7 +18,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		public TswFt5ButtonDialingControl(ITswFt5ButtonAdapter parent, int id)
+		public TswFt5ButtonTraditionalConferenceControl(ITswFt5ButtonAdapter parent, int id)
 			: base(parent, id)
 		{
 		}

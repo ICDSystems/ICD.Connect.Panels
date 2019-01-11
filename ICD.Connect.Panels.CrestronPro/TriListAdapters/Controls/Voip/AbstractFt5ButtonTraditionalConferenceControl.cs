@@ -1,45 +1,41 @@
 ﻿#if SIMPLSHARP
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
+using ICD.Connect.Conferencing.DialContexts;
+using ICD.Connect.Conferencing.Participants;
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
-using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
-using ICD.Connect.Calendaring.Booking;
-using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Conferencing.EventArguments;
 using ICD.Connect.Conferencing.Utils;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
-	public abstract class AbstractFt5ButtonDialingControl<TParent, TPanel, TVoIpSigs> :
-		AbstractDialingDeviceControl<TParent>
+	public abstract class AbstractFt5ButtonTraditionalConferenceControl<TParent, TPanel, TVoIpSigs> :
+		AbstractTraditionalConferenceDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
 	{
-		public override event EventHandler<ConferenceSourceEventArgs> OnSourceAdded;
-		public override event EventHandler<ConferenceSourceEventArgs> OnSourceRemoved;
+		public override event EventHandler<GenericEventArgs<IIncomingCall>> OnIncomingCallAdded;
+		public override event EventHandler<GenericEventArgs<IIncomingCall>> OnIncomingCallRemoved;
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
-		private ThinConferenceSource m_ActiveSource;
+		private ThinTraditionalParticipant m_ActiveParticipant;
+		private ThinIncomingCall m_IncomingCall;
 
 		#region Properties
 
 		/// <summary>
 		/// Gets the type of conference this dialer supports.
 		/// </summary>
-		public override eConferenceSourceType Supports { get { return eConferenceSourceType.Audio; } }
-
-		/// <summary>
-		/// Gets the current active source.
-		/// </summary>
-		[CanBeNull]
-		public IConferenceSource ActiveSource { get { return m_ActiveSource; } }
+		public override eCallType Supports { get { return eCallType.Audio; } }
 
 		/// <summary>
 		/// Gets the voip sig extender for the panel.
@@ -60,7 +56,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		protected AbstractFt5ButtonDialingControl(TParent parent, int id)
+		protected AbstractFt5ButtonTraditionalConferenceControl(TParent parent, int id)
 			: base(parent, id)
 		{
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
@@ -77,9 +73,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			base.DisposeFinal(disposing);
 
-			OnSourceAdded = null;
-			OnSourceRemoved = null;
-
 			Unsubscribe(Parent);
 			UnsubscribePanel();
 		}
@@ -87,78 +80,32 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		#region Dialer Methods
 
 		/// <summary>
-		/// Gets the active conference sources.
-		/// </summary>
-		/// <returns></returns>
-		public override IEnumerable<IConferenceSource> GetSources()
-		{
-			if (m_ActiveSource != null)
-				yield return m_ActiveSource;
-		}
-
-		/// <summary>
-		/// Dials the given number.
-		/// </summary>
-		/// <param name="number"></param>
-		public override void Dial(string number)
-		{
-			if (Panel == null)
-				throw new InvalidOperationException("No panel");
-
-			if (Sigs == null)
-				throw new InvalidOperationException("No VoIP extender");
-
-			if (!SipUtils.IsValidNumber(number))
-				throw new InvalidOperationException(string.Format("Not a valid SIP number: {0}", number));
-
-			Sigs.DialString.StringValue = number;
-			Sigs.DialCurrentNumber();
-		}
-
-		/// <summary>
-		/// Dials the given number.
-		/// </summary>
-		/// <param name="number"></param>
-		/// <param name="callType"></param>
-		public override void Dial(string number, eConferenceSourceType callType)
-		{
-			if (callType != eConferenceSourceType.Audio)
-			{
-				string message = string.Format("{0} does not support {1} calls", Parent.GetType().Name, callType);
-				throw new InvalidOperationException(message);
-			}
-
-			Dial(number);
-		}
-
-		/// <summary>
 		/// Returns the level of support the device has for the given booking.
 		/// </summary>
-		/// <param name="bookingNumber"></param>
+		/// <param name="dialContext"></param>
 		/// <returns></returns>
-		public override eBookingSupport CanDial(IBookingNumber bookingNumber)
+		public override eDialContextSupport CanDial(IDialContext dialContext)
 		{
-			var sipBookingNumber = bookingNumber as ISipBookingNumber;
-			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
-				return eBookingSupport.Supported;
+			if (dialContext == null)
+				throw new ArgumentNullException("dialContext");
 
-			return eBookingSupport.Unsupported;
+			if (dialContext.Protocol == eDialProtocol.Sip && SipUtils.IsValidSipUri(dialContext.DialString))
+				return eDialContextSupport.Supported;
+
+			if (dialContext.Protocol == eDialProtocol.Unknown && !string.IsNullOrEmpty(dialContext.DialString))
+				return eDialContextSupport.Unknown;
+
+			return eDialContextSupport.Unsupported;
 		}
 
 		/// <summary>
 		/// Dials the given booking.
 		/// </summary>
-		/// <param name="bookingNumber"></param>
-		public override void Dial(IBookingNumber bookingNumber)
+		/// <param name="dialContext"></param>
+		public override void Dial(IDialContext dialContext)
 		{
-			var sipBookingNumber = bookingNumber as ISipBookingNumber;
-			if (sipBookingNumber != null && sipBookingNumber.IsValidSipUri())
-			{
-				Dial(sipBookingNumber.SipUri);
-				return;
-			}
-
-			Log(eSeverity.Error, "No supported methods for dialing the booking were found.");
+			Sigs.DialString.StringValue = dialContext.DialString;
+			Sigs.DialCurrentNumber();
 		}
 
 		/// <summary>
@@ -303,7 +250,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void HandleCallActiveFeedback(Sig sig)
 		{
 			if (sig.BoolValue)
-				LazyLoadActiveSource();
+				LazyLoadActiveParticipant();
 		}
 
 		/// <summary>
@@ -313,17 +260,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void HandleCallTerminatedFeedback(Sig sig)
 		{
 			if (sig.BoolValue)
-				ClearActiveSource();
+				ClearActiveParticipant();
 		}
 
 		/// <summary>
-		/// Called when the CallActiveFeedback sig changes state.
+		/// Called when the DialingFeedback sig changes state.
 		/// </summary>
 		/// <param name="sig"></param>
 		private void HandleDialingFeedback(Sig sig)
 		{
 			if (sig.BoolValue)
-				LazyLoadActiveSource();
+				LazyLoadActiveParticipant();
 		}
 
 		/// <summary>
@@ -351,7 +298,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void HandleIncomingCallDetectedFeedback(Sig sig)
 		{
 			if (sig.BoolValue)
-				LazyLoadActiveSource();
+				LazyLoadIncomingCall();
 		}
 
 		/// <summary>
@@ -360,15 +307,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <param name="sig"></param>
 		private void HandleIncomingCallerInformationFeedback(Sig sig)
 		{
-			UpdateActiveSource();
+			UpdateIncomingCall();
 		}
 
 		/// <summary>
-		/// Updates the active source based on the current sig states.
+		/// Updates the active participant based on the current sig states.
 		/// </summary>
 		private void UpdateActiveSource()
 		{
-			if (m_ActiveSource == null)
+			if (m_ActiveParticipant == null)
 				return;
 
 			TVoIpSigs sigs = Sigs;
@@ -379,46 +326,40 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
 			if (!StringUtils.IsNullOrWhitespace(uri))
 			{
-				m_ActiveSource.Name = uri;
-				m_ActiveSource.Number = SipUtils.NumberFromUri(uri);
+				m_ActiveParticipant.Name = uri;
+				m_ActiveParticipant.Number = SipUtils.NumberFromUri(uri);
 			}
 
 			// Status
 			if (sigs.CallActiveFeedback.BoolValue)
 			{
-				m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
-					                        ? eConferenceSourceStatus.OnHold
-					                        : eConferenceSourceStatus.Connected;
+				m_ActiveParticipant.Status = sigs.HoldFeedback.BoolValue
+					                        ? eParticipantStatus.OnHold
+					                        : eParticipantStatus.Connected;
 			}
 			else
 			{
-				m_ActiveSource.Status = sigs.DialingFeedback.BoolValue
-					                        ? eConferenceSourceStatus.Dialing
-					                        : eConferenceSourceStatus.Disconnecting;
+				m_ActiveParticipant.Status = sigs.DialingFeedback.BoolValue
+					                        ? eParticipantStatus.Dialing
+					                        : eParticipantStatus.Disconnecting;
 			}
 
 			// Direction
 			if (sigs.IncomingCallDetectedFeedback.BoolValue)
-				m_ActiveSource.Direction = eConferenceSourceDirection.Incoming;
-			if (m_ActiveSource.Direction != eConferenceSourceDirection.Incoming)
-				m_ActiveSource.Direction = eConferenceSourceDirection.Outgoing;
+				m_ActiveParticipant.Direction = eCallDirection.Incoming;
+			if (m_ActiveParticipant.Direction != eCallDirection.Incoming)
+				m_ActiveParticipant.Direction = eCallDirection.Outgoing;
 
 			// Start/End
-			switch (m_ActiveSource.Status)
+			switch (m_ActiveParticipant.Status)
 			{
-				case eConferenceSourceStatus.Connected:
-					m_ActiveSource.Start = m_ActiveSource.Start ?? IcdEnvironment.GetLocalTime();
+				case eParticipantStatus.Connected:
+					m_ActiveParticipant.Start = m_ActiveParticipant.Start ?? IcdEnvironment.GetLocalTime();
 					break;
-				case eConferenceSourceStatus.Disconnected:
-					m_ActiveSource.End = m_ActiveSource.End ?? IcdEnvironment.GetLocalTime();
+				case eParticipantStatus.Disconnected:
+					m_ActiveParticipant.End = m_ActiveParticipant.End ?? IcdEnvironment.GetLocalTime();
 					break;
 			}
-
-			// Answer state
-			if (sigs.CallActiveFeedback.BoolValue)
-				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
-			if (m_ActiveSource.AnswerState != eConferenceSourceAnswerState.Answered)
-				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Unanswered;
 		}
 
 		#endregion
@@ -426,115 +367,82 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		#region Source Callbacks
 
 		/// <summary>
-		/// If the active source is currently null, creates a new source.
-		/// Updates the active source.
+		/// If the active participant is currently null, creates a new participant.
+		/// Updates the active participant.
 		/// </summary>
-		private void LazyLoadActiveSource()
+		private void LazyLoadActiveParticipant()
 		{
-			bool instantiated = false;
-
-			if (m_ActiveSource == null)
+			if (m_ActiveParticipant == null)
 			{
-				m_ActiveSource = new ThinConferenceSource {SourceType = eConferenceSourceType.Audio};
-				instantiated = true;
-
-				Subscribe(m_ActiveSource);
+				m_ActiveParticipant = new ThinTraditionalParticipant {SourceType = eCallType.Audio};
+				AddParticipant(m_ActiveParticipant);
+				Subscribe(m_ActiveParticipant);
 			}
 
 			UpdateActiveSource();
-
-			if (instantiated)
-			{
-				SourceSubscribe(m_ActiveSource);
-				OnSourceAdded.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
-			}
 		}
 
 		/// <summary>
-		/// Clears the current active source to null.
+		/// Clears the current active participant to null.
 		/// </summary>
-		private void ClearActiveSource()
+		private void ClearActiveParticipant()
 		{
-			if (m_ActiveSource == null)
+			if (m_ActiveParticipant == null)
 				return;
 
-			Unsubscribe(m_ActiveSource);
+			Unsubscribe(m_ActiveParticipant);
 
-			m_ActiveSource.Status = eConferenceSourceStatus.Disconnected;
-			m_ActiveSource.End = IcdEnvironment.GetLocalTime();
+			m_ActiveParticipant.Status = eParticipantStatus.Disconnected;
+			m_ActiveParticipant.End = IcdEnvironment.GetLocalTime();
 
-			SourceUnsubscribe(m_ActiveSource);
-			OnSourceRemoved.Raise(this, new ConferenceSourceEventArgs(m_ActiveSource));
+			RemoveParticipant(m_ActiveParticipant);
 
-			m_ActiveSource = null;
+			m_ActiveParticipant = null;
 		}
 
 		/// <summary>
-		/// Subscribe to the source callbacks.
+		/// Subscribe to the participant callbacks.
 		/// </summary>
-		/// <param name="source"></param>
-		private void Subscribe(ThinConferenceSource source)
+		/// <param name="participant"></param>
+		private void Subscribe(ThinTraditionalParticipant participant)
 		{
-			source.AnswerCallback += AnswerCallback;
-			source.RejectCallback += RejectCallback;
-			source.HoldCallback += HoldCallback;
-			source.ResumeCallback += ResumeCallback;
-			source.SendDtmfCallback += SendDtmfCallback;
-			source.HangupCallback += HangupCallback;
+			participant.HoldCallback += HoldCallback;
+			participant.ResumeCallback += ResumeCallback;
+			participant.SendDtmfCallback += SendDtmfCallback;
+			participant.HangupCallback += HangupCallback;
 		}
 
 		/// <summary>
-		/// Unsubscribe from the source callbacks.
+		/// Unsubscribe from the participant callbacks.
 		/// </summary>
 		/// <param name="source"></param>
-		private void Unsubscribe(ThinConferenceSource source)
+		private void Unsubscribe(ThinTraditionalParticipant source)
 		{
-			source.AnswerCallback = null;
-			source.RejectCallback = null;
 			source.HoldCallback = null;
 			source.ResumeCallback = null;
 			source.SendDtmfCallback = null;
 			source.HangupCallback = null;
 		}
 
-		private void AnswerCallback(ThinConferenceSource sender)
-		{
-			if (Sigs == null)
-				throw new InvalidOperationException("No VoIP extender");
-
-			Sigs.Answer();
-		}
-
-		/// <summary>
-		/// Rejects the current incoming source.
-		/// </summary>
-		private void RejectCallback(ThinConferenceSource sender)
-		{
-			if (Sigs == null)
-				throw new InvalidOperationException("No VoIP extender");
-
-			Sigs.Reject();
-		}
-
-		private void HoldCallback(ThinConferenceSource sender)
+		private void HoldCallback(ThinTraditionalParticipant sender)
 		{
 			// Is this possible?
 			Log(eSeverity.Warning, "Hold is unsupported");
 		}
 
-		private void ResumeCallback(ThinConferenceSource sender)
+		private void ResumeCallback(ThinTraditionalParticipant sender)
 		{
 			// Is this possible?
 			Log(eSeverity.Warning, "Resume is unsupported");
 		}
 
-		private void SendDtmfCallback(ThinConferenceSource sender, string data)
+		private void SendDtmfCallback(ThinTraditionalParticipant sender, string data)
 		{
 			foreach (char item in data)
 				SendDtmfCallback(item);
 		}
 
-		private void HangupCallback(ThinConferenceSource sender)
+		private void HangupCallback(ThinTraditionalParticipant sender)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
@@ -544,7 +452,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		}
 
 		/// <summary>
-		/// Sends the DTMF character to the current source.
+		/// Sends the DTMF character to the current participant.
 		/// </summary>
 		/// <param name="digit"></param>
 		private void SendDtmfCallback(char digit)
@@ -602,6 +510,97 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 					Sigs.DialAsterisk();
 					break;
 			}
+		}
+
+		#endregion
+
+		#region Incoming Call Callbacks
+
+		private void LazyLoadIncomingCall()
+		{
+			if (m_IncomingCall == null)
+			{
+				m_IncomingCall = new ThinIncomingCall();
+				Subscribe(m_IncomingCall);
+				OnIncomingCallAdded.Raise(this, new GenericEventArgs<IIncomingCall>(m_IncomingCall));
+			}
+
+			UpdateIncomingCall();
+		}
+
+		private void UpdateIncomingCall()
+		{
+			if (m_IncomingCall == null)
+				return;
+
+			TVoIpSigs sigs = Sigs;
+			if (sigs == null)
+				return;
+
+			// Caller number
+			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
+			if (!StringUtils.IsNullOrWhitespace(uri))
+			{
+				m_IncomingCall.Name = uri;
+				m_IncomingCall.Number = SipUtils.NumberFromUri(uri);
+			}
+
+			// Direction
+			if (sigs.IncomingCallDetectedFeedback.BoolValue)
+				m_IncomingCall.Direction = eCallDirection.Incoming;
+			if (m_IncomingCall.Direction != eCallDirection.Incoming)
+				m_IncomingCall.Direction = eCallDirection.Outgoing;
+
+			// Answer state
+			if (sigs.CallActiveFeedback.BoolValue)
+				m_IncomingCall.AnswerState = eCallAnswerState.Answered;
+			if (m_IncomingCall.AnswerState != eCallAnswerState.Answered)
+				m_IncomingCall.AnswerState = eCallAnswerState.Unanswered;
+		}
+
+		private void ClearIncomingCall()
+		{
+			if (m_IncomingCall == null)
+				return;
+
+			Unsubscribe(m_IncomingCall);
+
+			OnIncomingCallRemoved.Raise(this, new GenericEventArgs<IIncomingCall>(m_IncomingCall));
+
+			m_IncomingCall = null;
+		}
+
+		private void Subscribe(ThinIncomingCall call)
+		{
+			call.AnswerCallback += AnswerCallback;
+			call.RejectCallback += RejectCallback;
+		}
+
+		private void Unsubscribe(ThinIncomingCall call)
+		{
+			call.AnswerCallback = null;
+			call.RejectCallback = null;
+		}
+
+		private void AnswerCallback(ThinIncomingCall sender)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Answer();
+			ClearIncomingCall();
+		}
+
+		/// <summary>
+		/// Rejects the current incoming participant.
+		/// </summary>
+		private void RejectCallback(ThinIncomingCall sender)
+		{
+			if (Sigs == null)
+				throw new InvalidOperationException("No VoIP extender");
+
+			Sigs.Reject();
+			ClearIncomingCall();
 		}
 
 		#endregion
