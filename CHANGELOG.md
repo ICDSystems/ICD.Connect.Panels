@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.0.0] - 2019-01-14
+### Changed
+ - Dialing features refactored to fit new conferencing interfaces
+
 ## [6.2.1] - 2019-01-10
 ### Changed
  - Fixed bug with hard button selection states
