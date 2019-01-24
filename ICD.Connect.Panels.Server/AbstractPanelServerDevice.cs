@@ -124,7 +124,7 @@ namespace ICD.Connect.Panels.Server
 				if (m_Server.NumberOfClients == 0)
 					return;
 
-				string serial = JsonUtils.SerializeMessage(sigInfo.Serialize, SIG_MESSAGE);
+				string serial = JsonUtils.SerializeMessage(sigInfo, SIG_MESSAGE);
 				SendData(serial);
 			}
 			finally
@@ -319,17 +319,17 @@ namespace ICD.Connect.Panels.Server
 			try
 			{
 				// Inform the client of the processor time in ISO8601
-				SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(IcdEnvironment.GetLocalTime().ToString("O")), TIME_MESSAGE));
+				SendData(args.ClientId, JsonUtils.SerializeMessage(IcdEnvironment.GetLocalTime().ToString("O"), TIME_MESSAGE));
 
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
-					SendData(args.ClientId, JsonUtils.SerializeMessage(sig.Serialize, SIG_MESSAGE));
+					SendData(args.ClientId, JsonUtils.SerializeMessage(sig, SIG_MESSAGE));
 
 				// Inform the client of used smartobjects
 				foreach (uint so in m_SmartObjects.Select(kvp => kvp.Key))
 				{
 					uint closureSo = so;
-					SendData(args.ClientId, JsonUtils.SerializeMessage(w => w.WriteValue(closureSo), SMART_OBJECT_MESSAGE));
+					SendData(args.ClientId, JsonUtils.SerializeMessage(closureSo, SMART_OBJECT_MESSAGE));
 				}
 			}
 			finally
@@ -373,7 +373,7 @@ namespace ICD.Connect.Panels.Server
 				object parsedData = JsonUtils.DeserializeMessage<object>(DeserializeJson, data);
 				if (parsedData is string && parsedData.Equals(HEARTBEAT_MESSAGE))
 					m_Server.Send(clientId,
-					              JsonUtils.SerializeMessage(w => w.WriteValue("pong"), HEARTBEAT_MESSAGE) +
+					              JsonUtils.SerializeMessage("pong", HEARTBEAT_MESSAGE) +
 					              PanelClientDevice.DELIMITER);
 			}
 			catch (JsonReaderException e)
@@ -393,7 +393,7 @@ namespace ICD.Connect.Panels.Server
 			switch (messageName)
 			{
 				case SIG_MESSAGE:
-					SigInfo sigInfo = SigInfo.Deserialize(reader);
+					SigInfo sigInfo = reader.ReadAsObject<SigInfo>();
 
 					if (sigInfo.SmartObject == 0)
 						m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
@@ -452,7 +452,7 @@ namespace ICD.Connect.Panels.Server
 				if (!m_Server.GetClients().Any())
 					return;
 
-				string serial = JsonUtils.SerializeMessage(w => w.WriteValue(smartObjectId), SMART_OBJECT_MESSAGE);
+				string serial = JsonUtils.SerializeMessage(smartObjectId, SMART_OBJECT_MESSAGE);
 				SendData(serial);
 			}
 			finally
