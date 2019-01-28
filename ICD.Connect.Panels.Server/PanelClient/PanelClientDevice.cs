@@ -236,7 +236,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// <param name="args"></param>
 		private void PanelOnAnyOutput(object sender, SigInfoEventArgs args)
 		{
-			string json = JsonUtils.SerializeMessage(args.Data.Serialize, PanelServerDevice.SIG_MESSAGE);
+			string json = JsonUtils.SerializeMessage(args.Data, PanelServerDevice.SIG_MESSAGE);
 			m_Client.Send(json + DELIMITER);
 		}
 
@@ -342,7 +342,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			{
 				// Received an input sig from the server
 				case (PanelServerDevice.SIG_MESSAGE):
-					SigInfo sigInfo = SigInfo.Deserialize(reader);
+					SigInfo sigInfo = reader.ReadAsObject<SigInfo>();
 					HandleInputSig(sigInfo.SmartObject == 0 ? (ISigInputOutput)m_Panel : m_Panel.SmartObjects[sigInfo.SmartObject],
 					               sigInfo);
 					return sigInfo;
@@ -361,7 +361,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			}
 		}
 
-		private void HandleInputSig(ISigInputOutput device, SigInfo sig)
+		private static void HandleInputSig(ISigInputOutput device, SigInfo sig)
 		{
 			switch (sig.Type)
 			{
