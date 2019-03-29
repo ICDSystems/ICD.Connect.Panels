@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Misc.CrestronPro.Extensions;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
@@ -171,13 +172,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				throw new InvalidOperationException("No VoIP extender");
 
 			// Do-not-disturb only toggles :/
-			bool doNotDisturb = Sigs.DoNotDisturbFeedback.BoolValue;
+			bool doNotDisturb = Sigs.DoNotDisturbFeedback.GetBoolValueOrDefault();
 			if (enabled == doNotDisturb)
 				return;
 
 			Sigs.DoNotDisturb();
 
-			DoNotDisturb = Sigs.DoNotDisturbFeedback.BoolValue;
+			DoNotDisturb = Sigs.DoNotDisturbFeedback.GetBoolValueOrDefault();
 		}
 
 		#endregion
@@ -376,7 +377,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				return;
 
 			// Caller number
-			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
+			string uri = sigs.IncomingCallerInformationFeedback.GetSerialValueOrDefault();
 			if (!StringUtils.IsNullOrWhitespace(uri))
 			{
 				m_ActiveSource.Name = uri;
@@ -384,21 +385,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			// Status
-			if (sigs.CallActiveFeedback.BoolValue)
+			if (sigs.CallActiveFeedback.GetBoolValueOrDefault())
 			{
-				m_ActiveSource.Status = sigs.HoldFeedback.BoolValue
+				m_ActiveSource.Status = sigs.HoldFeedback.GetBoolValueOrDefault()
 					                        ? eConferenceSourceStatus.OnHold
 					                        : eConferenceSourceStatus.Connected;
 			}
 			else
 			{
-				m_ActiveSource.Status = sigs.DialingFeedback.BoolValue
+				m_ActiveSource.Status = sigs.DialingFeedback.GetBoolValueOrDefault()
 					                        ? eConferenceSourceStatus.Dialing
 					                        : eConferenceSourceStatus.Disconnecting;
 			}
 
 			// Direction
-			if (sigs.IncomingCallDetectedFeedback.BoolValue)
+			if (sigs.IncomingCallDetectedFeedback.GetBoolValueOrDefault())
 				m_ActiveSource.Direction = eConferenceSourceDirection.Incoming;
 			if (m_ActiveSource.Direction != eConferenceSourceDirection.Incoming)
 				m_ActiveSource.Direction = eConferenceSourceDirection.Outgoing;
@@ -415,7 +416,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			// Answer state
-			if (sigs.CallActiveFeedback.BoolValue)
+			if (sigs.CallActiveFeedback.GetBoolValueOrDefault())
 				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Answered;
 			if (m_ActiveSource.AnswerState != eConferenceSourceAnswerState.Answered)
 				m_ActiveSource.AnswerState = eConferenceSourceAnswerState.Unanswered;

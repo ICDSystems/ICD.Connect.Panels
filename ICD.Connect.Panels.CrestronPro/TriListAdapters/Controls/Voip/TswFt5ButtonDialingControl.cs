@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 #if SIMPLSHARP
 using System;
 using Crestron.SimplSharpPro.DeviceSupport;
@@ -43,7 +44,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			Sigs.Muted.BoolValue = enabled;
 
-			PrivacyMuted = Sigs.MutedFeedback.BoolValue;
+			PrivacyMuted = Sigs.MutedFeedback.GetBoolValueOrDefault();
 		}
 	}
 }

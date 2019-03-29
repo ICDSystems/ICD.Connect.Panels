@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Misc.CrestronPro.Extensions;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
@@ -210,7 +211,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// </summary>
 		private void UpdateIsPowered()
 		{
-			IsPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.BoolValue;
+			IsPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
 		}
 
 		/// <summary>
