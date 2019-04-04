@@ -1,8 +1,8 @@
-﻿using ICD.Common.Utils.Services.Logging;
-using ICD.Connect.Misc.CrestronPro.Extensions;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {

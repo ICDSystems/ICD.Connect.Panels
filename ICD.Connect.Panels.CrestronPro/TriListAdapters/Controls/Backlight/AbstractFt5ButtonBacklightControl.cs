@@ -1,11 +1,11 @@
-﻿using ICD.Connect.Misc.CrestronPro.Extensions;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Connect.Devices.Controls;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {

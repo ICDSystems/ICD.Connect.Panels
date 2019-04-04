@@ -1,5 +1,4 @@
-﻿using ICD.Connect.Misc.CrestronPro.Extensions;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
@@ -13,6 +12,7 @@ using ICD.Connect.Conferencing.ConferenceSources;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Conferencing.EventArguments;
 using ICD.Connect.Conferencing.Utils;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
