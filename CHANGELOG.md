@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.2.2] - 2019-05-16
+### Changed
+ - Checking for nullsigs before getting sig values
+
 ## [6.2.1] - 2019-01-10
 ### Changed
  - Fixed bug with hard button selection states
