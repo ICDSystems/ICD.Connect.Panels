@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
@@ -38,7 +39,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			Sigs.AutoAnswer.BoolValue = enabled;
 
-			AutoAnswer = Sigs.AutoAnswerFeedback.BoolValue;
+			AutoAnswer = Sigs.AutoAnswerFeedback.GetBoolValueOrDefault();
 		}
 
 		/// <summary>
@@ -52,7 +53,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			Sigs.Muted.BoolValue = enabled;
 
-			PrivacyMuted = Sigs.MutedFeedback.BoolValue;
+			PrivacyMuted = Sigs.MutedFeedback.GetBoolValueOrDefault();
 		}
 
 		/// <summary>

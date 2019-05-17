@@ -5,4 +5,3 @@ using System.Reflection;
 [assembly: AssemblyProduct("ICD.Connect.Panels.Mock")]
 [assembly: AssemblyCopyright("Copyright © ICD Systems 2019")]
 [assembly: AssemblyVersion("7.0.0.0")]
-

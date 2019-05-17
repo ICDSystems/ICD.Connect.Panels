@@ -5,6 +5,7 @@ using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
 using ICD.Connect.Devices.Controls;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
@@ -210,7 +211,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// </summary>
 		private void UpdateIsPowered()
 		{
-			IsPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.BoolValue;
+			IsPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
 		}
 
 		/// <summary>

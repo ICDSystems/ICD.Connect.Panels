@@ -13,6 +13,7 @@ using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Conferencing.EventArguments;
 using ICD.Connect.Conferencing.Utils;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
@@ -118,13 +119,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				throw new InvalidOperationException("No VoIP extender");
 
 			// Do-not-disturb only toggles :/
-			bool doNotDisturb = Sigs.DoNotDisturbFeedback.BoolValue;
+			bool doNotDisturb = Sigs.DoNotDisturbFeedback.GetBoolValueOrDefault();
 			if (enabled == doNotDisturb)
 				return;
 
 			Sigs.DoNotDisturb();
 
-			DoNotDisturb = Sigs.DoNotDisturbFeedback.BoolValue;
+			DoNotDisturb = Sigs.DoNotDisturbFeedback.GetBoolValueOrDefault();
 		}
 
 		#endregion
@@ -323,7 +324,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				return;
 
 			// Caller number
-			string uri = sigs.IncomingCallerInformationFeedback.StringValue;
+			string uri = sigs.IncomingCallerInformationFeedback.GetSerialValueOrDefault();
 			if (!StringUtils.IsNullOrWhitespace(uri))
 			{
 				m_ActiveParticipant.Name = uri;
@@ -331,21 +332,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			}
 
 			// Status
-			if (sigs.CallActiveFeedback.BoolValue)
+			if (sigs.CallActiveFeedback.GetBoolValueOrDefault())
 			{
-				m_ActiveParticipant.Status = sigs.HoldFeedback.BoolValue
+				m_ActiveParticipant.Status = sigs.HoldFeedback.GetBoolValueOrDefault()
 					                        ? eParticipantStatus.OnHold
 					                        : eParticipantStatus.Connected;
 			}
 			else
 			{
-				m_ActiveParticipant.Status = sigs.DialingFeedback.BoolValue
+				m_ActiveParticipant.Status = sigs.DialingFeedback.GetBoolValueOrDefault()
 					                        ? eParticipantStatus.Dialing
 					                        : eParticipantStatus.Disconnecting;
 			}
 
 			// Direction
-			if (sigs.IncomingCallDetectedFeedback.BoolValue)
+			if (sigs.IncomingCallDetectedFeedback.GetBoolValueOrDefault())
 				m_ActiveParticipant.Direction = eCallDirection.Incoming;
 			if (m_ActiveParticipant.Direction != eCallDirection.Incoming)
 				m_ActiveParticipant.Direction = eCallDirection.Outgoing;
