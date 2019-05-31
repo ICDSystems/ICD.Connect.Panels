@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Dialing features refactored to fit new conferencing interfaces
 
+## [6.2.3] - 2019-05-31
+### Changed
+ - Using TCP Server listen state for panel server online state
+
 ## [6.2.2] - 2019-05-16
 ### Changed
  - Checking for nullsigs before getting sig values

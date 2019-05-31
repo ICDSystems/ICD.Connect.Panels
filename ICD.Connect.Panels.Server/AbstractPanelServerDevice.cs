@@ -61,7 +61,7 @@ namespace ICD.Connect.Panels.Server
 
 				m_Server.Port = value;
 
-				if (m_Server.Active)
+				if (m_Server.Enabled)
 					m_Server.Restart();
 
 				UpdateCachedOnlineStatus();
@@ -260,7 +260,7 @@ namespace ICD.Connect.Panels.Server
 		/// <returns></returns>
 		protected override bool GetIsOnlineStatus()
 		{
-			return m_Server != null && m_Server.Active;
+			return m_Server != null && m_Server.Listening;
 		}
 
 		/// <summary>
