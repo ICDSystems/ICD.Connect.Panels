@@ -419,12 +419,12 @@ namespace ICD.Connect.Panels.Server
 
 		private void Subscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectAdded += SmartObjectsOnSmartObjectAdded;
 		}
 
 		private void Unsubscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectAdded -= SmartObjectsOnSmartObjectAdded;
 		}
 
 		/// <summary>
@@ -432,7 +432,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="smartObject"></param>
-		private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+		private void SmartObjectsOnSmartObjectAdded(object sender, ISmartObject smartObject)
 		{
 			// When a SmartObject is added to the collection we need to inform the clients that we are
 			// using the SmartObject so they can handle output events.

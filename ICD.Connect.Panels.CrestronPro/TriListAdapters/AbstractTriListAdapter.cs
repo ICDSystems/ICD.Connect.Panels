@@ -360,14 +360,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		private void Subscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
-			smartObjects.OnSmartObjectUnsubscribe += SmartObjectsOnSmartObjectUnsubscribe;
+			smartObjects.OnSmartObjectAdded += SmartObjectsOnSmartObjectAdded;
+			smartObjects.OnSmartObjectRemoved += SmartObjectsOnSmartObjectRemoved;
 		}
 
 		private void Unsubscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
-			smartObjects.OnSmartObjectUnsubscribe -= SmartObjectsOnSmartObjectUnsubscribe;
+			smartObjects.OnSmartObjectAdded -= SmartObjectsOnSmartObjectAdded;
+			smartObjects.OnSmartObjectRemoved -= SmartObjectsOnSmartObjectRemoved;
 		}
 
 		/// <summary>
@@ -375,7 +375,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="smartObject"></param>
-		private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+		private void SmartObjectsOnSmartObjectAdded(object sender, ISmartObject smartObject)
 		{
 			smartObject.OnAnyOutput += SmartObjectOnAnyOutput;
 		}
@@ -385,7 +385,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="smartObject"></param>
-		private void SmartObjectsOnSmartObjectUnsubscribe(object sender, ISmartObject smartObject)
+		private void SmartObjectsOnSmartObjectRemoved(object sender, ISmartObject smartObject)
 		{
 			smartObject.OnAnyOutput -= SmartObjectOnAnyOutput;
 		}
