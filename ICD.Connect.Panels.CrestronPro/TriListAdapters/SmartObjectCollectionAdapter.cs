@@ -12,39 +12,27 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 {
 	public sealed class SmartObjectCollectionAdapter : ISmartObjectCollection
 	{
-		private SmartObjectCollection m_Collection;
+		/// <summary>
+		/// Raised when a SmartObject is added to the collection.
+		/// </summary>
+		public event SmartObjectCallback OnSmartObjectAdded;
+
+		/// <summary>
+		/// Raised when a SmartObject is removed from the collection.
+		/// </summary>
+		public event SmartObjectCallback OnSmartObjectRemoved;
 
 		private readonly Dictionary<uint, ISmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
 
-		public event AddSmartObject OnSmartObjectSubscribe;
-		public event RemoveSmartObject OnSmartObjectUnsubscribe;
+		private SmartObjectCollection m_Collection;
 
 		/// <summary>
-		/// Get the object at the specified number.
-		/// 
+		/// Gets the SmartObject with the given id.
 		/// </summary>
-		/// <param name="paramKey">the key of the value to get.</param>
-		/// <returns>
-		/// Object stored at the key specified.
-		/// </returns>
-		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Index Number specified.</exception>
-		public ISmartObject this[uint paramKey]
-		{
-			get
-			{
-				m_SmartObjectsSection.Enter();
-
-				try
-				{
-					return LazyLoadSmartObject(paramKey);
-				}
-				finally
-				{
-					m_SmartObjectsSection.Leave();
-				}
-			}
-		}
+		/// <param name="id">The SmartObject id.</param>
+		/// <returns>The SmartObject with the given id.</returns>
+		public ISmartObject this[uint id] { get { return LazyLoadSmartObject(id); } }
 
 		/// <summary>
 		/// Constructor.
@@ -61,6 +49,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			m_SmartObjects = new Dictionary<uint, ISmartObject>();
 			m_SmartObjectsSection = new SafeCriticalSection();
+
+			SetSmartObjects(collection);
 		}
 
 		#region Methods
@@ -71,12 +61,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <param name="collection"></param>
 		public void SetSmartObjects(SmartObjectCollection collection)
 		{
-			if (collection == m_Collection)
-				return;
+			m_SmartObjectsSection.Enter();
 
-			m_Collection = collection;
+			try
+			{
+				if (collection == m_Collection)
+					return;
 
-			Clear();
+				m_Collection = collection;
+
+				Clear();
+			}
+			finally
+			{
+				m_SmartObjectsSection.Leave();
+			}
 		}
 
 		/// <summary>
@@ -88,12 +87,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			try
 			{
-				foreach (KeyValuePair<uint, ISmartObject> item in m_SmartObjects)
+				foreach (KeyValuePair<uint, ISmartObject> item in m_SmartObjects.ToArray())
 				{
-					if (OnSmartObjectUnsubscribe != null)
-						OnSmartObjectUnsubscribe(this, item.Value);
+					m_SmartObjects.Remove(item.Key);
+
+					if (OnSmartObjectRemoved != null)
+						OnSmartObjectRemoved(this, item.Value);
 				}
-				m_SmartObjects.Clear();
 			}
 			finally
 			{
@@ -103,13 +103,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 		public IEnumerator<KeyValuePair<uint, ISmartObject>> GetEnumerator()
 		{
-			if (m_Collection == null)
-				throw new InvalidOperationException("No internal collection");
-
 			m_SmartObjectsSection.Enter();
 
 			try
 			{
+				if (m_Collection == null)
+					throw new InvalidOperationException("No internal collection");
+
 				return m_Collection.Select(s => new KeyValuePair<uint, ISmartObject>(s.Key, LazyLoadSmartObject(s.Key)))
 				                   .ToList()
 				                   .GetEnumerator();
@@ -136,20 +136,29 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// <returns></returns>
 		private ISmartObject LazyLoadSmartObject(uint key)
 		{
-			if (m_Collection == null)
-				throw new InvalidOperationException("No internal collection");
+			m_SmartObjectsSection.Enter();
 
-			ISmartObject adapter;
-			if (!m_SmartObjects.TryGetValue(key, out adapter))
+			try
 			{
-				adapter = new SmartObjectAdapter(m_Collection[key]);
-				m_SmartObjects[key] = adapter;
+				if (m_Collection == null)
+					throw new InvalidOperationException("No internal collection");
 
-				if (OnSmartObjectSubscribe != null)
-					OnSmartObjectSubscribe(this, adapter);
+				ISmartObject adapter;
+				if (!m_SmartObjects.TryGetValue(key, out adapter))
+				{
+					adapter = new SmartObjectAdapter(m_Collection[key]);
+					m_SmartObjects.Add(key, adapter);
+
+					if (OnSmartObjectAdded != null)
+						OnSmartObjectAdded(this, adapter);
+				}
+
+				return adapter;
 			}
-
-			return adapter;
+			finally
+			{
+				m_SmartObjectsSection.Leave();
+			}
 		}
 
 		#endregion

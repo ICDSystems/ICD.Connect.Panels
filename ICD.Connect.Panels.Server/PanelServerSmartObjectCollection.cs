@@ -9,48 +9,34 @@ namespace ICD.Connect.Panels.Server
 {
 	public sealed class PanelServerSmartObjectCollection : ISmartObjectCollection
 	{
+		/// <summary>
+		/// Raised when a SmartObject is added to the collection.
+		/// </summary>
+		public event SmartObjectCallback OnSmartObjectAdded;
+
+		/// <summary>
+		/// Raised when a SmartObject is removed from the collection.
+		/// </summary>
+		public event SmartObjectCallback OnSmartObjectRemoved;
+
 		private readonly IPanelServerDevice m_Device;
 
 		private readonly Dictionary<uint, PanelServerSmartObject> m_SmartObjects;
 		private readonly SafeCriticalSection m_SmartObjectsSection;
 
-		public event AddSmartObject OnSmartObjectSubscribe;
-		public event RemoveSmartObject OnSmartObjectUnsubscribe;
+		/// <summary>
+		/// Gets the SmartObject with the given id.
+		/// </summary>
+		/// <param name="id">The SmartObject id.</param>
+		/// <returns>The SmartObject with the given id.</returns>
+		ISmartObject ISmartObjectCollection.this[uint id] { get { return this[id]; } }
 
 		/// <summary>
-		/// Get the object at the specified number.
+		/// Gets the SmartObject with the given id.
 		/// </summary>
-		/// <param name="paramKey">the key of the value to get.</param>
-		/// <returns>
-		/// Object stored at the key specified.
-		/// </returns>
-		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Index Number specified.</exception>
-		ISmartObject ISmartObjectCollection.this[uint paramKey] { get { return this[paramKey]; } }
-
-		/// <summary>
-		/// Get the object at the specified number.
-		/// </summary>
-		/// <param name="paramKey">the key of the value to get.</param>
-		/// <returns>
-		/// Object stored at the key specified.
-		/// </returns>
-		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Index Number specified.</exception>
-		public PanelServerSmartObject this[uint paramKey]
-		{
-			get
-			{
-				m_SmartObjectsSection.Enter();
-
-				try
-				{
-					return LazyLoadSmartObject((ushort)paramKey);
-				}
-				finally
-				{
-					m_SmartObjectsSection.Leave();
-				}
-			}
-		}
+		/// <param name="id">The SmartObject id.</param>
+		/// <returns>The SmartObject with the given id.</returns>
+		public PanelServerSmartObject this[uint id] { get { return LazyLoadSmartObject((ushort)id); } }
 
 		/// <summary>
 		/// Constructor.
@@ -75,12 +61,13 @@ namespace ICD.Connect.Panels.Server
 
 			try
 			{
-				foreach (KeyValuePair<uint, PanelServerSmartObject> item in m_SmartObjects)
+				foreach (KeyValuePair<uint, PanelServerSmartObject> item in m_SmartObjects.ToArray())
 				{
-					if (OnSmartObjectUnsubscribe != null)
-						OnSmartObjectUnsubscribe(this, item.Value);
+					m_SmartObjects.Remove(item.Key);
+
+					if (OnSmartObjectRemoved != null)
+						OnSmartObjectRemoved(this, item.Value);
 				}
-				m_SmartObjects.Clear();
 			}
 			finally
 			{
@@ -120,14 +107,26 @@ namespace ICD.Connect.Panels.Server
 		/// <returns></returns>
 		private PanelServerSmartObject LazyLoadSmartObject(ushort key)
 		{
-			if (!m_SmartObjects.ContainsKey(key))
-			{
-				m_SmartObjects[key] = new PanelServerSmartObject(m_Device, key);
-				if (OnSmartObjectSubscribe != null)
-					OnSmartObjectSubscribe(this, m_SmartObjects[key]);
-			}
+			m_SmartObjectsSection.Enter();
 
-			return m_SmartObjects[key];
+			try
+			{
+				PanelServerSmartObject smartObject;
+				if (!m_SmartObjects.TryGetValue(key, out smartObject))
+				{
+					smartObject = new PanelServerSmartObject(m_Device, key);
+					m_SmartObjects[key] = smartObject;
+
+					if (OnSmartObjectAdded != null)
+						OnSmartObjectAdded(this, smartObject);
+				}
+
+				return smartObject;
+			}
+			finally
+			{
+				m_SmartObjectsSection.Leave();
+			}
 		}
 
 		#endregion

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Text;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
@@ -41,7 +41,7 @@ namespace ICD.Connect.Panels.Server
 		private readonly AsyncTcpServer m_Server;
 		private readonly TcpServerBufferManager m_Buffers;
 		private readonly SigCache m_Cache;
-		private readonly SafeCriticalSection m_SendSection;
+		private readonly SafeCriticalSection m_CacheSection;
 		private readonly SigCallbackManager m_SigCallbacks;
 		private readonly PanelServerSmartObjectCollection m_SmartObjects;
 
@@ -86,7 +86,7 @@ namespace ICD.Connect.Panels.Server
 		protected AbstractPanelServerDevice()
 		{
 			m_Cache = new SigCache();
-			m_SendSection = new SafeCriticalSection();
+			m_CacheSection = new SafeCriticalSection();
 			m_SigCallbacks = new SigCallbackManager();
 
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
@@ -114,23 +114,15 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="sigInfo"></param>
 		public void SendSig(SigInfo sigInfo)
 		{
-			m_SendSection.Enter();
+			// No change
+			if (!m_CacheSection.Execute(() => m_Cache.Add(sigInfo)))
+				return;
 
-			try
-			{
-				if (!m_Cache.Add(sigInfo))
-					return;
+			if (m_Server.NumberOfClients == 0)
+				return;
 
-				if (m_Server.NumberOfClients == 0)
-					return;
-
-				string serial = JsonUtils.SerializeMessage(sigInfo, SIG_MESSAGE);
-				SendData(serial);
-			}
-			finally
-			{
-				m_SendSection.Leave();
-			}
+			string serial = JsonUtils.SerializeMessage(sigInfo, SIG_MESSAGE);
+			SendData(serial);
 		}
 
 		/// <summary>
@@ -138,7 +130,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public void Clear()
 		{
-			m_SendSection.Execute(() => m_Cache.Clear());
+			m_CacheSection.Execute(() => m_Cache.Clear());
 		}
 
 		/// <summary>
@@ -314,28 +306,48 @@ namespace ICD.Connect.Panels.Server
 			if (args.SocketState != SocketStateEventArgs.eSocketStatus.SocketStatusConnected)
 				return;
 
-			m_SendSection.Enter();
+			InitializeClient(args.ClientId);
+		}
+
+		/// <summary>
+		/// Updates the client to match the current state of the panel.
+		/// </summary>
+		/// <param name="clientId"></param>
+		private void InitializeClient(uint clientId)
+		{
+			if (!m_Server.ClientConnected(clientId))
+				return;
+
+			// Inform the client of the processor time in ISO8601
+			string localTimeMessage = JsonUtils.SerializeMessage(IcdEnvironment.GetLocalTime().ToString("O"), TIME_MESSAGE);
+			SendData(clientId, localTimeMessage);
+
+			StringBuilder messages = new StringBuilder();
+
+			m_CacheSection.Enter();
 
 			try
 			{
-				// Inform the client of the processor time in ISO8601
-				SendData(args.ClientId, JsonUtils.SerializeMessage(IcdEnvironment.GetLocalTime().ToString("O"), TIME_MESSAGE));
-
 				// Send all of the cached sigs to the new client.
 				foreach (SigInfo sig in m_Cache)
-					SendData(args.ClientId, JsonUtils.SerializeMessage(sig, SIG_MESSAGE));
+				{
+					string sigMessage = JsonUtils.SerializeMessage(sig, SIG_MESSAGE);
+					messages.Append(sigMessage);
+				}
 
 				// Inform the client of used smartobjects
-				foreach (uint so in m_SmartObjects.Select(kvp => kvp.Key))
+				foreach (KeyValuePair<uint, ISmartObject> kvp in m_SmartObjects)
 				{
-					uint closureSo = so;
-					SendData(args.ClientId, JsonUtils.SerializeMessage(closureSo, SMART_OBJECT_MESSAGE));
+					string soMessage = JsonUtils.SerializeMessage(kvp.Value, SMART_OBJECT_MESSAGE);
+					messages.Append(soMessage);
 				}
 			}
 			finally
 			{
-				m_SendSection.Leave();
+				m_CacheSection.Leave();
 			}
+
+			SendData(clientId, messages.ToString());
 		}
 
 		#endregion
@@ -419,12 +431,12 @@ namespace ICD.Connect.Panels.Server
 
 		private void Subscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe += SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectAdded += SmartObjectsOnSmartObjectAdded;
 		}
 
 		private void Unsubscribe(ISmartObjectCollection smartObjects)
 		{
-			smartObjects.OnSmartObjectSubscribe -= SmartObjectsOnSmartObjectSubscribe;
+			smartObjects.OnSmartObjectAdded -= SmartObjectsOnSmartObjectAdded;
 		}
 
 		/// <summary>
@@ -432,7 +444,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="smartObject"></param>
-		private void SmartObjectsOnSmartObjectSubscribe(object sender, ISmartObject smartObject)
+		private void SmartObjectsOnSmartObjectAdded(object sender, ISmartObject smartObject)
 		{
 			// When a SmartObject is added to the collection we need to inform the clients that we are
 			// using the SmartObject so they can handle output events.
@@ -445,20 +457,11 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="smartObjectId"></param>
 		private void SendSmartObjectId(uint smartObjectId)
 		{
-			m_SendSection.Enter();
+			if (m_Server.NumberOfClients == 0)
+				return;
 
-			try
-			{
-				if (!m_Server.GetClients().Any())
-					return;
-
-				string serial = JsonUtils.SerializeMessage(smartObjectId, SMART_OBJECT_MESSAGE);
-				SendData(serial);
-			}
-			finally
-			{
-				m_SendSection.Leave();
-			}
+			string serial = JsonUtils.SerializeMessage(smartObjectId, SMART_OBJECT_MESSAGE);
+			SendData(serial);
 		}
 
 		#endregion

@@ -3,25 +3,26 @@ using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels.SmartObjectCollections
 {
-	public delegate void AddSmartObject(object sender, ISmartObject e);
-
-	public delegate void RemoveSmartObject(object sender, ISmartObject e);
+	public delegate void SmartObjectCallback(object sender, ISmartObject smartObject);
 
 	public interface ISmartObjectCollection : IEnumerable<KeyValuePair<uint, ISmartObject>>
 	{
-		event AddSmartObject OnSmartObjectSubscribe;
-		event RemoveSmartObject OnSmartObjectUnsubscribe;
+		/// <summary>
+		/// Raised when a SmartObject is added to the collection.
+		/// </summary>
+		event SmartObjectCallback OnSmartObjectAdded;
 
 		/// <summary>
-		/// Get the object at the specified number.
-		/// 
+		/// Raised when a SmartObject is removed from the collection.
 		/// </summary>
-		/// <param name="paramKey">the key of the value to get.</param>
-		/// <returns>
-		/// Object stored at the key specified.
-		/// </returns>
-		/// <exception cref="T:System.IndexOutOfRangeException">Invalid Index Number specified.</exception>
-		ISmartObject this[uint paramKey] { get; }
+		event SmartObjectCallback OnSmartObjectRemoved;
+
+		/// <summary>
+		/// Gets the SmartObject with the given id.
+		/// </summary>
+		/// <param name="id">The SmartObject id.</param>
+		/// <returns>The SmartObject with the given id.</returns>
+		ISmartObject this[uint id] { get; }
 
 		/// <summary>
 		/// Clears the cached smart objects.
