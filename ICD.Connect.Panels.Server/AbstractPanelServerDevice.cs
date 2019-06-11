@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
@@ -322,7 +321,7 @@ namespace ICD.Connect.Panels.Server
 			string localTimeMessage = JsonUtils.SerializeMessage(IcdEnvironment.GetLocalTime().ToString("O"), TIME_MESSAGE);
 			SendData(clientId, localTimeMessage);
 
-			StringBuilder messages = new StringBuilder();
+			List<string> messages = new List<string>();
 
 			m_CacheSection.Enter();
 
@@ -332,14 +331,14 @@ namespace ICD.Connect.Panels.Server
 				foreach (SigInfo sig in m_Cache)
 				{
 					string sigMessage = JsonUtils.SerializeMessage(sig, SIG_MESSAGE);
-					messages.Append(sigMessage);
+					messages.Add(sigMessage);
 				}
 
 				// Inform the client of used smartobjects
 				foreach (KeyValuePair<uint, ISmartObject> kvp in m_SmartObjects)
 				{
 					string soMessage = JsonUtils.SerializeMessage(kvp.Value, SMART_OBJECT_MESSAGE);
-					messages.Append(soMessage);
+					messages.Add(soMessage);
 				}
 			}
 			finally
@@ -347,7 +346,8 @@ namespace ICD.Connect.Panels.Server
 				m_CacheSection.Leave();
 			}
 
-			SendData(clientId, messages.ToString());
+			foreach (string message in messages)
+				SendData(clientId, message);
 		}
 
 		#endregion
