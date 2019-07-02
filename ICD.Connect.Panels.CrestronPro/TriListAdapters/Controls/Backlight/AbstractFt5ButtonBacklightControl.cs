@@ -62,7 +62,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// <summary>
 		/// Powers on the device.
 		/// </summary>
-		public override void PowerOn()
+		protected override void PowerOnFinal()
 		{
 			if (Panel == null)
 				throw new InvalidOperationException("No panel");
@@ -76,7 +76,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// <summary>
 		/// Powers off the device.
 		/// </summary>
-		public override void PowerOff()
+		protected override void PowerOffFinal()
 		{
 			if (Panel == null)
 				throw new InvalidOperationException("No panel");
