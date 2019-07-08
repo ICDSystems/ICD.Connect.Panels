@@ -250,8 +250,8 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// <param name="client"></param>
 		private void Subscribe(AsyncTcpClient client)
 		{
-			client.OnIsOnlineStateChanged += ClientOnOnIsOnlineStateChanged;
-			client.OnSerialDataReceived += ClientOnOnSerialDataReceived;
+			client.OnIsOnlineStateChanged += ClientOnIsOnlineStateChanged;
+			client.OnSerialDataReceived += ClientOnSerialDataReceived;
 		}
 
 		/// <summary>
@@ -260,8 +260,8 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// <param name="client"></param>
 		private void Unsubscribe(AsyncTcpClient client)
 		{
-			client.OnIsOnlineStateChanged -= ClientOnOnIsOnlineStateChanged;
-			client.OnSerialDataReceived -= ClientOnOnSerialDataReceived;
+			client.OnIsOnlineStateChanged -= ClientOnIsOnlineStateChanged;
+			client.OnSerialDataReceived -= ClientOnSerialDataReceived;
 		}
 
 		/// <summary>
@@ -269,7 +269,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void ClientOnOnIsOnlineStateChanged(object sender, DeviceBaseOnlineStateApiEventArgs args)
+		private void ClientOnIsOnlineStateChanged(object sender, DeviceBaseOnlineStateApiEventArgs args)
 		{
 			if (!args.Data)
 				Clear();
@@ -282,7 +282,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="args"></param>
-		private void ClientOnOnSerialDataReceived(object sender, StringEventArgs args)
+		private void ClientOnSerialDataReceived(object sender, StringEventArgs args)
 		{
 			m_Buffer.Enqueue(args.Data);
 		}
