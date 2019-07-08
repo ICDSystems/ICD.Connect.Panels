@@ -74,6 +74,7 @@
     <Compile Include="Controls\IPanelControl.cs" />
     <Compile Include="Controls\ISigControl.cs" />
     <Compile Include="Controls\PanelControl.cs" />
+    <Compile Include="Controls\PanelControlConsole.cs" />
     <Compile Include="Controls\SigControl.cs" />
     <Compile Include="Controls\SigControlConsole.cs" />
     <Compile Include="Devices\AbstractPanelDeviceSettings.cs" />
