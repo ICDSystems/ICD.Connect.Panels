@@ -337,7 +337,7 @@ namespace ICD.Connect.Panels.Server
 				// Inform the client of used smartobjects
 				foreach (KeyValuePair<uint, ISmartObject> kvp in m_SmartObjects)
 				{
-					string soMessage = JsonUtils.SerializeMessage(w => w.WriteValue(kvp.Value), SMART_OBJECT_MESSAGE);
+					string soMessage = JsonUtils.SerializeMessage(w => w.WriteValue(kvp.Key), SMART_OBJECT_MESSAGE);
 					messages.Add(soMessage);
 				}
 			}
