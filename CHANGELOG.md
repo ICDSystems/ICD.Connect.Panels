@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.4.0] - 2019-07-16
+### Changed
+ - Fixed a bug where the panel server was not properly communicating SmartObject ids
+ - Changed PowerOn/PowerOff methods to support pre-on/off callbacks
+
 ## [6.3.0] - 2019-06-06
 ### Changed
  - Panel threading improvements, potential deadlock fixes
