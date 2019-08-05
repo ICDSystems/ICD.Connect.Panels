@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Dialing features refactored to fit new conferencing interfaces
 
+## [6.5.0] - 2019-08-05
+### Added
+ - Added a RouteDestinationControl to the Ts1542CAdapter
+
 ## [6.4.0] - 2019-07-16
 ### Changed
  - Fixed a bug where the panel server was not properly communicating SmartObject ids

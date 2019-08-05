@@ -9,6 +9,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 	public sealed class Ts1542CAdapter : AbstractTs1542Adapter<global::Crestron.SimplSharpPro.UI.Ts1542C, Ts1542CAdapterSettings>
 	{
 		/// <summary>
+		/// Constructor.
+		/// </summary>
+		public Ts1542CAdapter()
+		{
+			Controls.Add(new Ts1542CRouteDestinationControl(this, 0));
+		}
+
+		/// <summary>
 		/// Creates an instance of the wrapped trilist.
 		/// </summary>
 		/// <param name="ipid"></param>
