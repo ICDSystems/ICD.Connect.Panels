@@ -1,4 +1,5 @@
 ﻿using ICD.Connect.API.Nodes;
+using ICD.Connect.Misc.CrestronPro.Utils;
 using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
@@ -169,32 +170,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Unsubscribe(Panel);
 
 			if (Panel != null)
-			{
-				if (Panel.Registered)
-					Panel.UnRegister();
-
-				try
-				{
-					Panel.Dispose();
-				}
-				catch
-				{
-				}
-			}
+				GenericBaseUtils.TearDown(Panel);
 
 			m_Panel = panel;
 
-			if (Panel != null && !Panel.Registered)
-			{
-				if (Name != null)
-					Panel.Description = Name;
-
-				RegisterExtenders(Panel);
-
-				eDeviceRegistrationUnRegistrationResponse result = Panel.Register();
-				if (result != eDeviceRegistrationUnRegistrationResponse.Success)
-					Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
-			}
+			eDeviceRegistrationUnRegistrationResponse result;
+			if (Panel != null && !GenericBaseUtils.SetUp(Panel, this, RegisterExtenders, out result))
+				Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
 			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
