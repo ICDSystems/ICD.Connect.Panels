@@ -37,7 +37,7 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
-		private readonly AsyncTcpServer m_Server;
+		private readonly IcdTcpServer m_Server;
 		private readonly TcpServerBufferManager m_Buffers;
 		private readonly SigCache m_Cache;
 		private readonly SafeCriticalSection m_CacheSection;
@@ -91,10 +91,10 @@ namespace ICD.Connect.Panels.Server
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
-			m_Server = new AsyncTcpServer
+			m_Server = new IcdTcpServer
 			{
 				Name = GetType().Name,
-				MaxNumberOfClients = AsyncTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED
+				MaxNumberOfClients = IcdTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED
 			};
 			Subscribe(m_Server);
 
@@ -281,7 +281,7 @@ namespace ICD.Connect.Panels.Server
 		/// Subscribe to the server events.
 		/// </summary>
 		/// <param name="server"></param>
-		private void Subscribe(AsyncTcpServer server)
+		private void Subscribe(IcdTcpServer server)
 		{
 			server.OnSocketStateChange += ServerOnSocketStateChange;
 		}
@@ -290,7 +290,7 @@ namespace ICD.Connect.Panels.Server
 		/// Unsubscribe from the server events.
 		/// </summary>
 		/// <param name="server"></param>
-		private void Unsubscribe(AsyncTcpServer server)
+		private void Unsubscribe(IcdTcpServer server)
 		{
 			server.OnSocketStateChange -= ServerOnSocketStateChange;
 		}

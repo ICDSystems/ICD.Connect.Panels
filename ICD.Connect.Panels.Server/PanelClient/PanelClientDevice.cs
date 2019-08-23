@@ -29,7 +29,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 
 		public const char DELIMITER = (char)0xFF;
 
-		private readonly AsyncTcpClient m_Client;
+		private readonly IcdTcpClient m_Client;
 		private readonly ISerialBuffer m_Buffer;
 		private readonly SafeTimer m_ConnectionTimer;
 
@@ -44,7 +44,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// </summary>
 		public PanelClientDevice()
 		{
-			m_Client = new AsyncTcpClient
+			m_Client = new IcdTcpClient
 			{
 				Name = GetType().Name
 			};
@@ -248,7 +248,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// Subscribe to the client events.
 		/// </summary>
 		/// <param name="client"></param>
-		private void Subscribe(AsyncTcpClient client)
+		private void Subscribe(IcdTcpClient client)
 		{
 			client.OnIsOnlineStateChanged += ClientOnIsOnlineStateChanged;
 			client.OnSerialDataReceived += ClientOnSerialDataReceived;
@@ -258,7 +258,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 		/// Unsubscribe from the client events.
 		/// </summary>
 		/// <param name="client"></param>
-		private void Unsubscribe(AsyncTcpClient client)
+		private void Unsubscribe(IcdTcpClient client)
 		{
 			client.OnIsOnlineStateChanged -= ClientOnIsOnlineStateChanged;
 			client.OnSerialDataReceived -= ClientOnSerialDataReceived;
