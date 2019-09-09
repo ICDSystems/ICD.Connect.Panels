@@ -211,7 +211,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// </summary>
 		private void UpdateIsPowered()
 		{
-			IsPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
+			bool isPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
+
+			PowerState = isPowered ? ePowerState.PowerOn : ePowerState.PowerOff;
 		}
 
 		/// <summary>
