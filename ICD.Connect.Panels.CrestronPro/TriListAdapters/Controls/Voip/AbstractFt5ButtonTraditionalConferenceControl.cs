@@ -375,7 +375,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			if (m_ActiveParticipant == null)
 			{
-				m_ActiveParticipant = new ThinTraditionalParticipant {SourceType = eCallType.Audio};
+				m_ActiveParticipant = new ThinTraditionalParticipant {CallType = eCallType.Audio};
 				AddParticipant(m_ActiveParticipant);
 				Subscribe(m_ActiveParticipant);
 			}
