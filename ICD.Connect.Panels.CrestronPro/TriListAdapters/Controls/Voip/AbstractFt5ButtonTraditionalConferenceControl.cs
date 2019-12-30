@@ -583,7 +583,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			call.RejectCallback = null;
 		}
 
-		private void AnswerCallback(ThinIncomingCall sender)
+		private void AnswerCallback(IIncomingCall sender)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
@@ -595,7 +595,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <summary>
 		/// Rejects the current incoming participant.
 		/// </summary>
-		private void RejectCallback(ThinIncomingCall sender)
+		private void RejectCallback(IIncomingCall sender)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
