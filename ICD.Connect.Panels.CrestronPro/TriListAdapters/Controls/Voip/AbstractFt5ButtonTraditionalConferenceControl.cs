@@ -1,4 +1,5 @@
 ﻿#if SIMPLSHARP
+using ICD.Connect.Conferencing.IncomingCalls;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Conferencing.DialContexts;
@@ -327,38 +328,38 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			string uri = sigs.IncomingCallerInformationFeedback.GetSerialValueOrDefault();
 			if (!StringUtils.IsNullOrWhitespace(uri))
 			{
-				m_ActiveParticipant.Name = uri;
-				m_ActiveParticipant.Number = SipUtils.NumberFromUri(uri);
+				m_ActiveParticipant.SetName(uri);
+				m_ActiveParticipant.SetNumber(SipUtils.NumberFromUri(uri));
 			}
 
 			// Status
 			if (sigs.CallActiveFeedback.GetBoolValueOrDefault())
 			{
-				m_ActiveParticipant.Status = sigs.HoldFeedback.GetBoolValueOrDefault()
+				m_ActiveParticipant.SetStatus(sigs.HoldFeedback.GetBoolValueOrDefault()
 					                        ? eParticipantStatus.OnHold
-					                        : eParticipantStatus.Connected;
+					                        : eParticipantStatus.Connected);
 			}
 			else
 			{
-				m_ActiveParticipant.Status = sigs.DialingFeedback.GetBoolValueOrDefault()
+				m_ActiveParticipant.SetStatus(sigs.DialingFeedback.GetBoolValueOrDefault()
 					                        ? eParticipantStatus.Dialing
-					                        : eParticipantStatus.Disconnecting;
+					                        : eParticipantStatus.Disconnecting);
 			}
 
 			// Direction
 			if (sigs.IncomingCallDetectedFeedback.GetBoolValueOrDefault())
-				m_ActiveParticipant.Direction = eCallDirection.Incoming;
+				m_ActiveParticipant.SetDirection(eCallDirection.Incoming);
 			if (m_ActiveParticipant.Direction != eCallDirection.Incoming)
-				m_ActiveParticipant.Direction = eCallDirection.Outgoing;
+				m_ActiveParticipant.SetDirection(eCallDirection.Outgoing);
 
 			// Start/End
 			switch (m_ActiveParticipant.Status)
 			{
 				case eParticipantStatus.Connected:
-					m_ActiveParticipant.Start = m_ActiveParticipant.Start ?? IcdEnvironment.GetLocalTime();
+					m_ActiveParticipant.SetStart(m_ActiveParticipant.Start ?? IcdEnvironment.GetLocalTime());
 					break;
 				case eParticipantStatus.Disconnected:
-					m_ActiveParticipant.End = m_ActiveParticipant.End ?? IcdEnvironment.GetLocalTime();
+					m_ActiveParticipant.SetEnd(m_ActiveParticipant.End ?? IcdEnvironment.GetLocalTime());
 					break;
 			}
 		}
@@ -375,7 +376,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			if (m_ActiveParticipant == null)
 			{
-				m_ActiveParticipant = new ThinTraditionalParticipant {CallType = eCallType.Audio};
+				m_ActiveParticipant = new ThinTraditionalParticipant();
+				m_ActiveParticipant.SetCallType(eCallType.Audio);
 				AddParticipant(m_ActiveParticipant);
 				Subscribe(m_ActiveParticipant);
 			}
@@ -393,8 +395,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			Unsubscribe(m_ActiveParticipant);
 
-			m_ActiveParticipant.Status = eParticipantStatus.Disconnected;
-			m_ActiveParticipant.End = IcdEnvironment.GetLocalTime();
+			m_ActiveParticipant.SetStatus(eParticipantStatus.Disconnected);
+			m_ActiveParticipant.SetEnd(IcdEnvironment.GetLocalTime());
 
 			RemoveParticipant(m_ActiveParticipant);
 
