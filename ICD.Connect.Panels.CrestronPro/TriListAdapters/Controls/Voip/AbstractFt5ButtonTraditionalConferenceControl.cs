@@ -63,7 +63,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
 
-			Subscribe(parent);
 			SetPanel(parent.Panel as TPanel);
 		}
 
@@ -73,9 +72,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <param name="disposing"></param>
 		protected override void DisposeFinal(bool disposing)
 		{
+			OnIncomingCallAdded = null;
+			OnIncomingCallRemoved = null;
+
 			base.DisposeFinal(disposing);
 
-			Unsubscribe(Parent);
 			UnsubscribePanel();
 		}
 
@@ -137,8 +138,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// Subscribe to the parent events.
 		/// </summary>
 		/// <param name="parent"></param>
-		private void Subscribe(TParent parent)
+		protected override void Subscribe(TParent parent)
 		{
+			base.Subscribe(parent);
+
 			parent.OnPanelChanged += ParentOnPanelChanged;
 		}
 
@@ -146,8 +149,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// Unsubscribe from the parent events.
 		/// </summary>
 		/// <param name="parent"></param>
-		private void Unsubscribe(TParent parent)
+		protected override void Unsubscribe(TParent parent)
 		{
+			base.Unsubscribe(parent);
+
 			parent.OnPanelChanged -= ParentOnPanelChanged;
 		}
 

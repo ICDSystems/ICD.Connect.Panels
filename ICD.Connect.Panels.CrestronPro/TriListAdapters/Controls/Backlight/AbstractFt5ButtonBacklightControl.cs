@@ -43,7 +43,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		{
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
 
-			Subscribe(parent);
 			SetPanel(parent.Panel as TPanel);
 		}
 
@@ -55,7 +54,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		{
 			base.DisposeFinal(disposing);
 
-			Unsubscribe(Parent);
 			UnsubscribePanel();
 		}
 
@@ -93,8 +91,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// Subscribe to the parent events.
 		/// </summary>
 		/// <param name="parent"></param>
-		private void Subscribe(TParent parent)
+		protected override void Subscribe(TParent parent)
 		{
+			base.Subscribe(parent);
+
 			parent.OnPanelChanged += ParentOnPanelChanged;
 		}
 
@@ -102,8 +102,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// Unsubscribe from the parent events.
 		/// </summary>
 		/// <param name="parent"></param>
-		private void Unsubscribe(TParent parent)
+		protected override void Unsubscribe(TParent parent)
 		{
+			base.Unsubscribe(parent);
+
 			parent.OnPanelChanged -= ParentOnPanelChanged;
 		}
 

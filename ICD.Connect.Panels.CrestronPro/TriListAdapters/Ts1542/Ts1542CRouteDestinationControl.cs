@@ -40,8 +40,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 			m_SwitcherCache = new SwitcherCache();
 			Subscribe(m_SwitcherCache);
 
-			Subscribe(parent);
-
 			SetPanel(parent.Panel);
 		}
 
@@ -57,7 +55,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 			base.DisposeFinal(disposing);
 
 			Unsubscribe(m_SwitcherCache);
-			Unsubscribe(Parent);
 			SetPanel(null);
 		}
 
@@ -126,13 +123,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 
 		#region Parent Callbacks
 
-		private void Subscribe(Ts1542CAdapter parent)
+		protected override void Subscribe(Ts1542CAdapter parent)
 		{
+			base.Subscribe(parent);
+
 			parent.OnPanelChanged += ParentOnPanelChanged;
 		}
 
-		private void Unsubscribe(Ts1542CAdapter parent)
+		protected override void Unsubscribe(Ts1542CAdapter parent)
 		{
+			base.Unsubscribe(parent);
+
 			parent.OnPanelChanged -= ParentOnPanelChanged;
 		}
 
