@@ -64,6 +64,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
 
 			SetPanel(parent.Panel as TPanel);
+
+			SupportedConferenceFeatures |= eConferenceFeatures.DoNotDisturb;
 		}
 
 		/// <summary>

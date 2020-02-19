@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Conferencing.Controls.Dialing;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
@@ -26,6 +27,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		public TswFt5ButtonSystemConferenceControl(ITswFt5ButtonSystemAdapter parent, int id)
 			: base(parent, id)
 		{
+			SupportedConferenceFeatures |= eConferenceFeatures.PrivacyMute;
+			SupportedConferenceFeatures |= eConferenceFeatures.AutoAnswer;
 		}
 
 		/// <summary>
