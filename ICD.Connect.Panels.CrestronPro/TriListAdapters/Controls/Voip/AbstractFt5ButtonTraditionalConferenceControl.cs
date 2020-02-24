@@ -30,7 +30,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
 		private ThinTraditionalParticipant m_ActiveParticipant;
-		private ThinIncomingCall m_IncomingCall;
+		private TraditionalIncomingCall m_IncomingCall;
 
 		#region Properties
 
@@ -528,7 +528,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			if (m_IncomingCall == null)
 			{
-				m_IncomingCall = new ThinIncomingCall();
+				m_IncomingCall = new TraditionalIncomingCall(eCallType.Audio);
 				Subscribe(m_IncomingCall);
 				OnIncomingCallAdded.Raise(this, new GenericEventArgs<IIncomingCall>(m_IncomingCall));
 			}
@@ -578,13 +578,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			m_IncomingCall = null;
 		}
 
-		private void Subscribe(ThinIncomingCall call)
+		private void Subscribe(TraditionalIncomingCall call)
 		{
 			call.AnswerCallback += AnswerCallback;
 			call.RejectCallback += RejectCallback;
 		}
 
-		private void Unsubscribe(ThinIncomingCall call)
+		private void Unsubscribe(TraditionalIncomingCall call)
 		{
 			call.AnswerCallback = null;
 			call.RejectCallback = null;
