@@ -30,7 +30,7 @@ namespace ICD.Connect.Panels.Devices
 			if (instance == null)
 				throw new ArgumentNullException("instance");
 
-			addRow("Last Output", instance.LastOutput);
+			addRow("Last Output", instance.LastOutput.HasValue ? instance.LastOutput.Value.ToLocalTime() : (DateTime?)null);
 		}
 
 		/// <summary>

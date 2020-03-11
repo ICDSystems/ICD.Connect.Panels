@@ -67,7 +67,7 @@ namespace ICD.Connect.Panels
 		/// <param name="sigInfo"></param>
 		public void RaiseSigChangeCallback(SigInfo sigInfo)
 		{
-			m_LastOutput = IcdEnvironment.GetLocalTime();
+			m_LastOutput = IcdEnvironment.GetUtcTime();
 
 			OnAnyCallback.Raise(this, new SigInfoEventArgs(sigInfo));
 

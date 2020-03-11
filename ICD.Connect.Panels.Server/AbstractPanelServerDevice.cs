@@ -318,7 +318,7 @@ namespace ICD.Connect.Panels.Server
 				return;
 
 			// Inform the client of the processor time in ISO8601
-			string localTimeMessage = JsonUtils.SerializeMessage(IcdEnvironment.GetLocalTime().ToString("O"), TIME_MESSAGE);
+			string localTimeMessage = JsonUtils.SerializeMessage(IcdEnvironment.GetUtcTime().ToString("O"), TIME_MESSAGE);
 			SendData(clientId, localTimeMessage);
 
 			List<string> messages = new List<string>();
@@ -412,8 +412,7 @@ namespace ICD.Connect.Panels.Server
 					else
 						m_SmartObjects[sigInfo.SmartObject].HandleOutputSig(sigInfo);
 
-					LastOutput = IcdEnvironment.GetLocalTime();
-
+					LastOutput = IcdEnvironment.GetUtcTime();
 
 					OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 

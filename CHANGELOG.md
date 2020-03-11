@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
  - Conference controls implement SupportedConferenceFeatures property
 
+### Changed
+ - Using UTC for times
+
 ## [7.2.1] - 2019-11-19
 ### Changed
  - Fixed incompatibility with new conferencing interfaces

@@ -37,7 +37,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 
 			mockPanelDevice.RaiseOutputSigChange(new SigInfo());
 			
-			Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)mockPanelDevice.LastOutput).TotalSeconds, 1);
+			Assert.AreEqual(0, (IcdEnvironment.GetUtcTime() - (DateTime)mockPanelDevice.LastOutput).TotalSeconds, 1);
 	    }
 
 	    [Test]
@@ -121,7 +121,7 @@ namespace ICD.Connect.Panels.Mock.Tests
             ob.RaiseOutputSigChange(info);
     
             Assert.AreEqual(1, callbackArgs.Count);
-            Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)mockPanelDevice.LastOutput).TotalSeconds, 1);
+            Assert.AreEqual(0, (IcdEnvironment.GetUtcTime() - (DateTime)mockPanelDevice.LastOutput).TotalSeconds, 1);
         }
 
     }

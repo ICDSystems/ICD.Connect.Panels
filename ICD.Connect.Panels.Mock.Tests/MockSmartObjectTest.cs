@@ -34,7 +34,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 
 			mockSmartObject.RaiseOutputSigChange(new SigInfo());
 			
-			Assert.AreEqual(0, (IcdEnvironment.GetLocalTime() - (DateTime)mockSmartObject.LastOutput).TotalSeconds, 1);
+			Assert.AreEqual(0, (IcdEnvironment.GetUtcTime() - (DateTime)mockSmartObject.LastOutput).TotalSeconds, 1);
 	    }
 
 	    [Test]

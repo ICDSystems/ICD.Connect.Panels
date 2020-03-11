@@ -363,10 +363,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			switch (m_ActiveParticipant.Status)
 			{
 				case eParticipantStatus.Connected:
-					m_ActiveParticipant.SetStart(m_ActiveParticipant.Start ?? IcdEnvironment.GetLocalTime());
+					m_ActiveParticipant.SetStart(m_ActiveParticipant.Start ?? IcdEnvironment.GetUtcTime());
 					break;
 				case eParticipantStatus.Disconnected:
-					m_ActiveParticipant.SetEnd(m_ActiveParticipant.End ?? IcdEnvironment.GetLocalTime());
+					m_ActiveParticipant.SetEnd(m_ActiveParticipant.End ?? IcdEnvironment.GetUtcTime());
 					break;
 			}
 		}
@@ -403,7 +403,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			Unsubscribe(m_ActiveParticipant);
 
 			m_ActiveParticipant.SetStatus(eParticipantStatus.Disconnected);
-			m_ActiveParticipant.SetEnd(IcdEnvironment.GetLocalTime());
+			m_ActiveParticipant.SetEnd(IcdEnvironment.GetUtcTime());
 
 			RemoveParticipant(m_ActiveParticipant);
 
