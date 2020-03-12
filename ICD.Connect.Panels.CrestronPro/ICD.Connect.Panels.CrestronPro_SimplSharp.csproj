@@ -110,11 +110,16 @@
     <Compile Include="TriListAdapters\AbstractTswFt5ButtonSystemAdapter.cs" />
     <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapter.cs" />
     <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Dge\AbstractDge100Adapter.cs" />
     <Compile Include="TriListAdapters\Dge\AbstractDge1BaseAdapter.cs" />
     <Compile Include="TriListAdapters\Dge\AbstractDgeAdapter.cs" />
     <Compile Include="TriListAdapters\Dge\AbstractDge2BaseAdapter.cs" />
+    <Compile Include="TriListAdapters\Dge\Dge100Adapter.cs" />
+    <Compile Include="TriListAdapters\Dge\Dge100AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Dge\Dge2Adapter.cs" />
     <Compile Include="TriListAdapters\Dge\Dge1Adapter.cs" />
+    <Compile Include="TriListAdapters\Dge\DmDge200CAdapter.cs" />
+    <Compile Include="TriListAdapters\Dge\DmDge200CAdapterSettings.cs" />
     <Compile Include="TriListAdapters\ITriListAdapter.cs" />
     <Compile Include="TriListAdapters\ITriListAdapterSettings.cs" />
     <Compile Include="TriListAdapters\FtTs600\FtTs600Adapter.cs" />
