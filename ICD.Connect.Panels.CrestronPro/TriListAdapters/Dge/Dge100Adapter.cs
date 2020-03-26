@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
@@ -6,7 +7,7 @@ using Crestron.SimplSharpPro.UI;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
 #if SIMPLSHARP
-	public sealed class Dge100Adapter : AbstractDge100Adapter<Dge100, Dge100AdapterSettings>
+	public sealed class Dge100Adapter : AbstractDgeX00Adapter<Dge100, Dge100AdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -18,9 +19,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		{
 			return new Dge100(ipid, controlSystem);
 		}
+
+		public Dge100Adapter()
+		{
+			Controls.Add(new Dge100StreamSwitcherControl(this, 0));
+		}
 	}
 #else
-	public sealed class Dge100Adapter : AbstractDge100Adapter<Dge100AdapterSettings>
+	public sealed class Dge100Adapter : AbstractDgeX00Adapter<Dge100AdapterSettings>
 	{
 	}
 #endif

@@ -6,7 +6,7 @@ using Crestron.SimplSharpPro.UI;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
 #if SIMPLSHARP
-	public sealed class DmDge200CAdapter : AbstractDge100Adapter<DmDge200C, DmDge200CAdapterSettings>
+	public sealed class DmDge200CAdapter : AbstractDgeX00Adapter<DmDge200C, DmDge200CAdapterSettings>
 	{
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
@@ -20,7 +20,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		}
 	}
 #else
-	public sealed class DmDge200CAdapter : AbstractDge100Adapter<DmDge200CAdapterSettings>
+	public sealed class DmDge200CAdapter : AbstractDgeX00Adapter<DmDge200CAdapterSettings>
 	{
 	}
 #endif
