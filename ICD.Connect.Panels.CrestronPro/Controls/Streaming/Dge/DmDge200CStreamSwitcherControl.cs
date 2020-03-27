@@ -6,8 +6,6 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 {
 	public sealed class DmDge200CStreamSwitcherControl : AbstractDgeStreamSwitcherControl<DmDge200CAdapter>
 	{
-		private const int STREAM_INPUT_ADDRESS = 1;
-		private const int HDMI_INPUT_ADDRESS = 2;
 		private const int DM_INPUT_ADDRESS = 3;
 
 		/// <summary>
@@ -27,7 +25,7 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// <returns></returns>
 		public override bool ContainsInput(int input)
 		{
-			return input == STREAM_INPUT_ADDRESS || input == HDMI_INPUT_ADDRESS || input == DM_INPUT_ADDRESS;
+			return input == DM_INPUT_ADDRESS || base.ContainsInput(input);
 		}
 
 		/// <summary>
@@ -36,9 +34,15 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// <returns></returns>
 		public override IEnumerable<ConnectorInfo> GetInputs()
 		{
-			yield return GetInput(STREAM_INPUT_ADDRESS);
-			yield return GetInput(HDMI_INPUT_ADDRESS);
+			foreach (ConnectorInfo input in GetBaseInputs())
+				yield return input;
+
 			yield return GetInput(DM_INPUT_ADDRESS);
+		}
+
+		private IEnumerable<ConnectorInfo> GetBaseInputs()
+		{
+			return base.GetInputs();
 		}
 	}
 }
