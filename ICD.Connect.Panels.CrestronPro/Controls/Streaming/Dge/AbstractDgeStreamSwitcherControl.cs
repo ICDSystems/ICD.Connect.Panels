@@ -117,7 +117,7 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 								.Unanimous(false);
 			}
 
-			if (ContainsInput(input))
+			if (!ContainsInput(input))
 			{
 				string message = string.Format("{0} has no {1} input at address {2}", this, type, input);
 				throw new ArgumentOutOfRangeException("input", message);
