@@ -1,27 +1,35 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using System;
 using System.Collections.Generic;
-using System.Linq;
+using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
-using ICD.Common.Utils.Services.Logging;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
 using ICD.Connect.Routing;
 using ICD.Connect.Routing.Connections;
 using ICD.Connect.Routing.Controls;
 using ICD.Connect.Routing.Controls.Streaming;
 using ICD.Connect.Routing.EventArguments;
+using ICD.Connect.Routing.Utils;
+using Crestron.SimplSharpPro.DeviceSupport;
+using Crestron.SimplSharpPro.DM;
+using Crestron.SimplSharpPro.UI;
 
 namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 {
-	public abstract class AbstractDgeStreamSwitcherControl<TParent> : AbstractRouteSwitcherControl<TParent>, IStreamRouteDestinationControl 
-		where TParent : IDgeX00Adapter
+	public abstract class AbstractDgeStreamSwitcherControl<TParent, TPanel> : AbstractRouteSwitcherControl<TParent>, IDgeX00StreamSwitcherControl, IStreamRouteDestinationControl 
+		where TParent : IDgeX00Adapter<TPanel>
+		where TPanel : Dge100
 	{
-		private const int STREAM_INPUT_ADDRESS = 1;
-		private const int HDMI_INPUT_ADDRESS = 2;
+		private const int STREAM_H264_INPUT_ADDRESS = 1;
+		private const int STREAM_MJPEG_INPUT_ADDRESS = 2;
+		private const int STREAM_AIRBOARD_INPUT_ADDRESS = 3;
+		private const int HDMI_INPUT_ADDRESS = 4;
 
 		private const int OUTPUT_ADDRESS = 1;
 
-		#region Events
+#region Events
 
 		public event EventHandler<StreamUriEventArgs> OnInputStreamUriChanged;
 		public override event EventHandler<SourceDetectionStateChangeEventArgs> OnSourceDetectionStateChange;
@@ -29,15 +37,13 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		public override event EventHandler<RouteChangeEventArgs> OnRouteChange;
 		public override event EventHandler<TransmissionStateEventArgs> OnActiveTransmissionStateChanged;
 
-		#endregion
+#endregion
 
-		#region Delegates
+#region Properties
 
-		public delegate bool RouteDelegate(RouteOperation info);
+		protected SwitcherCache Cache { get { return m_Cache; } }
 
-		public delegate bool ClearOutputDelegate();
-
-		public delegate bool SetStreamDelegate(Uri stream);
+		protected TPanel Dge { get { return m_Dge; } }
 
 		public RouteDelegate UiRoute { get; set; }
 
@@ -45,50 +51,14 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 
 		public SetStreamDelegate UiSetStream { get; set; }
 
-		#endregion
+#endregion
 
-		private Uri m_StreamUri;
-		private int? m_ActiveInput;
+		private readonly SwitcherCache m_Cache;
 
-		public Uri StreamUri
-		{
-			get { return m_StreamUri; }
-			private set
-			{
-				if (m_StreamUri == value)
-					return;
+		private TPanel m_Dge;
 
-				m_StreamUri = value;
-				Log(eSeverity.Debug, "Stream Uri changed to {0}", m_StreamUri);
-				OnInputStreamUriChanged.Raise(this,
-				                              new StreamUriEventArgs(eConnectionType.Audio | eConnectionType.Video,
-				                                                     STREAM_INPUT_ADDRESS, m_StreamUri));
-			}
-		}
-
-		public int? ActiveInput
-		{
-			get { return m_ActiveInput; }
-			set
-			{
-				if (m_ActiveInput == value)
-					return;
-
-				if (m_ActiveInput != null)
-					OnActiveInputsChanged.Raise(this,
-					                            new ActiveInputStateChangeEventArgs(m_ActiveInput.Value,
-					                                                                eConnectionType.Audio | eConnectionType.Video,
-					                                                                false));
-
-				m_ActiveInput = value;
-				Log(eSeverity.Debug, "Active Input changed to {0}", m_ActiveInput);
-
-				if (m_ActiveInput != null)
-					OnActiveInputsChanged.Raise(this,
-					                            new ActiveInputStateChangeEventArgs(m_ActiveInput.Value,
-					                                                                eConnectionType.Audio | eConnectionType.Video, true));
-			}
-		}
+		private readonly Dictionary<int, Uri> m_StreamUris;
+		private readonly SafeCriticalSection m_StreamUrisSection;
 
 		/// <summary>
 		/// Constructor.
@@ -98,9 +68,134 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		protected AbstractDgeStreamSwitcherControl(TParent parent, int id) 
 			: base(parent, id)
 		{
+			m_StreamUris = new Dictionary<int, Uri>();
+			m_StreamUrisSection = new SafeCriticalSection();
+			
+			
+			// Switcher Cache
+			m_Cache = new SwitcherCache();
+			Subscribe(m_Cache);
+
+			parent.OnPanelChanged += ParentOnPanelChanged;
+
+			SetDge(parent.Dge);
 		}
 
-		#region Methods
+		/// <summary>
+		/// Override to release resources.
+		/// </summary>
+		/// <param name="disposing"></param>
+		protected override void DisposeFinal(bool disposing)
+		{
+			base.DisposeFinal(disposing);
+
+			if (!disposing)
+				return;
+
+			Parent.OnPanelChanged -= ParentOnPanelChanged;
+			Unsubscribe(m_Cache);
+			SetDge(null);
+		}
+
+#region Panel Callbacks
+
+		private void ParentOnPanelChanged(ITriListAdapter sender, BasicTriListWithSmartObject panel)
+		{
+			SetDge(panel as TPanel);
+		}
+
+#endregion
+
+#region Dge Callbacks
+
+		private void SetDge(TPanel dge)
+		{
+			if (dge == m_Dge)
+				return;
+
+			Unsubscribe(m_Dge);
+			m_Dge = dge;
+			Subscribe(m_Dge);
+
+			SetInitialInputDetectState();
+		}
+
+		protected virtual void Subscribe([CanBeNull] TPanel dge)
+		{
+			if (dge == null)
+				return;
+
+			dge.HdmiIn.StreamChange += HdmiInOnStreamChange;
+		}
+
+		protected virtual void Unsubscribe([CanBeNull] TPanel dge)
+		{
+			if (dge == null)
+				return;
+
+			dge.HdmiIn.StreamChange -= HdmiInOnStreamChange;
+		}
+
+		private void HdmiInOnStreamChange(Stream stream, StreamEventArgs args)
+		{
+			switch (args.EventId)
+			{
+				case DMInputEventIds.SourceSyncEventId:
+					Cache.SetSourceDetectedState(HDMI_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video,GetHdmiInputSyncState());
+					break;
+			}
+		}
+
+#endregion
+
+#region Methods
+
+		protected virtual void SetInitialInputDetectState()
+		{
+			// Set Stream Inputs as always detected
+			Cache.SetSourceDetectedState(STREAM_H264_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video, true);
+			Cache.SetSourceDetectedState(STREAM_MJPEG_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video, true);
+			Cache.SetSourceDetectedState(STREAM_AIRBOARD_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video, true);
+			
+			Cache.SetSourceDetectedState(HDMI_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video,GetHdmiInputSyncState());
+		}
+
+		private bool GetHdmiInputSyncState()
+		{
+			return Dge != null && Dge.HdmiIn.SyncDetectedFeedback.BoolValue;
+		}
+
+		private void UpdateStreamUriCache(int input, Uri stream)
+		{
+			bool changed = true;
+
+			m_StreamUrisSection.Enter();
+			try
+			{
+				Uri currentStream;
+				if (m_StreamUris.TryGetValue(input, out currentStream))
+					changed = !currentStream.Equals(stream);
+
+				m_StreamUris[input] = stream;
+
+			}
+			finally
+			{
+				m_StreamUrisSection.Leave();
+			}
+
+			if (changed)
+				OnInputStreamUriChanged.Raise(this, new StreamUriEventArgs(eConnectionType.Audio | eConnectionType.Video, input, stream));
+		}
+
+		private bool IsInputStreamInput(int input)
+		{
+			return input == STREAM_H264_INPUT_ADDRESS ||
+			       input == STREAM_MJPEG_INPUT_ADDRESS ||
+			       input == STREAM_AIRBOARD_INPUT_ADDRESS;
+		}
+
+#region AbstractRouteSwitcher Overrides
 
 		/// <summary>
 		/// Returns true if a signal is detected at the given input.
@@ -110,28 +205,7 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// <returns></returns>
 		public override bool GetSignalDetectedState(int input, eConnectionType type)
 		{
-			if (EnumUtils.HasMultipleFlags(type))
-			{
-				return EnumUtils.GetFlagsExceptNone(type)
-								.Select(f => GetSignalDetectedState(input, f))
-								.Unanimous(false);
-			}
-
-			if (!ContainsInput(input))
-			{
-				string message = string.Format("{0} has no {1} input at address {2}", this, type, input);
-				throw new ArgumentOutOfRangeException("input", message);
-			}
-
-			switch (type)
-			{
-				case eConnectionType.Audio:
-				case eConnectionType.Video:
-					return true;
-
-				default:
-					throw new ArgumentOutOfRangeException("type");
-			}
+			return Cache.GetSourceDetectedState(input, type);
 		}
 
 		/// <summary>
@@ -154,7 +228,10 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// <returns></returns>
 		public override bool ContainsInput(int input)
 		{
-			return input == STREAM_INPUT_ADDRESS || input == HDMI_INPUT_ADDRESS;
+			return input == STREAM_H264_INPUT_ADDRESS ||
+			       input == STREAM_MJPEG_INPUT_ADDRESS ||
+			       input == STREAM_AIRBOARD_INPUT_ADDRESS ||
+			       input == HDMI_INPUT_ADDRESS;
 		}
 
 		/// <summary>
@@ -163,7 +240,9 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// <returns></returns>
 		public override IEnumerable<ConnectorInfo> GetInputs()
 		{
-			yield return GetInput(STREAM_INPUT_ADDRESS);
+			yield return GetInput(STREAM_H264_INPUT_ADDRESS);
+			yield return GetInput(STREAM_MJPEG_INPUT_ADDRESS);
+			yield return GetInput(STREAM_AIRBOARD_INPUT_ADDRESS);
 			yield return GetInput(HDMI_INPUT_ADDRESS);
 		}
 
@@ -208,10 +287,9 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		public override IEnumerable<ConnectorInfo> GetOutputs(int input, eConnectionType type)
 		{
 			if (!ContainsInput(input))
-				throw new ArgumentOutOfRangeException("No inputs with address " + input);
-
-			if (m_ActiveInput.HasValue && m_ActiveInput.Value == input)
-				yield return GetOutput(OUTPUT_ADDRESS);
+				throw new ArgumentOutOfRangeException("No input with address " + input);
+			
+			return Cache.GetOutputsForInput(input, type);
 		}
 
 		/// <summary>
@@ -224,12 +302,9 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		public override ConnectorInfo? GetInput(int output, eConnectionType type)
 		{
 			if (!ContainsOutput(output))
-				throw new ArgumentOutOfRangeException("No outputs with address " + output);
+				throw new ArgumentOutOfRangeException("No output with address " + output);
 
-			if (m_ActiveInput == null)
-				return null;
-
-			return GetInput(m_ActiveInput.Value);
+			return Cache.GetInputConnectorInfoForOutput(output, type);
 		}
 
 		/// <summary>
@@ -237,11 +312,19 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		/// </summary>
 		/// <param name="info"></param>
 		/// <returns></returns>
-		public override bool Route(RouteOperation info)
+		public override bool Route([NotNull] RouteOperation info)
 		{
-			var callback = UiRoute;
+			if (info == null)
+				throw new ArgumentNullException("info");
 
-			return callback != null && callback(info);
+			RouteDelegate callback = UiRoute;
+
+			bool result = callback != null && callback(info);
+
+			if (result)
+				Cache.SetInputForOutput(info.LocalOutput, info.LocalInput, info.ConnectionType);
+
+			return result;
 		}
 
 		/// <summary>
@@ -256,19 +339,24 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 				throw new ArgumentOutOfRangeException("No outputs with address " + output);
 
 			var callback = UiClearOutput;
-			return callback != null && callback();
+			bool result = callback != null && callback();
+
+			if (result)
+				Cache.SetInputForOutput(output, null, type);
+
+			return result;
 		}
 
 		public bool SetStreamForInput(int input, Uri stream)
 		{
-			if (input != STREAM_INPUT_ADDRESS)
+			if (!IsInputStreamInput(input))
 				throw new ArgumentOutOfRangeException("No stream input with address " + input);
 
 			var callback = UiSetStream;
 
-			if (callback != null && callback(stream))
+			if (callback != null && callback(input, stream))
 			{
-				StreamUri = stream;
+				UpdateStreamUriCache(input, stream);
 				return true;
 			}
 
@@ -277,12 +365,70 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 
 		public Uri GetStreamForInput(int input)
 		{
-			if (input != STREAM_INPUT_ADDRESS)
+			if (!IsInputStreamInput(input))
 				throw new ArgumentOutOfRangeException("No stream for input with address " + input);
 
-			return StreamUri;
+			m_StreamUrisSection.Enter();
+			try
+			{
+				Uri streamUri;
+				return m_StreamUris.TryGetValue(input, out streamUri) ? streamUri : null;
+			}
+			finally
+			{
+				m_StreamUrisSection.Leave();
+			}
 		}
 
-		#endregion
+		public void SetInputActive(int? input)
+		{
+			Cache.SetInputForOutput(OUTPUT_ADDRESS, input, eConnectionType.Audio | eConnectionType.Video);
+		}
+
+#endregion
+
+#endregion
+
+
+#region Switcher Cache Callbacks
+
+		private void Subscribe(SwitcherCache cache)
+		{
+			cache.OnActiveInputsChanged += CacheOnActiveInputsChanged;
+			cache.OnActiveTransmissionStateChanged += CacheOnActiveTransmissionStateChanged;
+			cache.OnRouteChange += CacheOnRouteChange;
+			cache.OnSourceDetectionStateChange += CacheOnSourceDetectionStateChange;
+		}
+
+		private void Unsubscribe(SwitcherCache cache)
+		{
+			cache.OnActiveInputsChanged -= CacheOnActiveInputsChanged;
+			cache.OnActiveTransmissionStateChanged -= CacheOnActiveTransmissionStateChanged;
+			cache.OnRouteChange -= CacheOnRouteChange;
+			cache.OnSourceDetectionStateChange -= CacheOnSourceDetectionStateChange;
+		}
+
+		private void CacheOnActiveInputsChanged(object sender, ActiveInputStateChangeEventArgs args)
+		{
+			OnActiveInputsChanged.Raise(this, args);
+		}
+
+		private void CacheOnActiveTransmissionStateChanged(object sender, TransmissionStateEventArgs args)
+		{
+			OnActiveTransmissionStateChanged.Raise(this, args);
+		}
+
+		private void CacheOnRouteChange(object sender, RouteChangeEventArgs args)
+		{
+			OnRouteChange.Raise(this, args);
+		}
+
+		private void CacheOnSourceDetectionStateChange(object sender, SourceDetectionStateChangeEventArgs args)
+		{
+			OnSourceDetectionStateChange.Raise(this, args);
+		}
+
+#endregion
 	}
 }
+#endif

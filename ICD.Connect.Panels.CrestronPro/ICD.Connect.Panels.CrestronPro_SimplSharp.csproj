@@ -53,6 +53,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.DeviceSupport.dll</HintPath>
     </Reference>
+    <Reference Include="Crestron.SimplSharpPro.DM, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.DM.dll</HintPath>
+    </Reference>
     <Reference Include="Crestron.SimplSharpPro.GeneralIO, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.GeneralIO.dll</HintPath>
@@ -98,6 +102,7 @@
     <Compile Include="Controls\Streaming\Dge\AbstractDgeStreamSwitcherControl.cs" />
     <Compile Include="Controls\Streaming\Dge\Dge100StreamSwitcherControl.cs" />
     <Compile Include="Controls\Streaming\Dge\DmDge200CStreamSwitcherControl.cs" />
+    <Compile Include="Controls\Streaming\Dge\IDgeX00StreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\AbstractThreeSeriesTouchScreenControl.cs" />
     <Compile Include="KrangPlugin.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\AbstractFt5ButtonBacklightControl.cs" />

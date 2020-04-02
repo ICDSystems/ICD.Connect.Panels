@@ -1,8 +1,10 @@
-﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
+﻿#if SIMPLSHARP
+using Crestron.SimplSharpPro.UI;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
 
 namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 {
-	public sealed class Dge100StreamSwitcherControl : AbstractDgeStreamSwitcherControl<Dge100Adapter>
+	public sealed class Dge100StreamSwitcherControl : AbstractDgeStreamSwitcherControl<Dge100Adapter, Dge100>
 	{
 		/// <summary>
 		/// Constructor.
@@ -15,3 +17,4 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		}
 	}
 }
+#endif

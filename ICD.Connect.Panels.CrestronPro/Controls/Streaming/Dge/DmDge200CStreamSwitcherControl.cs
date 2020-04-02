@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿#if SIMPLSHARP
+using System.Collections.Generic;
+using Crestron.SimplSharpPro.DM.Endpoints;
+using Crestron.SimplSharpPro.UI;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
 using ICD.Connect.Routing;
+using ICD.Connect.Routing.Connections;
 
 namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 {
-	public sealed class DmDge200CStreamSwitcherControl : AbstractDgeStreamSwitcherControl<DmDge200CAdapter>
+	public sealed class DmDge200CStreamSwitcherControl : AbstractDgeStreamSwitcherControl<DmDge200CAdapter, DmDge200C>
 	{
-		private const int DM_INPUT_ADDRESS = 3;
+		private const int DM_INPUT_ADDRESS = 5;
 
 		/// <summary>
 		/// Constructor.
@@ -17,6 +21,15 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 			: base(parent, id)
 		{
 		}
+
+		#region Methods
+
+		private bool GetDmInputSyncState()
+		{
+			return Dge != null && Dge.DmIn.SyncDetectedFeedback.BoolValue;
+		}
+
+		#region Abstract Overrides
 
 		/// <summary>
 		/// Returns true if the destination contains an input at the given address.
@@ -44,5 +57,51 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 		{
 			return base.GetInputs();
 		}
+
+		protected override void SetInitialInputDetectState()
+		{
+			base.SetInitialInputDetectState();
+
+			Cache.SetSourceDetectedState(DM_INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video, GetDmInputSyncState());
+		}
+
+		#endregion
+
+		#endregion
+
+		#region DGE Callbacks
+
+		protected override void Subscribe(DmDge200C dge)
+		{
+			base.Subscribe(dge);
+
+			if (dge == null)
+				return;
+
+			dge.DmIn.InputStreamChange += DmInOnInputStreamChange;
+		}
+
+		protected override void Unsubscribe(DmDge200C dge)
+		{
+			base.Subscribe(dge);
+
+			if (dge == null)
+				return;
+
+			dge.DmIn.InputStreamChange -= DmInOnInputStreamChange;
+		}
+
+		private void DmInOnInputStreamChange(EndpointInputStream inputStream, EndpointInputStreamEventArgs args)
+		{
+			switch (args.EventId)
+			{
+				case EndpointInputStreamEventIds.SyncDetectedFeedbackEventId:
+					Cache.SetSourceDetectedState(DM_INPUT_ADDRESS,eConnectionType.Audio | eConnectionType.Video, GetDmInputSyncState());
+					break;
+			}
+		}
+
+		#endregion
 	}
 }
+#endif
