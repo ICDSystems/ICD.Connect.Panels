@@ -19,7 +19,7 @@ namespace ICD.Connect.Panels.Devices
 	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDeviceBase
 		where TSettings : ISettings, new()
 	{
-		private const int PANEL_CONTROL_ID = 0;
+		private const int PANEL_CONTROL_ID = 10;
 
 		/// <summary>
 		/// Raised when the user interacts with the panel.
