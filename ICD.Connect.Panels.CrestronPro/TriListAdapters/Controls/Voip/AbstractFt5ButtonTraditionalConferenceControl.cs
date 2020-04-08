@@ -437,13 +437,13 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		private void HoldCallback(ThinTraditionalParticipant sender)
 		{
 			// Is this possible?
-			Log(eSeverity.Warning, "Hold is unsupported");
+			Logger.Log(eSeverity.Warning, "Hold is unsupported");
 		}
 
 		private void ResumeCallback(ThinTraditionalParticipant sender)
 		{
 			// Is this possible?
-			Log(eSeverity.Warning, "Resume is unsupported");
+			Logger.Log(eSeverity.Warning, "Resume is unsupported");
 		}
 
 		private void SendDtmfCallback(ThinTraditionalParticipant sender, string data)

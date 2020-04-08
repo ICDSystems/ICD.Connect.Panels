@@ -87,6 +87,10 @@
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ICD.Common.Logging\ICD.Common.Logging\ICD.Common.Logging_SimplSharp.csproj">
+      <Project>{8093AE94-7250-411E-9C55-68AB2B5D705A}</Project>
+      <Name>ICD.Common.Logging_SimplSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ICD.Connect.API\ICD.Connect.API\ICD.Connect.API_SimplSharp.csproj">
       <Project>{727F5820-5A61-440D-8899-E454FE8238D7}</Project>
       <Name>ICD.Connect.API</Name>

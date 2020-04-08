@@ -71,7 +71,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 			TswX60BaseClass panel = Parent.Panel as TswX60BaseClass;
 			if (panel == null)
 			{
-				Log(eSeverity.Error, "Unable to set button backlight state - internal panel is null");
+				Logger.Log(eSeverity.Error, "Unable to set button backlight state - internal panel is null");
 				return;
 			}
 

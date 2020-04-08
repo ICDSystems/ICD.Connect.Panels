@@ -179,7 +179,7 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			{
 				panel = factory.GetOriginatorById(settings.Panel.Value) as IPanelDevice;
 				if (panel == null)
-					Logger.AddEntry(eSeverity.Error, "No panel with id {0}", settings.Panel.Value);
+					Logger.Log(eSeverity.Error, "No panel with id {0}", settings.Panel.Value);
 			}
 
 			SetPanel(panel);
@@ -325,8 +325,8 @@ namespace ICD.Connect.Panels.Server.PanelClient
 			}
 			catch (JsonReaderException e)
 			{
-				Logger.AddEntry(eSeverity.Error, "{0} failed to parse JSON - {1}{2}{3}", this, e.Message, IcdEnvironment.NewLine,
-				                JsonUtils.Format(args.Data));
+				Logger.Log(eSeverity.Error, "Failed to parse JSON - {0}{1}{2}", e.Message, IcdEnvironment.NewLine,
+				           JsonUtils.Format(args.Data));
 			}
 		}
 

@@ -390,7 +390,7 @@ namespace ICD.Connect.Panels.Server
 			}
 			catch (JsonReaderException e)
 			{
-				Log(eSeverity.Error, "Failed to parse JSON - {0}{1}{2}", e.Message, IcdEnvironment.NewLine, JsonUtils.Format(data));
+				Logger.Log(eSeverity.Error, "Failed to parse JSON - {0}{1}{2}", e.Message, IcdEnvironment.NewLine, JsonUtils.Format(data));
 			}
 		}
 

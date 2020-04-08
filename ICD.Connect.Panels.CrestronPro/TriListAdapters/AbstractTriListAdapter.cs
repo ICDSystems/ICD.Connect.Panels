@@ -176,7 +176,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 			eDeviceRegistrationUnRegistrationResponse result;
 			if (Panel != null && !GenericBaseUtils.SetUp(Panel, this, RegisterExtenders, out result))
-				Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
+				Logger.Log(eSeverity.Error, "Unable to register {0} - {1}", Panel.GetType().Name, result);
 
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
 			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);

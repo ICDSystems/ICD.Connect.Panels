@@ -2,7 +2,6 @@
 #if SIMPLSHARP
 using System;
 using Crestron.SimplSharpPro.DeviceSupport;
-using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
@@ -32,7 +31,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <param name="enabled"></param>
 		public override void SetAutoAnswer(bool enabled)
 		{
-			Logger.AddEntry(eSeverity.Warning, "{0} does not support AutoAnswer", Parent);
+			throw new NotSupportedException();
 		}
 
 		/// <summary>

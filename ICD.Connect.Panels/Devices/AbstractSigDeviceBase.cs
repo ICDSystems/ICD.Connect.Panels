@@ -140,7 +140,7 @@ namespace ICD.Connect.Panels.Devices
 			}
 			catch (Exception e)
 			{
-				Log(eSeverity.Error, "Unable to send input serial {0} - {1}", number, e.Message);
+				Logger.Log(eSeverity.Error, "Unable to send input serial {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -157,7 +157,7 @@ namespace ICD.Connect.Panels.Devices
 			}
 			catch (Exception e)
 			{
-				Log(eSeverity.Error, "Unable to send input analog {0} - {1}", number, e.Message);
+				Logger.Log(eSeverity.Error, "Unable to send input analog {0} - {1}", number, e.Message);
 			}
 		}
 
@@ -174,7 +174,7 @@ namespace ICD.Connect.Panels.Devices
 			}
 			catch (Exception e)
 			{
-				Log(eSeverity.Error, "Unable to send input digital {0} - {1}", number, e.Message);
+				Logger.Log(eSeverity.Error, "Unable to send input digital {0} - {1}", number, e.Message);
 			}
 		}
 
