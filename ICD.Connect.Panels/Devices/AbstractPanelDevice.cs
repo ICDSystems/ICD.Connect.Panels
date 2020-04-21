@@ -9,7 +9,7 @@ using ICD.Connect.Panels.SmartObjects;
 
 namespace ICD.Connect.Panels.Devices
 {
-	public abstract class AbstractPanelDevice<T> : AbstractSigDeviceBase<T>, IPanelDevice
+	public abstract class AbstractPanelDevice<T> : AbstractSigDevice<T>, IPanelDevice
 		where T : IPanelDeviceSettings, new()
 	{
 		#region Properties

@@ -83,11 +83,9 @@
     <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
     <Compile Include="Controls\IHardButtonBacklightControl.cs" />
     <Compile Include="Devices\PanelDeviceConsole.cs" />
-    <Compile Include="Devices\ISigDeviceBase.cs" />
-    <Compile Include="Devices\SigDeviceBaseConsole.cs" />
+    <Compile Include="Devices\SigDeviceConsole.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="Devices\AbstractPanelDevice.cs" />
-    <Compile Include="Devices\AbstractSigDeviceBase.cs" />
     <Compile Include="Devices\IPanelDevice.cs" />
     <Compile Include="Devices\IPanelDeviceSettings.cs" />
     <Compile Include="Devices\ISigDevice.cs" />

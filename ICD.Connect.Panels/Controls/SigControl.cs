@@ -6,7 +6,7 @@ using ICD.Connect.Protocol.Sigs;
 
 namespace ICD.Connect.Panels.Controls
 {
-	public sealed class SigControl : AbstractSigControl<ISigDeviceBase>
+	public sealed class SigControl : AbstractSigControl<ISigDevice>
 	{
 		/// <summary>
 		/// Raised when the user interacts with the panel.
@@ -23,7 +23,7 @@ namespace ICD.Connect.Panels.Controls
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		public SigControl(ISigDeviceBase parent, int id)
+		public SigControl(ISigDevice parent, int id)
 			: base(parent, id)
 		{
 			Parent.OnAnyOutput += ParentOnAnyOutput;

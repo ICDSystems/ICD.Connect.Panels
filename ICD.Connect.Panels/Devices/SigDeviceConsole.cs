@@ -5,14 +5,14 @@ using ICD.Connect.API.Nodes;
 
 namespace ICD.Connect.Panels.Devices
 {
-	public static class SigDeviceBaseConsole
+	public static class SigDeviceConsole
 	{
 		/// <summary>
 		/// Gets the child console nodes.
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <returns></returns>
-		public static IEnumerable<IConsoleNodeBase> GetConsoleNodes(ISigDeviceBase instance)
+		public static IEnumerable<IConsoleNodeBase> GetConsoleNodes(ISigDevice instance)
 		{
 			if (instance == null)
 				throw new ArgumentNullException("instance");
@@ -25,7 +25,7 @@ namespace ICD.Connect.Panels.Devices
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <param name="addRow"></param>
-		public static void BuildConsoleStatus(ISigDeviceBase instance, AddStatusRowDelegate addRow)
+		public static void BuildConsoleStatus(ISigDevice instance, AddStatusRowDelegate addRow)
 		{
 			if (instance == null)
 				throw new ArgumentNullException("instance");
@@ -38,7 +38,7 @@ namespace ICD.Connect.Panels.Devices
 		/// </summary>
 		/// <param name="instance"></param>
 		/// <returns></returns>
-		public static IEnumerable<IConsoleCommand> GetConsoleCommands(ISigDeviceBase instance)
+		public static IEnumerable<IConsoleCommand> GetConsoleCommands(ISigDevice instance)
 		{
 			if (instance == null)
 				throw new ArgumentNullException("instance");
@@ -51,7 +51,7 @@ namespace ICD.Connect.Panels.Devices
 		}
 
 		/*
-		private static string PrintSigs(ISigDeviceBase instance)
+		private static string PrintSigs(ISigDevice instance)
 		{
 			if (instance == null)
 				throw new ArgumentNullException("instance");
