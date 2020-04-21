@@ -7,7 +7,7 @@ using ICD.Connect.Panels.SmartObjectCollections;
 namespace ICD.Connect.Panels.Controls
 {
 	public abstract class AbstractPanelControl<TParent> : AbstractSigControl<TParent>, IPanelControl
-		where TParent : IDeviceBase
+		where TParent : IDevice
 	{
 		/// <summary>
 		/// Collection containing the loaded SmartObjects of this device.

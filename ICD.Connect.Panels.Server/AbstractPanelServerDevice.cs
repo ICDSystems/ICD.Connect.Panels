@@ -24,7 +24,7 @@ namespace ICD.Connect.Panels.Server
 	/// <summary>
 	/// The AbstractPanelServerDevice wraps a TCPServer to emulate how existing Crestron panels work.
 	/// </summary>
-	public abstract class AbstractPanelServerDevice<TSettings> : AbstractDeviceBase<TSettings>, IPanelServerDevice
+	public abstract class AbstractPanelServerDevice<TSettings> : AbstractDevice<TSettings>, IPanelServerDevice
 		where TSettings : IPanelServerDeviceSettings, new()
 	{
 		public const string SIG_MESSAGE = "S";

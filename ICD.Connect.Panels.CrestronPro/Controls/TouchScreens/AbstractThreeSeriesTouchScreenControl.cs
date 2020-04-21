@@ -5,7 +5,7 @@ using ICD.Connect.Panels.Crestron.Controls.TouchScreens;
 namespace ICD.Connect.Panels.CrestronPro.Controls.TouchScreens
 {
 	public abstract class AbstractThreeSeriesTouchScreenControl<TParent> : AbstractPanelControl<TParent>, IThreeSeriesTouchScreenControl
-		where TParent : IDeviceBase
+		where TParent : IDevice
 	{
 		/// <summary>
 		/// Constructor.

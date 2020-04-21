@@ -5,7 +5,7 @@ namespace ICD.Connect.Panels.Controls
 {
 	public abstract class AbstractHardButtonBacklightControl<TParent> : AbstractDeviceControl<TParent>,
 	                                                                    IHardButtonBacklightControl
-		where TParent : IDeviceBase
+		where TParent : IDevice
 	{
 		/// <summary>
 		/// Constructor.

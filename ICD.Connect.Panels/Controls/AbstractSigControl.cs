@@ -10,7 +10,7 @@ using ICD.Connect.Protocol.Sigs;
 namespace ICD.Connect.Panels.Controls
 {
 	public abstract class AbstractSigControl<TParent> : AbstractDeviceControl<TParent>, ISigControl
-		where TParent : IDeviceBase
+		where TParent : IDevice
 	{
 		/// <summary>
 		/// Raised when the user interacts with the panel.
