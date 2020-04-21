@@ -9,7 +9,6 @@ using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
-using ICD.Connect.Settings;
 
 namespace ICD.Connect.Panels.Devices
 {
@@ -17,7 +16,7 @@ namespace ICD.Connect.Panels.Devices
 	/// AbstractPanelBase represents shared functionality between the PanelDevice and the SmartObject.
 	/// </summary>
 	public abstract class AbstractSigDeviceBase<TSettings> : AbstractDeviceBase<TSettings>, ISigDeviceBase
-		where TSettings : ISettings, new()
+		where TSettings : IDeviceBaseSettings, new()
 	{
 		private const int PANEL_CONTROL_ID = 0;
 
