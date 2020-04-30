@@ -3,5 +3,5 @@ using System.Reflection;
 [assembly: AssemblyTitle("ICD.Connect.Panels.Mock")]
 [assembly: AssemblyCompany("ICD Systems")]
 [assembly: AssemblyProduct("ICD.Connect.Panels.Mock")]
-[assembly: AssemblyCopyright("Copyright © ICD Systems 2019")]
-[assembly: AssemblyVersion("6.5.0.0")]
+[assembly: AssemblyCopyright("Copyright © ICD Systems 2020")]
+[assembly: AssemblyVersion("6.6.0.0")]
