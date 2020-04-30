@@ -1,5 +1,4 @@
 ﻿using System;
-using Crestron.SimplSharpPro;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.EventArguments;
@@ -11,6 +10,7 @@ using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings.Core;
 using ICD.Connect.Telemetry.Attributes;
 #if SIMPLSHARP
+using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
 
@@ -97,6 +97,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Controls.Add(m_BacklightControl);
 		}
 
+#if SIMPLSHARP
 		#region Panel Callbacks
 
 		/// <summary>
@@ -162,6 +163,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		#endregion
+#endif
 
 		#region Settings
 
