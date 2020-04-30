@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
  - Dialing features refactored to fit new conferencing interfaces
 
+## [6.6.0] - 2020-04-30
+### Added
+ - Added IP and Hostname properties/telemetry to AbstractTswFt5Button Panels using EthernetReservedSigs extender
+
 ## [6.5.0] - 2019-08-05
 ### Added
  - Added a RouteDestinationControl to the Ts1542CAdapter

@@ -58,6 +58,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			panel.ExtenderSystemReservedSigs.Use();
 		}
+
+		private void RegisterEthernetExternder(TPanel panel)
+		{
+			panel.ExtenderEthernetReservedSigs.Use();
+		}
 #endif
 	}
 

@@ -1,9 +1,15 @@
-﻿using ICD.Common.Properties;
+﻿using System;
+using ICD.Common.Properties;
+using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls.Dialing;
+using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings;
+using ICD.Connect.Telemetry.Attributes;
 #if SIMPLSHARP
+using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
 
@@ -22,11 +28,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private const int BACKLIGHT_CONTROL_ID = 2;
 		protected const int HARD_BUTTON_CONTROL_ID = 3;
 
+		[EventTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
+		public event EventHandler<StringEventArgs> OnIpAddressChanged;
+
+		[EventTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
+		public event EventHandler<StringEventArgs> OnMacAddressChanged;
+
 		private ITraditionalConferenceDeviceControl m_ConferenceControl;
+
 		private readonly IPowerDeviceControl m_BacklightControl;
 
 		// Used with settings
 		private bool m_EnableVoip;
+
+		private string m_IpAddress;
+		private string m_MacAddress;
 
 		#region Properties
 
@@ -40,6 +56,36 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		public IPowerDeviceControl BacklightControl { get { return m_BacklightControl; } }
 
+		[DynamicPropertyTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS, DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
+		public string IpAddress
+		{
+			get { return m_IpAddress; }
+			private set
+			{
+				if (m_IpAddress == value)
+					return;
+
+				m_IpAddress = value;
+
+				OnIpAddressChanged.Raise(this, new StringEventArgs(value));
+			}
+		}
+
+		[DynamicPropertyTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS, DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
+		public string MacAddress
+		{
+			get { return m_MacAddress; }
+			private set
+			{
+				if (m_MacAddress == value)
+					return;
+
+				m_MacAddress = value;
+
+				OnMacAddressChanged.Raise(this, new StringEventArgs(value));
+			}
+		}
+
 		#endregion
 
 		/// <summary>
@@ -50,6 +96,74 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_BacklightControl = InstantiateBacklightControl(BACKLIGHT_CONTROL_ID);
 			Controls.Add(m_BacklightControl);
 		}
+
+#if SIMPLSHARP
+		#region Panel Callbacks
+
+		/// <summary>
+		/// Sets the wrapped panel device.
+		/// </summary>
+		/// <param name="panel"></param>
+		public override void SetPanel(TPanel panel)
+		{
+			base.SetPanel(panel);
+
+			IpAddress = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.IpAddressFeedback.StringValue;
+			MacAddress = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.MacAddressFeedback.StringValue;
+		}
+
+		/// <summary>
+		/// Subscribe to the panel events.
+		/// </summary>
+		/// <param name="panel"></param>
+		protected override void Subscribe(TPanel panel)
+		{
+			base.Subscribe(panel);
+
+			if (panel == null)
+				return;
+
+			panel.ExtenderEthernetReservedSigs.DeviceExtenderSigChange += ExtenderEthernetReservedSigsOnDeviceExtenderSigChange;
+		}
+
+		/// <summary>
+		/// Subscribe to the TriList events.
+		/// </summary>
+		/// <param name="panel"></param>
+		protected override void Unsubscribe(TPanel panel)
+		{
+			base.Unsubscribe(panel);
+
+			if (panel == null)
+				return;
+
+			panel.ExtenderEthernetReservedSigs.DeviceExtenderSigChange -= ExtenderEthernetReservedSigsOnDeviceExtenderSigChange;
+		}
+
+		private void ExtenderEthernetReservedSigsOnDeviceExtenderSigChange(DeviceExtender currentDeviceExtender, SigEventArgs args)
+		{
+			switch (args.Event)
+			{
+				case eSigEvent.StringChange:
+					switch (args.Sig.Number)
+					{
+						case 17300:
+							IpAddress = args.Sig.StringValue;
+							break;
+						case 17309:
+							MacAddress = args.Sig.StringValue;
+							break;
+					}
+					break;
+				case eSigEvent.StringOutputSigsCleared:
+					IpAddress = null;
+					MacAddress = null;
+					break;
+			}
+		}
+
+		#endregion
+#endif
 
 		#region Settings
 
@@ -113,6 +227,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 				return;
 
 			RegisterSystemExtender(panel);
+			RegisterEthernetExtender(panel);
 
 			if (m_EnableVoip)
 				RegisterVoIpExtender(panel);
@@ -134,6 +249,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		protected virtual void RegisterVoIpExtender(TPanel panel)
 		{
 			panel.ExtenderVoipReservedSigs.Use();
+		}
+
+		protected virtual void RegisterEthernetExtender(TPanel panel)
+		{
+			panel.ExtenderEthernetReservedSigs.Use();
 		}
 #endif
 
