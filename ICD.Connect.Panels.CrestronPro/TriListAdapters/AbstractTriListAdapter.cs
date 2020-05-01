@@ -162,7 +162,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="panel"></param>
 		[PublicAPI]
-		public void SetPanel(TPanel panel)
+		public virtual void SetPanel(TPanel panel)
 		{
 			if (panel == Panel)
 				return;
@@ -291,7 +291,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Subscribe to the panel events.
 		/// </summary>
 		/// <param name="panel"></param>
-		private void Subscribe(TPanel panel)
+		protected virtual void Subscribe(TPanel panel)
 		{
 			if (panel == null)
 				return;
@@ -304,7 +304,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// Subscribe to the TriList events.
 		/// </summary>
 		/// <param name="panel"></param>
-		private void Unsubscribe(TPanel panel)
+		protected virtual void Unsubscribe(TPanel panel)
 		{
 			if (panel == null)
 				return;
