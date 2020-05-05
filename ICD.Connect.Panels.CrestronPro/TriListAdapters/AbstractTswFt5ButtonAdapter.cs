@@ -56,7 +56,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		public IPowerDeviceControl BacklightControl { get { return m_BacklightControl; } }
 
-		[DynamicPropertyTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS, null, DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
+		[PropertyTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS, null, DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
 		public string IpAddress
 		{
 			get { return m_IpAddress; }
@@ -71,7 +71,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			}
 		}
 
-		[DynamicPropertyTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS, null, DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
+		[PropertyTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS, null, DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
 		public string MacAddress
 		{
 			get { return m_MacAddress; }
