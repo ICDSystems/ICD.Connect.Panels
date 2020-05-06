@@ -1,9 +1,10 @@
-﻿using ICD.Connect.Routing.Connections;
+﻿using ICD.Connect.Protocol.Network.Ports.Tcp;
+using ICD.Connect.Routing.Connections;
 using ICD.Connect.Routing.Mock.Source;
 
 namespace ICD.Connect.Panels.Server.Osd
 {
-    public sealed class OsdPanelDevice : AbstractPanelServerDevice<OsdPanelDeviceSettings>
+    public sealed class OsdPanelDevice : AbstractPanelServerDevice<IcdTcpServer, OsdPanelDeviceSettings>
     {
 		/// <summary>
 		/// Constructor.

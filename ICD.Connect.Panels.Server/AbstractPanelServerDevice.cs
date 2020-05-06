@@ -13,7 +13,7 @@ using ICD.Connect.Panels.Server.PanelClient;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.EventArguments;
-using ICD.Connect.Protocol.Network.Ports.Tcp;
+using ICD.Connect.Protocol.Network.Servers;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
@@ -24,7 +24,8 @@ namespace ICD.Connect.Panels.Server
 	/// <summary>
 	/// The AbstractPanelServerDevice wraps a TCPServer to emulate how existing Crestron panels work.
 	/// </summary>
-	public abstract class AbstractPanelServerDevice<TSettings> : AbstractDevice<TSettings>, IPanelServerDevice
+	public abstract class AbstractPanelServerDevice<TServer, TSettings> : AbstractDevice<TSettings>, IPanelServerDevice
+		where TServer : class, INetworkServer, new()
 		where TSettings : IPanelServerDeviceSettings, new()
 	{
 		public const string SIG_MESSAGE = "S";
@@ -37,8 +38,8 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		public event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
-		private readonly IcdTcpServer m_Server;
-		private readonly TcpServerBufferManager m_Buffers;
+		private readonly TServer m_Server;
+		private readonly NetworkServerBufferManager m_Buffers;
 		private readonly SigCache m_Cache;
 		private readonly SafeCriticalSection m_CacheSection;
 		private readonly SigCallbackManager m_SigCallbacks;
@@ -91,14 +92,11 @@ namespace ICD.Connect.Panels.Server
 			m_SmartObjects = new PanelServerSmartObjectCollection(this);
 			Subscribe(m_SmartObjects);
 
-			m_Server = new IcdTcpServer
-			{
-				Name = GetType().Name,
-				MaxNumberOfClients = IcdTcpServer.MAX_NUMBER_OF_CLIENTS_SUPPORTED
-			};
+			m_Server = ReflectionUtils.CreateInstance<TServer>();
+			m_Server.Name = GetType().Name;
 			Subscribe(m_Server);
 
-			m_Buffers = new TcpServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
+			m_Buffers = new NetworkServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
 
@@ -281,7 +279,7 @@ namespace ICD.Connect.Panels.Server
 		/// Subscribe to the server events.
 		/// </summary>
 		/// <param name="server"></param>
-		private void Subscribe(IcdTcpServer server)
+		private void Subscribe(TServer server)
 		{
 			server.OnSocketStateChange += ServerOnSocketStateChange;
 		}
@@ -290,7 +288,7 @@ namespace ICD.Connect.Panels.Server
 		/// Unsubscribe from the server events.
 		/// </summary>
 		/// <param name="server"></param>
-		private void Unsubscribe(IcdTcpServer server)
+		private void Unsubscribe(TServer server)
 		{
 			server.OnSocketStateChange -= ServerOnSocketStateChange;
 		}
@@ -358,7 +356,7 @@ namespace ICD.Connect.Panels.Server
 		/// Subscribe to the buffer manager events.
 		/// </summary>
 		/// <param name="bufferManager"></param>
-		private void Subscribe(TcpServerBufferManager bufferManager)
+		private void Subscribe(NetworkServerBufferManager bufferManager)
 		{
 			bufferManager.OnClientCompletedSerial += BuffersOnClientCompletedSerial;
 		}
@@ -367,7 +365,7 @@ namespace ICD.Connect.Panels.Server
 		/// Unsubscribe from the buffer manager events.
 		/// </summary>
 		/// <param name="bufferManager"></param>
-		private void Unsubscribe(TcpServerBufferManager bufferManager)
+		private void Unsubscribe(NetworkServerBufferManager bufferManager)
 		{
 			bufferManager.OnClientCompletedSerial -= BuffersOnClientCompletedSerial;
 		}
@@ -378,7 +376,7 @@ namespace ICD.Connect.Panels.Server
 		/// <param name="sender"></param>
 		/// <param name="clientId"></param>
 		/// <param name="data"></param>
-		private void BuffersOnClientCompletedSerial(TcpServerBufferManager sender, uint clientId, string data)
+		private void BuffersOnClientCompletedSerial(NetworkServerBufferManager sender, uint clientId, string data)
 		{
 			try
 			{
