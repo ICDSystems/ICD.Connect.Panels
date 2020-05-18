@@ -363,10 +363,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			switch (m_ActiveParticipant.Status)
 			{
 				case eParticipantStatus.Connected:
-					m_ActiveParticipant.SetStart(m_ActiveParticipant.Start ?? IcdEnvironment.GetUtcTime());
+					m_ActiveParticipant.SetStart(m_ActiveParticipant.StartTime ?? IcdEnvironment.GetUtcTime());
 					break;
 				case eParticipantStatus.Disconnected:
-					m_ActiveParticipant.SetEnd(m_ActiveParticipant.End ?? IcdEnvironment.GetUtcTime());
+					m_ActiveParticipant.SetEnd(m_ActiveParticipant.EndTime ?? IcdEnvironment.GetUtcTime());
 					break;
 			}
 		}
@@ -554,12 +554,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 				m_IncomingCall.Name = uri;
 				m_IncomingCall.Number = SipUtils.NumberFromUri(uri);
 			}
-
-			// Direction
-			if (sigs.IncomingCallDetectedFeedback.BoolValue)
-				m_IncomingCall.Direction = eCallDirection.Incoming;
-			if (m_IncomingCall.Direction != eCallDirection.Incoming)
-				m_IncomingCall.Direction = eCallDirection.Outgoing;
 
 			// Answer state
 			if (sigs.CallActiveFeedback.BoolValue)
