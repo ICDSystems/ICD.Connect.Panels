@@ -231,6 +231,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			if (sigs == null)
 				return;
 
+			map[sigs.MyURIFeedback] = HandleMyUriFeedback;
 			map[sigs.CallActiveFeedback] = HandleCallActiveFeedback;
 			map[sigs.CallTerminatedFeedback] = HandleCallTerminatedFeedback;
 			map[sigs.DialingFeedback] = HandleDialingFeedback;
@@ -250,6 +251,21 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			Action<Sig> callback;
 			if (m_SigCallbackMap.TryGetValue(args.Sig, out callback))
 				callback(args.Sig);
+		}
+
+		/// <summary>
+		/// Called when the MyUriFeedback sig changes state.
+		/// </summary>
+		/// <param name="sig"></param>
+		private void HandleMyUriFeedback(Sig sig)
+		{
+			CallInInfo =
+				new DialContext
+				{
+					Protocol = eDialProtocol.Sip,
+					CallType = eCallType.Audio,
+					DialString = sig.StringValue
+				};
 		}
 
 		/// <summary>
