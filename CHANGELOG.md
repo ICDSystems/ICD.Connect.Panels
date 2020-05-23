@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - MockPanelDevice now implements IMockDevice
  - Using new logging context
 
+## [7.4.0] - 2020-05-23
+### Changed
+ - Updated ConfernceControls to support ConferenceHistory Changes - Start/End renamed, Incoming call direction removed
+
 ## [7.3.0] - 2020-03-20
 ### Added
  - Conference controls implement SupportedConferenceFeatures property
