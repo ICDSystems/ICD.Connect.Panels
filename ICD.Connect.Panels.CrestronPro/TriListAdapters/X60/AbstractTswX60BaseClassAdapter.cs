@@ -1,4 +1,6 @@
-﻿#if SIMPLSHARP
+﻿using System;
+using ICD.Connect.Settings;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro.UI;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
@@ -19,15 +21,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 		where TSettings : ITswX60BaseClassAdapterSettings, new()
 	{
 #if SIMPLSHARP
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		protected AbstractTswX60BaseClassAdapter()
-		{
-			Controls.Add(new TswX60HardButtonBacklightControl(this, HARD_BUTTON_CONTROL_ID));
-		}
-
 		/// <summary>
 		/// Called before registration.
 		/// Override to control which extenders are used with the panel.
@@ -61,6 +54,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 		protected override void RegisterSystemExtender(TPanel panel)
 		{
 			panel.ExtenderSystemReservedSigs.Use();
+		}
+		
+		/// <summary>
+		/// Override to add controls to the device.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		/// <param name="addControl"></param>
+		protected override void AddControls(TSettings settings, IDeviceFactory factory, Action<IDeviceControl> addControl)
+		{
+			base.AddControls(settings, factory, addControl);
+
+			addControl(new TswX60HardButtonBacklightControl(this, HARD_BUTTON_CONTROL_ID));
 		}
 #endif
 	}

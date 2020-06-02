@@ -1,5 +1,4 @@
 ﻿using System;
-using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Xml;
@@ -34,10 +33,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		[EventTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
 		public event EventHandler<StringEventArgs> OnMacAddressChanged;
 
-		private ITraditionalConferenceDeviceControl m_ConferenceControl;
-
-		private readonly IPowerDeviceControl m_BacklightControl;
-
 		// Used with settings
 		private bool m_EnableVoip;
 
@@ -45,16 +40,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private string m_MacAddress;
 
 		#region Properties
-
-		/// <summary>
-		/// Gets the VoIp dialer for this panel.
-		/// </summary>
-		public ITraditionalConferenceDeviceControl VoipConferenceControl { get { return m_ConferenceControl; } }
-
-		/// <summary>
-		/// Gets the backlight control for this panel.
-		/// </summary>
-		public IPowerDeviceControl BacklightControl { get { return m_BacklightControl; } }
 
 		[PropertyTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS, null, DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
 		public string IpAddress
@@ -87,15 +72,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		#endregion
-
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		protected AbstractTswFt5ButtonAdapter()
-		{
-			m_BacklightControl = InstantiateBacklightControl(BACKLIGHT_CONTROL_ID);
-			Controls.Add(m_BacklightControl);
-		}
 
 #if SIMPLSHARP
 		#region Panel Callbacks
@@ -175,11 +151,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			base.ClearSettingsFinal();
 
 			m_EnableVoip = false;
-
-			Controls.Remove(VOIP_DIALER_CONTROL_ID);
-			if (m_ConferenceControl != null)
-				m_ConferenceControl.Dispose();
-			m_ConferenceControl = null;
 		}
 
 		/// <summary>
@@ -204,13 +175,22 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_EnableVoip = settings.EnableVoip;
 
 			base.ApplySettingsFinal(settings, factory);
+		}
 
-			// Create the control after the panel has been registered
-			if (!m_EnableVoip)
-				return;
+		/// <summary>
+		/// Override to add controls to the device.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		/// <param name="addControl"></param>
+		protected override void AddControls(TSettings settings, IDeviceFactory factory, Action<IDeviceControl> addControl)
+		{
+			base.AddControls(settings, factory, addControl);
 
-			m_ConferenceControl = InstantiateDialingControl(VOIP_DIALER_CONTROL_ID);
-			Controls.Add(m_ConferenceControl);
+			addControl(InstantiateBacklightControl(BACKLIGHT_CONTROL_ID));
+
+			if (m_EnableVoip)
+				addControl(InstantiateDialingControl(VOIP_DIALER_CONTROL_ID));
 		}
 
 #if SIMPLSHARP
@@ -308,11 +288,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 
 	public interface ITswFt5ButtonAdapter : ITriListAdapter
 	{
-		/// <summary>
-		/// Gets the VoIp dialer for this panel.
-		/// </summary>
-		[PublicAPI]
-		ITraditionalConferenceDeviceControl VoipConferenceControl { get; }
 	}
 
 	public interface ITswFt5ButtonAdapterSettings : ITriListAdapterSettings

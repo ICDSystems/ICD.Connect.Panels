@@ -5,10 +5,12 @@ using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;
+using ICD.Connect.Settings;
 
 namespace ICD.Connect.Panels.Devices
 {
@@ -55,9 +57,6 @@ namespace ICD.Connect.Panels.Devices
 		{
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
-
-			ISigControl sigControl = InstantiateSigControl(PANEL_CONTROL_ID);
-			Controls.Add(sigControl);
 		}
 
 		/// <summary>
@@ -203,6 +202,24 @@ namespace ICD.Connect.Panels.Devices
 		protected void RaiseOnAnyOutput(SigInfo sigInfo)
 		{
 			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
+		}
+
+		#endregion
+
+		#region Settings
+
+		/// <summary>
+		/// Override to add controls to the device.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		/// <param name="addControl"></param>
+		protected override void AddControls(TSettings settings, IDeviceFactory factory, Action<IDeviceControl> addControl)
+		{
+			base.AddControls(settings, factory, addControl);
+
+			ISigControl sigControl = InstantiateSigControl(PANEL_CONTROL_ID);
+			addControl(sigControl);
 		}
 
 		#endregion

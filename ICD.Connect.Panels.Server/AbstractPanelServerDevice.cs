@@ -7,6 +7,7 @@ using ICD.Common.Utils.Json;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelClient;
@@ -99,8 +100,6 @@ namespace ICD.Connect.Panels.Server
 			m_Buffers = new NetworkServerBufferManager(() => new DelimiterSerialBuffer(PanelClientDevice.DELIMITER));
 			m_Buffers.SetServer(m_Server);
 			Subscribe(m_Buffers);
-
-			Controls.Add(new PanelControl(this, 1));
 		}
 
 		#region Methods
@@ -221,6 +220,19 @@ namespace ICD.Connect.Panels.Server
 			Port = settings.Port;
 			m_Server.Start();
 			UpdateCachedOnlineStatus();
+		}
+
+		/// <summary>
+		/// Override to add controls to the device.
+		/// </summary>
+		/// <param name="settings"></param>
+		/// <param name="factory"></param>
+		/// <param name="addControl"></param>
+		protected override void AddControls(TSettings settings, IDeviceFactory factory, Action<IDeviceControl> addControl)
+		{
+			base.AddControls(settings, factory, addControl);
+
+			addControl(new PanelControl(this, 1));
 		}
 
 		#endregion
