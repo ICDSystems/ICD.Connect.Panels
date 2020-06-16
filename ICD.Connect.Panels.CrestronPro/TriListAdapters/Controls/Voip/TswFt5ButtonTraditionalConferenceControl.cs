@@ -47,15 +47,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			PrivacyMuted = Sigs.MutedFeedback.GetBoolValueOrDefault();
 		}
-
-		/// <summary>
-		/// Sets whether the camera should transmit video or not.
-		/// </summary>
-		/// <param name="enabled"></param>
-		public override void SetCameraEnabled(bool enabled)
-		{
-			throw new NotSupportedException();
-		}
 	}
 }
 

@@ -61,15 +61,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		}
 
 		/// <summary>
-		/// Sets whether the camera should transmit video or not.
-		/// </summary>
-		/// <param name="enabled"></param>
-		public override void SetCameraEnabled(bool enabled)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
 		/// Populates the sig callback map with handlers for sig changes.
 		/// </summary>
 		protected override void BuildSigCallbacks(Dictionary<Sig, Action<Sig>> map)
