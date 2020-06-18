@@ -133,10 +133,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		}
 
 		/// <summary>
-		/// Sets whether the camera should transmit video or not.
+		/// Sets the camera mute state.
 		/// </summary>
 		/// <param name="enabled"></param>
-		public override void SetCameraEnabled(bool enabled)
+		public override void SetCameraMute(bool mute)
 		{
 			throw new NotSupportedException();
 		}
