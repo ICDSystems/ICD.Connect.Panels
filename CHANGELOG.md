@@ -6,9 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.0.0] - 2020-06-19
+### Added
+ - Added WebPanelServerDevice for hosting WebSocket panels
+
 ### Changed
  - MockPanelDevice now implements IMockDevice
  - Using new logging context
+ - Panels are now Devices, no longer treating Panels as a distinct subset of devices
 
 ## [7.4.0] - 2020-05-23
 ### Changed
