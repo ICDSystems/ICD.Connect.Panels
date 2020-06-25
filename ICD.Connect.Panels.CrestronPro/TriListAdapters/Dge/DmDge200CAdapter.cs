@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
@@ -17,6 +18,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		protected override DmDge200C InstantiateTriList(byte ipid, CrestronControlSystem controlSystem)
 		{
 			return new DmDge200C(ipid, controlSystem);
+		}
+
+		public DmDge200CAdapter()
+		{
+			Controls.Add(new DmDge200CStreamSwitcherControl(this, 0));
 		}
 	}
 #else
