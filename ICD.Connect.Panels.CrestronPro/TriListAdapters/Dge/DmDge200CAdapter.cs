@@ -1,7 +1,10 @@
-﻿using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
+﻿using System;
+using ICD.Connect.Misc.CrestronPro.Devices;
+using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
+using Crestron.SimplSharpPro.DM;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
@@ -24,6 +27,24 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 		{
 			Controls.Add(new DmDge200CStreamSwitcherControl(this, 0));
 		}
+
+		#region IPortParent
+
+		public override Cec GetCecPort(eInputOuptut io, int address)
+		{
+
+			if (Dge == null)
+				throw new InvalidOperationException("No device instantiated");
+
+			if (io == eInputOuptut.Input && address == 5)
+			{
+					return Dge.DmIn.StreamCec;
+			}
+
+			return base.GetCecPort(io, address);
+		}
+
+		#endregion
 	}
 #else
 	public sealed class DmDge200CAdapter : AbstractDgeX00Adapter<DmDge200CAdapterSettings>
