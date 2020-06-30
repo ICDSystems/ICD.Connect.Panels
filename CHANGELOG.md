@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Using new logging context
  - Panels are now Devices, no longer treating Panels as a distinct subset of devices
 
+## [7.5.0] - 2020-06-30
+### Added
+ - Added AbstractDge100Adapter, Dge100 & DmDge200C adapters
+ - Added routing controls for DGE devices
+
+### Changed
+ - Change Panel Control ID to 10, so Routing control ID can be 0 for DAV support
+
 ## [7.4.0] - 2020-05-23
 ### Changed
  - Updated ConfernceControls to support ConferenceHistory Changes - Start/End renamed, Incoming call direction removed
