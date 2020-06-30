@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ICD.Common.Logging.LoggingContexts;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
@@ -34,7 +35,7 @@ namespace ICD.Connect.Panels.Controls
 					return;
 
 				m_InputActive = value;
-				Log(eSeverity.Debug, "Input Active set to {0}", m_InputActive);
+				Logger.LogSetTo(eSeverity.Debug, "Input Active", m_InputActive);
 				OnActiveInputsChanged.Raise(this,
 				                            new ActiveInputStateChangeEventArgs(INPUT_ADDRESS, eConnectionType.Audio | eConnectionType.Video,
 				                                                                m_InputActive));
@@ -51,7 +52,7 @@ namespace ICD.Connect.Panels.Controls
 					return;
 
 				m_StreamUri = value;
-				Log(eSeverity.Debug, "Stream Uri set to {0}", m_StreamUri);
+				Logger.LogSetTo(eSeverity.Debug, "Stream Uri", m_StreamUri);
 				OnInputStreamUriChanged.Raise(this,
 				                              new StreamUriEventArgs(eConnectionType.Audio | eConnectionType.Video, INPUT_ADDRESS,
 				                                                     m_StreamUri));
