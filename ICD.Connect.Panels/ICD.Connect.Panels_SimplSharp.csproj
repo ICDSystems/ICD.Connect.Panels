@@ -91,7 +91,7 @@
     <Compile Include="Devices\IPanelDeviceSettings.cs" />
     <Compile Include="Devices\ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
-    <None Include="ObfuscationSettings.cs" />
+    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="SigCallbackManager.cs" />
     <Compile Include="SigCollections\IDeviceSigCollections.cs" />
     <Compile Include="SigCollections\ISigCollectionBase.cs" />

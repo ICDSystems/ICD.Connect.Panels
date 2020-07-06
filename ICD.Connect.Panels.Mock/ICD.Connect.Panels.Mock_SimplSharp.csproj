@@ -78,7 +78,7 @@
     <Compile Include="MockSigs.cs" />
     <Compile Include="MockSmartObject.cs" />
     <Compile Include="MockSmartObjectCollection.cs" />
-    <None Include="ObfuscationSettings.cs" />
+    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
