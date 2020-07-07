@@ -74,7 +74,7 @@
     <Compile Include="IPanelServerDevice.cs" />
     <Compile Include="IPanelServerDeviceSettings.cs" />
     <Compile Include="KrangPlugin.cs" />
-    <None Include="ObfuscationSettings.cs" />
+    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Osd\OsdPanelDevice.cs" />
     <Compile Include="Osd\OsdPanelDeviceSettings.cs" />
     <Compile Include="PanelClient\PanelClientDevice.cs" />
