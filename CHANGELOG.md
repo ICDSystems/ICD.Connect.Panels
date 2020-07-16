@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+ - XPanels ignore Crestron IsOnline feedback since they are used for diagnostics and we don't want to pollute telemetry
+
 ## [8.0.0] - 2020-06-19
 ### Added
  - Added WebPanelServerDevice for hosting WebSocket panels
