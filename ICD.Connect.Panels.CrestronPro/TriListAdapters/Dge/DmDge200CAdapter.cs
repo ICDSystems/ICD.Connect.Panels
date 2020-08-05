@@ -1,7 +1,7 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using System;
 using ICD.Connect.Misc.CrestronPro.Devices;
 using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
-#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 using Crestron.SimplSharpPro.DM;

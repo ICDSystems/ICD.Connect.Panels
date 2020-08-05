@@ -1,5 +1,5 @@
-﻿using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
+using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif

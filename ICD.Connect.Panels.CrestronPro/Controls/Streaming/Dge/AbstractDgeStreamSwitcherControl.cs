@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
+using ICD.Connect.Panels.Crestron.Controls.Streaming.Dge;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
 using ICD.Connect.Routing;
