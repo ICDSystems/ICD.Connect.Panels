@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Using new logging context
  - Panels are now Devices, no longer treating Panels as a distinct subset of devices
 
+## [7.5.1] - 2020-08-06
+### Changed
+ - Moved DgeX00 interfaces into non-pro project to fix downstream dependency issues
+
 ## [7.5.0] - 2020-06-30
 ### Added
  - Added AbstractDge100Adapter, Dge100 & DmDge200C adapters

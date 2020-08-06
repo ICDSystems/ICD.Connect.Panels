@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObfuscationSettings.cs" />
+    <Compile Include="Controls\Streaming\Dge\IDgeX00StreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\IFTTouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\IMPC3BasicTouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\IMPC3x101TouchScreenControl.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Controls\TouchScreens\ITSCW730TouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\MPC3BasicTouchScreenControlConsole.cs" />
     <Compile Include="Controls\TouchScreens\MPC3x101TouchScreenControlConsole.cs" />
+    <Compile Include="Devices\Dge\IDgeX00Adapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
@@ -95,6 +97,14 @@
     <ProjectReference Include="..\..\ICD.Connect.Misc\ICD.Connect.Misc\ICD.Connect.Misc_SimplSharp.csproj">
       <Project>{3BAE6352-77B5-499A-9DA5-2AB198F53183}</Project>
       <Name>ICD.Connect.Misc_SimplSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ICD.Connect.Routing\ICD.Connect.Routing\ICD.Connect.Routing_SimplSharp.csproj">
+      <Project>{B0C0CA1C-FA55-4BEA-8A8B-EDB2141C523E}</Project>
+      <Name>ICD.Connect.Routing_SimplSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ICD.Connect.Settings\ICD.Connect.Settings\ICD.Connect.Settings_SimplSharp.csproj">
+      <Project>{5B84EB3C-1C3A-4C4D-98C2-69F67CF51D5A}</Project>
+      <Name>ICD.Connect.Settings_SimplSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\ICD.Connect.Telemetry\ICD.Connect.Telemetry\ICD.Connect.Telemetry_SimplSharp.csproj">
       <Project>{9512C0A5-F966-4AC6-9668-62C6F343B0CD}</Project>

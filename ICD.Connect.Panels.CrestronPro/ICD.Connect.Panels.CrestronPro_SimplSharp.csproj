@@ -102,7 +102,6 @@
     <Compile Include="Controls\Streaming\Dge\AbstractDgeStreamSwitcherControl.cs" />
     <Compile Include="Controls\Streaming\Dge\Dge100StreamSwitcherControl.cs" />
     <Compile Include="Controls\Streaming\Dge\DmDge200CStreamSwitcherControl.cs" />
-    <Compile Include="Controls\Streaming\Dge\IDgeX00StreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\AbstractThreeSeriesTouchScreenControl.cs" />
     <Compile Include="KrangPlugin.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\AbstractFt5ButtonBacklightControl.cs" />
