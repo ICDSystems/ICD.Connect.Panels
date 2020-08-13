@@ -1,5 +1,6 @@
 ﻿using System;
 using ICD.Connect.Misc.CrestronPro.Devices;
+using ICD.Connect.Panels.Crestron.Devices.Dge;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
@@ -127,14 +128,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 	{
 	}
 
-	public interface IDgeX00Adapter : ITriListAdapter, IPortParent
-	{
 
-
-	}
 
 #if SIMPLSHARP
-	public interface IDgeX00Adapter<TPanel> : IDgeX00Adapter
+	public interface IDgeX00Adapter<TPanel> : IDgeX00Adapter, ITriListAdapter, IPortParent
 		where TPanel : Dge100
 	{
 		TPanel Dge { get; }

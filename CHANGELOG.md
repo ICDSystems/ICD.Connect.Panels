@@ -6,8 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+
 ### Changed
  - XPanels ignore Crestron IsOnline feedback since they are used for diagnostics and we don't want to pollute telemetry
+
+## [8.0.1] - 2020-08-13
+### Changed
+ - Telemetry namespace change
+ - Updated NetworkPro dependency dlls
 
 ## [8.0.0] - 2020-06-19
 ### Added
@@ -17,6 +23,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - MockPanelDevice now implements IMockDevice
  - Using new logging context
  - Panels are now Devices, no longer treating Panels as a distinct subset of devices
+
+## [7.5.1] - 2020-08-06
+### Changed
+ - Moved DgeX00 interfaces into non-pro project to fix downstream dependency issues
 
 ## [7.5.0] - 2020-06-30
 ### Added

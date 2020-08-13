@@ -1,8 +1,8 @@
-using System;
+﻿using System;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Routing;
 
-namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
+namespace ICD.Connect.Panels.Crestron.Controls.Streaming.Dge
 {
 	public delegate bool RouteDelegate(RouteOperation info);
 

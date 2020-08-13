@@ -1,9 +1,9 @@
-﻿using System;
+﻿#if SIMPLSHARP
+using System;
 using ICD.Connect.Devices.Controls;
+using ICD.Connect.Settings;
 using ICD.Connect.Misc.CrestronPro.Devices;
 using ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge;
-using ICD.Connect.Settings;
-#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 using Crestron.SimplSharpPro.DM;
