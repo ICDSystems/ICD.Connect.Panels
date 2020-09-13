@@ -1,6 +1,6 @@
 ﻿using ICD.Connect.Devices.Controls;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.HardButtons
 {
 	public interface IHardButtonBacklightControl : IDeviceControl
 	{

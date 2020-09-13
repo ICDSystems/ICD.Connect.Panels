@@ -5,7 +5,7 @@ using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Protocol.Sigs;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Panels
 {
 	public sealed class PanelControl : AbstractPanelControl<IPanelDevice>
 	{

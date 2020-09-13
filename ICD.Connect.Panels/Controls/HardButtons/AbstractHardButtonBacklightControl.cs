@@ -1,7 +1,7 @@
 ﻿using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.HardButtons
 {
 	public abstract class AbstractHardButtonBacklightControl<TParent> : AbstractDeviceControl<TParent>,
 	                                                                    IHardButtonBacklightControl

@@ -7,7 +7,7 @@ using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Protocol.Sigs;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Sigs
 {
 	public abstract class AbstractSigControl<TParent> : AbstractDeviceControl<TParent>, ISigControl
 		where TParent : IDevice

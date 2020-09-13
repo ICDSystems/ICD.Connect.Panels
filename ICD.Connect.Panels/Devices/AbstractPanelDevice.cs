@@ -4,6 +4,8 @@ using System.Linq;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Panels.Controls;
+using ICD.Connect.Panels.Controls.Panels;
+using ICD.Connect.Panels.Controls.Sigs;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Panels.SmartObjects;
 

@@ -1,6 +1,7 @@
 ﻿using ICD.Common.Utils;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Devices.EventArguments;
+using ICD.Connect.Panels.Controls.HardButtons;
 #if SIMPLSHARP
 using System;
 using System.Collections.Generic;

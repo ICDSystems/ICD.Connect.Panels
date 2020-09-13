@@ -1,4 +1,5 @@
 ﻿using System;
+using ICD.Connect.Devices.Controls.Power;
 using ICD.Connect.Settings;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro.UI;

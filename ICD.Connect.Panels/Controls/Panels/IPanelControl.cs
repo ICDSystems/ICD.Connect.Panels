@@ -1,7 +1,8 @@
 ﻿using ICD.Common.Properties;
+using ICD.Connect.Panels.Controls.Sigs;
 using ICD.Connect.Panels.SmartObjectCollections;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Panels
 {
 	public interface IPanelControl : ISigControl
 	{

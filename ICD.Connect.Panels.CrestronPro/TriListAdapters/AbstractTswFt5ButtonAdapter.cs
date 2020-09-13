@@ -5,6 +5,7 @@ using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
+using ICD.Connect.Devices.Controls.Power;
 using ICD.Connect.Devices.Telemetry;
 using ICD.Connect.Settings;
 using ICD.Connect.Telemetry.Attributes;
