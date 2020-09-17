@@ -1,8 +1,7 @@
 ﻿using ICD.Connect.Conferencing.Controls.Dialing;
-using ICD.Connect.Devices.Controls.Power;
+using ICD.Connect.Panels.Controls.Backlight;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro.DeviceSupport;
-using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 #endif
@@ -37,7 +36,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected override IPowerDeviceControl InstantiateBacklightControl(int id)
+		protected override IBacklightDeviceControl InstantiateBacklightControl(int id)
 		{
 			return new TswFt5ButtonSystemBacklightControl(this, id);
 		}

@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro.UI;
 using ICD.Connect.API.Commands;
-using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X60;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons

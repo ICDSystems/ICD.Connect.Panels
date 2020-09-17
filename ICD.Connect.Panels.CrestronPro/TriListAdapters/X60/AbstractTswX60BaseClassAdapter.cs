@@ -1,5 +1,5 @@
 ﻿using System;
-using ICD.Connect.Devices.Controls.Power;
+using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Settings;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro.UI;
@@ -43,7 +43,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected override IPowerDeviceControl InstantiateBacklightControl(int id)
+		protected override IBacklightDeviceControl InstantiateBacklightControl(int id)
 		{
 			return new TswX60BaseBacklightControl(this, id);
 		}

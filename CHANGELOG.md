@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+ - Added backlight device controls
+
+### Changed
+ - Replaced panel power controls with backlight controls
+
 ## [8.0.1] - 2020-08-13
 ### Changed
  - Telemetry namespace change

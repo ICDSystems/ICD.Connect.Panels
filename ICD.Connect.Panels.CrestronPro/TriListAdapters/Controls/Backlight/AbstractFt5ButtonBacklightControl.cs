@@ -1,17 +1,16 @@
-﻿using ICD.Connect.Devices.Controls.Power;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Common.Properties;
-using ICD.Connect.Devices.Controls;
 using ICD.Connect.Misc.CrestronPro.Extensions;
+using ICD.Connect.Panels.Controls.Backlight;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
 	public abstract class AbstractFt5ButtonBacklightControl<TParent, TPanel, TSystemSigs> :
-		AbstractPowerDeviceControl<TParent>
+		AbstractBacklightDeviceControl<TParent>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TSystemSigs : TsxSystemReservedSigs
@@ -59,9 +58,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 
 		/// <summary>
-		/// Powers on the device.
+		/// Turns on the backlight.
 		/// </summary>
-		protected override void PowerOnFinal()
+		public override void BacklightOn()
 		{
 			if (Panel == null)
 				throw new InvalidOperationException("No panel");
@@ -73,9 +72,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		}
 
 		/// <summary>
-		/// Powers off the device.
+		/// Turns off the backlight.
 		/// </summary>
-		protected override void PowerOffFinal()
+		public override void BacklightOff()
 		{
 			if (Panel == null)
 				throw new InvalidOperationException("No panel");
@@ -214,9 +213,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// </summary>
 		private void UpdateIsPowered()
 		{
-			bool isPowered = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
+			bool backlightOn = Panel != null && Sigs != null && Sigs.BacklightOnFeedback.GetBoolValueOrDefault();
 
-			PowerState = isPowered ? ePowerState.PowerOn : ePowerState.PowerOff;
+			BacklightState = backlightOn ? eBacklightState.BacklightOn : eBacklightState.BacklightOff;
 		}
 
 		/// <summary>

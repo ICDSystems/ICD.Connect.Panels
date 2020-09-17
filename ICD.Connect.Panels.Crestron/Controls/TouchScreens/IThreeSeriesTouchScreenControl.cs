@@ -1,5 +1,4 @@
-﻿using ICD.Connect.Panels.Controls;
-using ICD.Connect.Panels.Controls.Panels;
+﻿using ICD.Connect.Panels.Controls.Panels;
 
 namespace ICD.Connect.Panels.Crestron.Controls.TouchScreens
 {

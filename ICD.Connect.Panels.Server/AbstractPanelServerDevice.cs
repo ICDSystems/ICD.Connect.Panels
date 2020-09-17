@@ -8,7 +8,6 @@ using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
-using ICD.Connect.Panels.Controls;
 using ICD.Connect.Panels.Controls.Panels;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.Server.PanelClient;
