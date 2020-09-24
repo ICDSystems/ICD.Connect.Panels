@@ -3,9 +3,9 @@ using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls.Dialing;
-using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Devices.Telemetry;
+using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Settings;
 using ICD.Connect.Telemetry.Attributes;
 #if SIMPLSHARP
@@ -252,7 +252,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected abstract IPowerDeviceControl InstantiateBacklightControl(int id);
+		protected abstract IBacklightDeviceControl InstantiateBacklightControl(int id);
 
 		#endregion
 	}

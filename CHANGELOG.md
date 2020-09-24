@@ -6,9 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-
 ### Changed
  - XPanels ignore Crestron IsOnline feedback since they are used for diagnostics and we don't want to pollute telemetry
+
+## [9.0.0] - 2020-09-24
+### Added
+ - Added backlight device controls
+
+### Changed
+ - Replaced panel power controls with backlight controls
 
 ## [8.0.1] - 2020-08-13
 ### Changed

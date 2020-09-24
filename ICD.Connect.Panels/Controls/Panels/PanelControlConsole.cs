@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Panels
 {
 	public static class PanelControlConsole
 	{

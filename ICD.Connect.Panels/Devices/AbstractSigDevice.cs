@@ -6,7 +6,7 @@ using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
-using ICD.Connect.Panels.Controls;
+using ICD.Connect.Panels.Controls.Sigs;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SigCollections;
 using ICD.Connect.Protocol.Sigs;

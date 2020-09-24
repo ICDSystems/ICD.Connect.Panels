@@ -69,22 +69,27 @@
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\AbstractPanelControl.cs" />
+    <Compile Include="Controls\Backlight\AbstractBacklightDeviceControl.cs" />
+    <Compile Include="Controls\Backlight\IBacklightDeviceControl.cs" />
+    <Compile Include="Controls\Backlight\BacklightDeviceControlActivities.cs" />
+    <Compile Include="Controls\Backlight\BacklightDeviceControlConsole.cs" />
+    <Compile Include="Controls\Panels\AbstractPanelControl.cs" />
     <Compile Include="Controls\PanelStreamRouteDestinationControl.cs" />
-    <Compile Include="Controls\AbstractSigControl.cs" />
-    <Compile Include="Controls\IPanelControl.cs" />
-    <Compile Include="Controls\ISigControl.cs" />
-    <Compile Include="Controls\PanelControl.cs" />
-    <Compile Include="Controls\PanelControlConsole.cs" />
-    <Compile Include="Controls\SigControl.cs" />
-    <Compile Include="Controls\SigControlConsole.cs" />
+    <Compile Include="Controls\Sigs\AbstractSigControl.cs" />
+    <Compile Include="Controls\Panels\IPanelControl.cs" />
+    <Compile Include="Controls\Sigs\ISigControl.cs" />
+    <Compile Include="Controls\Panels\PanelControl.cs" />
+    <Compile Include="Controls\Panels\PanelControlConsole.cs" />
+    <Compile Include="Controls\Sigs\SigControl.cs" />
+    <Compile Include="Controls\Sigs\SigControlConsole.cs" />
     <Compile Include="Devices\AbstractPanelDeviceSettings.cs" />
     <Compile Include="Devices\AbstractSigDevice.cs" />
     <Compile Include="CommonJoins.cs" />
-    <Compile Include="Controls\AbstractHardButtonBacklightControl.cs" />
-    <Compile Include="Controls\IHardButtonBacklightControl.cs" />
+    <Compile Include="Controls\HardButtons\AbstractHardButtonBacklightControl.cs" />
+    <Compile Include="Controls\HardButtons\IHardButtonBacklightControl.cs" />
     <Compile Include="Devices\PanelDeviceConsole.cs" />
     <Compile Include="Devices\SigDeviceConsole.cs" />
+    <Compile Include="EventArguments\BacklightDeviceControlBacklightStateApiEventArgs.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="Devices\AbstractPanelDevice.cs" />
     <Compile Include="Devices\IPanelDevice.cs" />
@@ -92,6 +97,8 @@
     <Compile Include="Devices\ISigDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
     <Compile Include="ObfuscationSettings.cs" />
+    <Compile Include="Proxies\Controls\Backlight\BacklightDeviceControlApi.cs" />
+    <Compile Include="Proxies\Controls\Backlight\ProxyBacklightDeviceControl.cs" />
     <Compile Include="SigCallbackManager.cs" />
     <Compile Include="SigCollections\IDeviceSigCollections.cs" />
     <Compile Include="SigCollections\ISigCollectionBase.cs" />

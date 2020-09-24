@@ -4,7 +4,7 @@ using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Protocol.Sigs;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Sigs
 {
 	public sealed class SigControl : AbstractSigControl<ISigDevice>
 	{

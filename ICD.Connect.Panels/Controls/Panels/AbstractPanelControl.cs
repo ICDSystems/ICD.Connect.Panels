@@ -2,9 +2,10 @@
 using ICD.Connect.API.Commands;
 using ICD.Connect.API.Nodes;
 using ICD.Connect.Devices;
+using ICD.Connect.Panels.Controls.Sigs;
 using ICD.Connect.Panels.SmartObjectCollections;
 
-namespace ICD.Connect.Panels.Controls
+namespace ICD.Connect.Panels.Controls.Panels
 {
 	public abstract class AbstractPanelControl<TParent> : AbstractSigControl<TParent>, IPanelControl
 		where TParent : IDevice
