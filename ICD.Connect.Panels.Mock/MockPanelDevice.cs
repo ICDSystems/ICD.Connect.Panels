@@ -21,6 +21,9 @@ namespace ICD.Connect.Panels.Mock
 		private readonly IDeviceBooleanInputCollection m_BooleanInput;
 		private readonly IDeviceUShortInputCollection m_UShortInput;
 		private readonly IDeviceStringInputCollection m_StringInput;
+		private readonly IDeviceBooleanOutputCollection m_BooleanOutput;
+		private readonly IDeviceUShortOutputCollection m_UShortOutput;
+		private readonly IDeviceStringOutputCollection m_StringOutput;
 		private readonly ISmartObjectCollection m_SmartObjects;
 		private bool m_IsOnline;
 
@@ -44,6 +47,21 @@ namespace ICD.Connect.Panels.Mock
 		public override IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
 
 		/// <summary>
+		/// Collection of Boolean Outputs sent from the device.
+		/// </summary>
+		public override IDeviceBooleanOutputCollection BooleanOutput { get { return m_BooleanOutput; } }
+
+		/// <summary>
+		/// Collection of Integer Outputs sent from the device.
+		/// </summary>
+		public override IDeviceUShortOutputCollection UShortOutput { get { return m_UShortOutput; } }
+
+		/// <summary>
+		/// Collection of String Outputs sent from the device.
+		/// </summary>
+		public override IDeviceStringOutputCollection StringOutput { get { return m_StringOutput; } }
+
+		/// <summary>
 		/// Collection containing the loaded SmartObjects of this device.
 		/// </summary>
 		public override ISmartObjectCollection SmartObjects { get { return m_SmartObjects; } }
@@ -58,12 +76,17 @@ namespace ICD.Connect.Panels.Mock
 			m_BooleanInput = new MockBooleanInputCollection();
 			m_UShortInput = new MockUShortInputCollection();
 			m_StringInput = new MockStringInputCollection();
+			m_BooleanOutput = new MockBooleanOutputCollection();
+			m_UShortOutput = new MockUShortOutputCollection();
+			m_StringOutput = new MockStringOutputCollection();
 			m_SmartObjects = new MockSmartObjectCollection();
 
             Subscribe(m_SmartObjects);
 		}
 
-        /// <summary>
+		#region Methods
+
+		/// <summary>
         /// Release resources.
         /// </summary>
         /// <param name="disposing"></param>
@@ -98,6 +121,8 @@ namespace ICD.Connect.Panels.Mock
 			m_IsOnline = isOnline;
 			UpdateCachedOnlineStatus();
 		}
+
+		#endregion
 
 		#region SmartObject Callbacks
 

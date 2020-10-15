@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Utils.Services;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
@@ -24,6 +25,18 @@ namespace ICD.Connect.Panels.SmartObjects
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<SigInfo> GetInputSigInfo();
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<SigInfo> GetOutputSigInfo();
 
 		/// <summary>
 		/// Clears the assigned input sig values.

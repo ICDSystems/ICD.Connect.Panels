@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Extensions;
@@ -119,6 +120,33 @@ namespace ICD.Connect.Panels.Server
 
 			string serial = JsonUtils.SerializeMessage(sigInfo, SIG_MESSAGE);
 			SendData(serial);
+		}
+
+		/// <summary>
+		/// Gets all of the cached input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetCachedInputSigs()
+		{
+			return m_CacheSection.Execute(() => m_Cache.ToArray());
+		}
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			return m_CacheSection.Execute(() => m_Cache.Where(s => s.SmartObject == 0).ToArray());
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			return m_SigCallbacks.GetOutputSigs();
 		}
 
 		/// <summary>

@@ -17,6 +17,27 @@ namespace ICD.Connect.Panels.Controls.Sigs
 		/// </summary>
 		public abstract event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
+		#region Properties
+
+		/// <summary>
+		/// Gets the time that the user last interacted with the panel.
+		/// </summary>
+		public abstract DateTime? LastOutput { get; }
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<SigInfo> GetInputSigInfo();
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public abstract IEnumerable<SigInfo> GetOutputSigInfo();
+
+		#endregion
+
 		/// <summary>
 		/// Constructor.
 		/// </summary>
@@ -27,10 +48,7 @@ namespace ICD.Connect.Panels.Controls.Sigs
 		{
 		}
 
-		/// <summary>
-		/// Gets the time that the user last interacted with the panel.
-		/// </summary>
-		public abstract DateTime? LastOutput { get; }
+		#region Methods
 
 		/// <summary>
 		/// Clears the assigned input sig values.
@@ -75,6 +93,8 @@ namespace ICD.Connect.Panels.Controls.Sigs
 		/// <param name="number"></param>
 		/// <param name="value"></param>
 		public abstract void SendInputDigital(uint number, bool value);
+
+		#endregion
 
 		#region Console
 

@@ -62,6 +62,27 @@ namespace ICD.Connect.Panels
 		}
 
 		/// <summary>
+		/// Gets all of the registered output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetOutputSigs()
+		{
+			m_RegistrationSection.Enter();
+
+			try
+			{
+				return m_SigToCallback.SelectMany(byNumber => byNumber.Value
+				                                                      .Select(byType =>
+				                                                              new SigInfo(byType.Key, byNumber.Key, null, 0)))
+				                      .ToArray();
+			}
+			finally
+			{
+				m_RegistrationSection.Leave();
+			}
+		}
+
+		/// <summary>
 		/// Raises the callbacks registered with the signature.
 		/// </summary>
 		/// <param name="sigInfo"></param>

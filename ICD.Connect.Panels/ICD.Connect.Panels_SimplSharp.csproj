@@ -102,6 +102,7 @@
     <Compile Include="SigCallbackManager.cs" />
     <Compile Include="SigCollections\IDeviceSigCollections.cs" />
     <Compile Include="SigCollections\ISigCollectionBase.cs" />
+    <Compile Include="SigInputOutputConsole.cs" />
     <Compile Include="SigIo\AbstractSigOutput.cs" />
     <Compile Include="SigIo\AnalogSigInputOutput.cs" />
     <Compile Include="SigIo\DigitalSigInputOutput.cs" />

@@ -1,4 +1,5 @@
-﻿using ICD.Common.Utils.Services.Logging;
+﻿using System.Collections.Generic;
+using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
 #if SIMPLSHARP
 using System;
@@ -24,6 +25,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
 		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
 		private readonly DeviceStringInputCollectionAdapter m_StringInput;
+
+		private readonly DeviceBooleanOutputCollectionAdapter m_BooleanOutput;
+		private readonly DeviceUShortOutputCollectionAdapter m_UShortOutput;
+		private readonly DeviceStringOutputCollectionAdapter m_StringOutput;
 
 		#region Properties
 
@@ -64,6 +69,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_UShortInput = new DeviceUShortInputCollectionAdapter();
 			m_StringInput = new DeviceStringInputCollectionAdapter();
 
+			m_BooleanOutput = new DeviceBooleanOutputCollectionAdapter();
+			m_UShortOutput = new DeviceUShortOutputCollectionAdapter();
+			m_StringOutput = new DeviceStringOutputCollectionAdapter();
+
 			m_SigCallbacks = new SigCallbackManager();
 			m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
 
@@ -72,6 +81,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_BooleanInput.SetCollection(m_SmartObject.BooleanInput);
 			m_UShortInput.SetCollection(m_SmartObject.UShortInput);
 			m_StringInput.SetCollection(m_SmartObject.StringInput);
+
+			m_BooleanOutput.SetCollection(m_SmartObject.BooleanOutput);
+			m_UShortOutput.SetCollection(m_SmartObject.UShortOutput);
+			m_StringOutput.SetCollection(m_SmartObject.StringOutput);
 
 			Subscribe(m_SmartObject);
 		}
@@ -86,6 +99,38 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			Unsubscribe(m_SmartObject);
 
 			m_SigCallbacks.Clear();
+		}
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			foreach (IBoolInputSig sig in m_BooleanInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IStringInputSig sig in m_StringInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IUShortInputSig sig in m_UShortInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			foreach (IBoolOutputSig sig in m_BooleanOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IStringOutputSig sig in m_StringOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IUShortOutputSig sig in m_UShortOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
 		}
 
 		/// <summary>

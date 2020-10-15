@@ -48,6 +48,21 @@ namespace ICD.Connect.Panels.Devices
 		/// </summary>
 		public abstract IDeviceStringInputCollection StringInput { get; }
 
+		/// <summary>
+		/// Collection of Boolean Outputs sent from the device.
+		/// </summary>
+		public abstract IDeviceBooleanOutputCollection BooleanOutput { get; }
+
+		/// <summary>
+		/// Collection of Integer Outputs sent from the device.
+		/// </summary>
+		public abstract IDeviceUShortOutputCollection UShortOutput { get; }
+
+		/// <summary>
+		/// Collection of String Outputs sent from the device.
+		/// </summary>
+		public abstract IDeviceStringOutputCollection StringOutput { get; }
+
 		#endregion
 
 		/// <summary>
@@ -81,6 +96,38 @@ namespace ICD.Connect.Panels.Devices
 			base.DisposeFinal(disposing);
 
 			m_SigCallbacks.Clear();
+		}
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			foreach (IBoolInputSig item in BooleanInput)
+				yield return new SigInfo(item, 0);
+
+			foreach (IUShortInputSig item in UShortInput)
+				yield return new SigInfo(item, 0);
+
+			foreach (IStringInputSig item in StringInput)
+				yield return new SigInfo(item, 0);
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			foreach (IBoolOutputSig item in BooleanOutput)
+				yield return new SigInfo(item, 0);
+
+			foreach (IUShortOutputSig item in UShortOutput)
+				yield return new SigInfo(item, 0);
+
+			foreach (IStringOutputSig item in StringOutput)
+				yield return new SigInfo(item, 0);
 		}
 
 		/// <summary>
@@ -234,6 +281,7 @@ namespace ICD.Connect.Panels.Devices
 		{
 			base.BuildConsoleStatus(addRow);
 
+			SigInputOutputConsole.BuildConsoleStatus(this, addRow);
 			SigDeviceConsole.BuildConsoleStatus(this, addRow);
 		}
 
@@ -244,6 +292,9 @@ namespace ICD.Connect.Panels.Devices
 		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
 		{
 			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			foreach (IConsoleCommand command in SigInputOutputConsole.GetConsoleCommands(this))
 				yield return command;
 
 			foreach (IConsoleCommand command in SigDeviceConsole.GetConsoleCommands(this))
@@ -266,6 +317,9 @@ namespace ICD.Connect.Panels.Devices
 		public override IEnumerable<IConsoleNodeBase> GetConsoleNodes()
 		{
 			foreach (IConsoleNodeBase node in GetBaseConsoleNodes())
+				yield return node;
+
+			foreach (IConsoleNodeBase node in SigInputOutputConsole.GetConsoleNodes(this))
 				yield return node;
 
 			foreach (IConsoleNodeBase node in SigDeviceConsole.GetConsoleNodes(this))

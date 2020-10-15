@@ -16,7 +16,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 	    {
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-	        MockSmartObject mockSmartObject = new MockSmartObject();
+	        MockSmartObject mockSmartObject = new MockSmartObject(1);
 	        mockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
 
 			SigInfo info = new SigInfo(1, 1, true);
@@ -29,7 +29,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 	    [Test]
 	    public void LastOutputTest()
 	    {
-		    MockSmartObject mockSmartObject = new MockSmartObject();
+		    MockSmartObject mockSmartObject = new MockSmartObject(1);
 			Assert.AreEqual(null, mockSmartObject.LastOutput);
 
 			mockSmartObject.RaiseOutputSigChange(new SigInfo());
@@ -42,7 +42,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 		{
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-			MockSmartObject mockSmartObject = new MockSmartObject();
+			MockSmartObject mockSmartObject = new MockSmartObject(1);
 			Action<SigCallbackManager, SigInfoEventArgs> callback = (callbackManager, args) => callbackArgs.Add(args);
 			mockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
 
@@ -64,7 +64,7 @@ namespace ICD.Connect.Panels.Mock.Tests
 		{
 			List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-			MockSmartObject mockSmartObject = new MockSmartObject();
+			MockSmartObject mockSmartObject = new MockSmartObject(1);
 			Action<SigCallbackManager, SigInfoEventArgs> callback = (callbackManager, args) => callbackArgs.Add(args);
 
 			mockSmartObject.RegisterOutputSigChangeCallback(1, eSigType.Digital, callback);
@@ -81,7 +81,7 @@ namespace ICD.Connect.Panels.Mock.Tests
         {
             List<SigInfoEventArgs> callbackArgs = new List<SigInfoEventArgs>();
 
-            MockSmartObject mockSmartObject = new MockSmartObject();
+            MockSmartObject mockSmartObject = new MockSmartObject(1);
             mockSmartObject.OnAnyOutput += (sender, args) => callbackArgs.Add(args);
 
             SigInfo info = new SigInfo(1, 1, true);
@@ -94,7 +94,7 @@ namespace ICD.Connect.Panels.Mock.Tests
         [Test]
         public void ClearTest()
         {
-            MockSmartObject mockSmartObject = new MockSmartObject();
+            MockSmartObject mockSmartObject = new MockSmartObject(1);
 
             mockSmartObject.SendInputDigital(1,true);
             mockSmartObject.Clear();

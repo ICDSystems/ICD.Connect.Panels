@@ -42,6 +42,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private readonly DeviceBooleanInputCollectionAdapter m_BooleanInput;
 		private readonly DeviceUShortInputCollectionAdapter m_UShortInput;
 		private readonly DeviceStringInputCollectionAdapter m_StringInput;
+		private readonly DeviceBooleanOutputCollectionAdapter m_BooleanOutput;
+		private readonly DeviceUShortOutputCollectionAdapter m_UShortOutput;
+		private readonly DeviceStringOutputCollectionAdapter m_StringOutput;
 		private readonly SmartObjectCollectionAdapter m_SmartObjects;
 
 		private TPanel m_Panel;
@@ -109,6 +112,51 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		}
 
 		/// <summary>
+		/// Collection of Boolean Outputs sent from the panel.
+		/// </summary>
+		public override IDeviceBooleanOutputCollection BooleanOutput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_BooleanOutput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
+
+		/// <summary>
+		/// Collection of Integer Outputs sent from the panel.
+		/// </summary>
+		public override IDeviceUShortOutputCollection UShortOutput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_UShortOutput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
+
+		/// <summary>
+		/// Collection of String Outputs sent from the panel.
+		/// </summary>
+		public override IDeviceStringOutputCollection StringOutput
+		{
+			get
+			{
+#if SIMPLSHARP
+				return m_StringOutput;
+#else
+				throw new NotSupportedException();
+#endif
+			}
+		}
+
+		/// <summary>
 		/// Collection containing the loaded SmartObjects of this panel.
 		/// </summary>
 		public override ISmartObjectCollection SmartObjects
@@ -135,6 +183,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_BooleanInput = new DeviceBooleanInputCollectionAdapter();
 			m_UShortInput = new DeviceUShortInputCollectionAdapter();
 			m_StringInput = new DeviceStringInputCollectionAdapter();
+			m_BooleanOutput = new DeviceBooleanOutputCollectionAdapter();
+			m_UShortOutput = new DeviceUShortOutputCollectionAdapter();
+			m_StringOutput = new DeviceStringOutputCollectionAdapter();
 
 			Subscribe(m_SmartObjects);
 #endif
@@ -181,6 +232,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 			m_BooleanInput.SetCollection(Panel == null ? null : Panel.BooleanInput);
 			m_UShortInput.SetCollection(Panel == null ? null : Panel.UShortInput);
 			m_StringInput.SetCollection(Panel == null ? null : Panel.StringInput);
+			m_BooleanOutput.SetCollection(Panel == null ? null : Panel.BooleanOutput);
+			m_UShortOutput.SetCollection(Panel == null ? null : Panel.UShortOutput);
+			m_StringOutput.SetCollection(Panel == null ? null : Panel.StringOutput);
 			m_SmartObjects.SetSmartObjects(Panel == null ? null : Panel.SmartObjects);
 
 			// Set the panel to "offline" visually by default.

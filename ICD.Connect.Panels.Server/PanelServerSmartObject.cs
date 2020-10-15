@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Panels.EventArguments;
 using ICD.Connect.Panels.SmartObjects;
@@ -53,6 +55,24 @@ namespace ICD.Connect.Panels.Server
 		}
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			return m_Device.GetCachedInputSigs().Where(s => s.SmartObject == m_SmartObjectId);
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			return m_SigCallbacks.GetOutputSigs();
+		}
 
 		/// <summary>
 		/// Clears the assigned input sig values.

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Panels.Devices;
 using ICD.Connect.Panels.EventArguments;
@@ -13,10 +14,14 @@ namespace ICD.Connect.Panels.Controls.Sigs
 		/// </summary>
 		public override event EventHandler<SigInfoEventArgs> OnAnyOutput;
 
+		#region Properties
+
 		/// <summary>
 		/// Gets the time that the user last interacted with the panel.
 		/// </summary>
 		public override DateTime? LastOutput { get { return Parent.LastOutput; } }
+
+		#endregion
 
 		/// <summary>
 		/// Constructor.
@@ -29,6 +34,8 @@ namespace ICD.Connect.Panels.Controls.Sigs
 			Parent.OnAnyOutput += ParentOnAnyOutput;
 		}
 
+		#region Methods
+
 		/// <summary>
 		/// Override to release resources.
 		/// </summary>
@@ -40,6 +47,24 @@ namespace ICD.Connect.Panels.Controls.Sigs
 			base.DisposeFinal(disposing);
 
 			Parent.OnAnyOutput -= OnAnyOutput;
+		}
+
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			return Parent.GetInputSigInfo();
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			return Parent.GetOutputSigInfo();
 		}
 
 		/// <summary>
@@ -102,6 +127,10 @@ namespace ICD.Connect.Panels.Controls.Sigs
 			Parent.SendInputDigital(number, value);
 		}
 
+		#endregion
+
+		#region Parent Callbacks
+
 		/// <summary>
 		/// Called when the parent device raises any output.
 		/// </summary>
@@ -111,5 +140,7 @@ namespace ICD.Connect.Panels.Controls.Sigs
 		{
 			OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfoEventArgs));
 		}
+
+		#endregion
 	}
 }

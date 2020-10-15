@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ICD.Common.Properties;
 using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Services.Logging;
@@ -15,28 +16,30 @@ namespace ICD.Connect.Panels.Mock
 
 		private readonly SigCallbackManager m_SigCallbacks;
 
-		private IDeviceBooleanInputCollection m_BooleanInput;
-		private IDeviceUShortInputCollection m_UShortInput;
-		private IDeviceStringInputCollection m_StringInput;
-		private uint m_SmartObjectId;
+		private readonly IDeviceBooleanInputCollection m_BooleanInput;
+		private readonly IDeviceUShortInputCollection m_UShortInput;
+		private readonly IDeviceStringInputCollection m_StringInput;
+
+		private readonly IDeviceBooleanOutputCollection m_BooleanOutput;
+		private readonly IDeviceUShortOutputCollection m_UShortOutput;
+		private readonly IDeviceStringOutputCollection m_StringOutput;
+
+		private readonly uint m_SmartObjectId;
 
 		#region Properties
 
 		/// <summary>
 		/// Collection of Boolean Inputs sent to the device.
-		/// 
 		/// </summary>
 		public IDeviceBooleanInputCollection BooleanInput { get { return m_BooleanInput; } }
 
 		/// <summary>
 		/// Collection of Integer Inputs sent to the device.
-		/// 
 		/// </summary>
 		public IDeviceUShortInputCollection UShortInput { get { return m_UShortInput; } }
 
 		/// <summary>
 		/// Collection of String Inputs sent to the device.
-		/// 
 		/// </summary>
 		public IDeviceStringInputCollection StringInput { get { return m_StringInput; } }
 
@@ -50,16 +53,55 @@ namespace ICD.Connect.Panels.Mock
 		/// </summary>
 		public override DateTime? LastOutput { get { return m_SigCallbacks.LastOutput; } }
 
+		/// <summary>
+		/// Gets the created input sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetInputSigInfo()
+		{
+			foreach (IBoolInputSig sig in m_BooleanInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IStringInputSig sig in m_StringInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IUShortInputSig sig in m_UShortInput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+		}
+
+		/// <summary>
+		/// Gets the created output sigs.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<SigInfo> GetOutputSigInfo()
+		{
+			foreach (IBoolOutputSig sig in m_BooleanOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IStringOutputSig sig in m_StringOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+
+			foreach (IUShortOutputSig sig in m_UShortOutput)
+				yield return new SigInfo(sig, (ushort)SmartObjectId);
+		}
+
 		#endregion
 
 		/// <summary>
 		/// Constructor.
 		/// </summary>
-		public MockSmartObject()
+		/// <param name="id"></param>
+		public MockSmartObject(uint id)
 		{
+			m_SmartObjectId = id;
+
 			m_BooleanInput = new MockBooleanInputCollection();
 			m_UShortInput = new MockUShortInputCollection();
 			m_StringInput = new MockStringInputCollection();
+
+			m_BooleanOutput = new MockBooleanOutputCollection();
+			m_UShortOutput = new MockUShortOutputCollection();
+			m_StringOutput = new MockStringOutputCollection();
 
 			m_SigCallbacks = new SigCallbackManager();
 		    m_SigCallbacks.OnAnyCallback += SigCallbacksOnAnyCallback;
@@ -167,31 +209,9 @@ namespace ICD.Connect.Panels.Mock
 			m_SigCallbacks.RaiseSigChangeCallback(sigInfo);
 		}
 
-		[PublicAPI]
-		public void SetBooleanInput(IDeviceBooleanInputCollection collection)
-		{
-			m_BooleanInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetUShortInput(IDeviceUShortInputCollection collection)
-		{
-			m_UShortInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetStringInput(IDeviceStringInputCollection collection)
-		{
-			m_StringInput = collection;
-		}
-
-		[PublicAPI]
-		public void SetSmartObjectId(uint id)
-		{
-			m_SmartObjectId = id;
-		}
-
 		#endregion
+
+		#region Private Methods
 
 		/// <summary>
 		/// Sends the serial data to the panel.
@@ -240,5 +260,7 @@ namespace ICD.Connect.Panels.Mock
 	    {
 	        OnAnyOutput.Raise(this, new SigInfoEventArgs(sigInfo));
 	    }
-    }
+
+		#endregion
+	}
 }

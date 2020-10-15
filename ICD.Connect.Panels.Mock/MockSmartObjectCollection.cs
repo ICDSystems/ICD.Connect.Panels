@@ -38,7 +38,7 @@ namespace ICD.Connect.Panels.Mock
 					ISmartObject smartObject;
 					if (!m_SmartObjects.TryGetValue(id, out smartObject))
 					{
-						smartObject = new MockSmartObject();
+						smartObject = new MockSmartObject(id);
 						m_SmartObjects.Add(id, smartObject);
 
 						if (OnSmartObjectAdded != null)
