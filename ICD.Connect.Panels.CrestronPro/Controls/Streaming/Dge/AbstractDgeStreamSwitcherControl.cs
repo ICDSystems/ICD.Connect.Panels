@@ -174,8 +174,9 @@ namespace ICD.Connect.Panels.CrestronPro.Controls.Streaming.Dge
 			try
 			{
 				Uri currentStream;
+				// Handle null streams for stream or currentStream
 				if (m_StreamUris.TryGetValue(input, out currentStream))
-					changed = !currentStream.Equals(stream);
+					changed = currentStream == null ? stream != null : !currentStream.Equals(stream);
 
 				m_StreamUris[input] = stream;
 
