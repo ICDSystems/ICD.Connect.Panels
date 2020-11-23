@@ -1,13 +1,9 @@
 ﻿using System;
-using ICD.Common.Utils.EventArguments;
-using ICD.Common.Utils.Extensions;
 using ICD.Common.Utils.Xml;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
-using ICD.Connect.Devices.Telemetry;
 using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Settings;
-using ICD.Connect.Telemetry.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
@@ -28,51 +24,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		private const int BACKLIGHT_CONTROL_ID = 2;
 		protected const int HARD_BUTTON_CONTROL_ID = 3;
 
-		[EventTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
-		public event EventHandler<StringEventArgs> OnIpAddressChanged;
-
-		[EventTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
-		public event EventHandler<StringEventArgs> OnMacAddressChanged;
-
 		// Used with settings
 		private bool m_EnableVoip;
-
-		private string m_IpAddress;
-		private string m_MacAddress;
-
-		#region Properties
-
-		[PropertyTelemetry(DeviceTelemetryNames.DEVICE_IP_ADDRESS, null, DeviceTelemetryNames.DEVICE_IP_ADDRESS_CHANGED)]
-		public string IpAddress
-		{
-			get { return m_IpAddress; }
-			private set
-			{
-				if (m_IpAddress == value)
-					return;
-
-				m_IpAddress = value;
-
-				OnIpAddressChanged.Raise(this, new StringEventArgs(value));
-			}
-		}
-
-		[PropertyTelemetry(DeviceTelemetryNames.DEVICE_MAC_ADDRESS, null, DeviceTelemetryNames.DEVICE_MAC_ADDRESS_CHANGED)]
-		public string MacAddress
-		{
-			get { return m_MacAddress; }
-			private set
-			{
-				if (m_MacAddress == value)
-					return;
-
-				m_MacAddress = value;
-
-				OnMacAddressChanged.Raise(this, new StringEventArgs(value));
-			}
-		}
-
-		#endregion
 
 #if SIMPLSHARP
 		#region Panel Callbacks
@@ -85,8 +38,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 		{
 			base.SetPanel(panel);
 
-			IpAddress = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.IpAddressFeedback.StringValue;
-			MacAddress = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.MacAddressFeedback.StringValue;
+			MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).Ipv4Address = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.IpAddressFeedback.StringValue;
+			MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).MacAddress = panel == null ? string.Empty : panel.ExtenderEthernetReservedSigs.MacAddressFeedback.StringValue;
 		}
 
 		/// <summary>
@@ -125,16 +78,16 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
 					switch (args.Sig.Number)
 					{
 						case 17300:
-							IpAddress = args.Sig.StringValue;
+							MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).Ipv4Address = args.Sig.StringValue;
 							break;
 						case 17309:
-							MacAddress = args.Sig.StringValue;
+							MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).MacAddress = args.Sig.StringValue;
 							break;
 					}
 					break;
 				case eSigEvent.StringOutputSigsCleared:
-					IpAddress = null;
-					MacAddress = null;
+					MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).Ipv4Address = null;
+					MonitoredDeviceInfo.NetworkInfo.GetOrAddAdapter(1).MacAddress = null;
 					break;
 			}
 		}
