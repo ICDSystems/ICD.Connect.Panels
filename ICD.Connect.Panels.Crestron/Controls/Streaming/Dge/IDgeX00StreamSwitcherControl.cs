@@ -1,6 +1,6 @@
 ﻿using System;
-using ICD.Connect.Devices.Controls;
 using ICD.Connect.Routing;
+using ICD.Connect.Routing.Controls;
 
 namespace ICD.Connect.Panels.Crestron.Controls.Streaming.Dge
 {
@@ -10,7 +10,7 @@ namespace ICD.Connect.Panels.Crestron.Controls.Streaming.Dge
 
 	public delegate bool SetStreamDelegate(int input, Uri stream);
 
-	public interface IDgeX00StreamSwitcherControl : IDeviceControl
+	public interface IDgeX00StreamSwitcherControl : IRouteSwitcherControl
 	{
 		RouteDelegate UiRoute { get; set; }
 
