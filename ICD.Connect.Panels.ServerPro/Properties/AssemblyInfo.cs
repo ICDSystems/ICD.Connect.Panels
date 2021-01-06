@@ -3,5 +3,5 @@ using System.Reflection;
 [assembly: AssemblyTitle("ICD.Connect.Panels.ServerPro")]
 [assembly: AssemblyCompany("ICD Systems")]
 [assembly: AssemblyProduct("ICD.Connect.Panels.ServerPro")]
-[assembly: AssemblyCopyright("Copyright © ICD Systems 2020")]
+[assembly: AssemblyCopyright("Copyright © ICD Systems 2021")]
 [assembly: AssemblyVersion("9.0.0.0")]
