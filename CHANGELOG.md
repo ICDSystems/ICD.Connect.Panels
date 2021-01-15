@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.1.0] - 2021-01-14
 ### Changed
  - XPanels ignore Crestron IsOnline feedback since they are used for diagnostics and we don't want to pollute telemetry
  - AbstractTswFt5ButtonAdapter - Removing ip and mac address propreties and using Monitored Device Telemetry instead
