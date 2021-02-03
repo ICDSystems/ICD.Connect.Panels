@@ -104,6 +104,12 @@
     <Compile Include="Controls\Streaming\Dge\DmDge200CStreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\AbstractThreeSeriesTouchScreenControl.cs" />
     <Compile Include="KrangPlugin.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\AbstractTswFt5ButtonAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\Telemetry\CrestronProjectInfo.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\Telemetry\ICrestronProjectInfo.cs" />
+    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\Telemetry\TswFt5ButtonAdapterTelemetryNames.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\AbstractFt5ButtonBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswFt5ButtonBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswFt5ButtonSystemBacklightControl.cs" />
