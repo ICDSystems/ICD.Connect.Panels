@@ -2,19 +2,10 @@
 {
 	public static class TswFt5ButtonAdapterTelemetryNames
 	{
-		public const string TSID_PROPERTY = "Tsid";
-		public const string TSID_EVENT = "OnTsidChanged";
-
-		public const string NETWORK_INFO_PROPERTY = "NetworkInfo";
-		public const string NETWORK_INFO_EVENT = "OnNetworkInfoChanged";
-
-		public const string VERSION_INFO_PROPERTY = "VersionInfo";
-		public const string VERSION_INFO_EVENT = "OnVersionInfoChanged";
-
-		public const string PROJECT_INFO_PROPERTY = "ProjectInfo";
-		public const string PROJECT_INFO_EVENT = "OnProjectInfoChanged";
-
 		public const string APP_MODE_PROPERTY = "AppMode";
 		public const string APP_MODE_EVENT = "OnAppModeChanged";
+
+		public const string DISPLAY_PROJECT_PROPERTY = "DisplayProject";
+		public const string DISPLAY_PROJECT_EVENT = "OnDisplayProjectChanged";
 	}
 }

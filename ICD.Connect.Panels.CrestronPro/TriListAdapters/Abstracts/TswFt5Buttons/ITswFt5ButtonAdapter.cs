@@ -8,13 +8,16 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
 	public interface ITswFt5ButtonAdapter : ITriListAdapter, ICrestronEthernetDeviceAdapter
 	{
-		[EventTelemetry(TswFt5ButtonAdapterTelemetryNames.TSID_EVENT)]
-		event EventHandler<StringEventArgs> OnTsidChanged;
+		[EventTelemetry(TswFt5ButtonAdapterTelemetryNames.APP_MODE_EVENT)]
+		event EventHandler<StringEventArgs> OnAppModeChanged;
 
-		[NodeTelemetry("ProjectInfo")]
-		CrestronProjectInfo ProjectInfo { get; }
+		[EventTelemetry(TswFt5ButtonAdapterTelemetryNames.DISPLAY_PROJECT_EVENT)]
+		event EventHandler<StringEventArgs> OnDisplayProjectChanged;
 
-		[PropertyTelemetry(TswFt5ButtonAdapterTelemetryNames.TSID_PROPERTY, null, TswFt5ButtonAdapterTelemetryNames.TSID_EVENT)]
-		string Tsid { get; }
+		[PropertyTelemetry(TswFt5ButtonAdapterTelemetryNames.APP_MODE_PROPERTY, null, TswFt5ButtonAdapterTelemetryNames.APP_MODE_EVENT)]
+		string AppMode { get; }
+
+		[PropertyTelemetry(TswFt5ButtonAdapterTelemetryNames.DISPLAY_PROJECT_PROPERTY, null, TswFt5ButtonAdapterTelemetryNames.DISPLAY_PROJECT_EVENT)]
+		string DisplayProject { get; }
 	}
 }

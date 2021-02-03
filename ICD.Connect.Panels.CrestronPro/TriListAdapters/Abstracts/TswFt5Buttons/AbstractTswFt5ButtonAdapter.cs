@@ -27,7 +27,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 	{
 		#region Events
 
-		public event EventHandler<StringEventArgs> OnTsidChanged;
+		public event EventHandler<StringEventArgs> OnAppModeChanged;
+		public event EventHandler<StringEventArgs> OnDisplayProjectChanged;
 
 		#endregion
 
@@ -44,7 +45,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		[UsedImplicitly]
 		private SafeTimer m_ProjectInfoUpdateTimer;
 		private CrestronProjectInfo m_ProjectInfo;
-		private string m_Tsid;
+		private string m_AppMode;
+		private string m_DisplayProject;
 
 		// Used with settings
 		private bool m_EnableVoip;
@@ -54,10 +56,10 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 		#region Properties
 
-		public CrestronProjectInfo ProjectInfo
+		private CrestronProjectInfo ProjectInfo
 		{
 			get { return m_ProjectInfo; }
-			private set
+			set
 			{
 				if (m_ProjectInfo == value)
 					return;
@@ -68,16 +70,29 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			}
 		}
 
-		public string Tsid
+		public string AppMode
 		{
-			get { return m_Tsid; }
+			get { return m_AppMode; }
 			private set
 			{
-				if (m_Tsid == value)
+				if (m_AppMode == value)
 					return;
 
-				m_Tsid = value;
-				OnTsidChanged.Raise(this, m_Tsid);
+				m_AppMode = value;
+				OnAppModeChanged.Raise(this, m_AppMode);
+			}
+		}
+
+		public string DisplayProject
+		{
+			get { return m_DisplayProject; }
+			private set
+			{
+				if (m_DisplayProject == value)
+					return;
+
+				m_DisplayProject = value;
+				OnDisplayProjectChanged.Raise(this, m_DisplayProject);
 			}
 		}
 
@@ -181,6 +196,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 			projectInfo.OnNetworkInfoChanged += ProjectInfoOnNetworkInfoChanged;
 			projectInfo.OnVersionInfoChanged += ProjectInfoOnVersionInfoChanged;
+			projectInfo.OnProjectInfoChanged += ProjectInfoOnProjectInfoChanged;
+			projectInfo.OnAppModeChanged += ProjectInfoOnAppModeChanged;
 		}
 
 		private void Unsubscribe(ICrestronProjectInfo projectInfo)
@@ -190,6 +207,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 			projectInfo.OnNetworkInfoChanged -= ProjectInfoOnNetworkInfoChanged;
 			projectInfo.OnVersionInfoChanged -= ProjectInfoOnVersionInfoChanged;
+			projectInfo.OnProjectInfoChanged -= ProjectInfoOnProjectInfoChanged;
+			projectInfo.OnAppModeChanged -= ProjectInfoOnAppModeChanged;
 		}
 
 		private void ProjectInfoOnNetworkInfoChanged(object sender, GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?> args)
@@ -211,7 +230,16 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			MonitoredDeviceInfo.SerialNumber = args.Data.HasValue ? args.Data.Value.SerialNumber : null;
 			MonitoredDeviceInfo.FirmwareVersion = args.Data.HasValue ? args.Data.Value.FirmwareVersion : null;
 			MonitoredDeviceInfo.FirmwareDate = args.Data.HasValue ? args.Data.Value.FirmwareDate : null;
-			Tsid = args.Data.HasValue ? args.Data.Value.Tsid : null;
+		}
+
+		private void ProjectInfoOnProjectInfoChanged(object sender, GenericEventArgs<CrestronEthernetDeviceAdapterProjectInfo?> args)
+		{
+			DisplayProject = args.Data.HasValue ? args.Data.Value.Vtz : null;
+		}
+
+		private void ProjectInfoOnAppModeChanged(object sender, StringEventArgs args)
+		{
+			AppMode = args.Data;
 		}
 
 		#endregion
