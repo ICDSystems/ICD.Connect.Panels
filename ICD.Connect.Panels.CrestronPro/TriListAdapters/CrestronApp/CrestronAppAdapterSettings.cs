@@ -1,4 +1,5 @@
 ﻿using ICD.Common.Utils.Xml;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp

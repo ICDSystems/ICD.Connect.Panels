@@ -8,7 +8,7 @@ using ICD.Common.Utils;
 using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Panels.SmartObjects;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.SmartObjects
 {
 	public sealed class SmartObjectCollectionAdapter : ISmartObjectCollection
 	{

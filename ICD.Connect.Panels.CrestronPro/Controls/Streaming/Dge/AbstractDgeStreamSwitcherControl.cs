@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+#if SIMPLSHARP
 using System;
 using System.Collections.Generic;
 using ICD.Common.Properties;

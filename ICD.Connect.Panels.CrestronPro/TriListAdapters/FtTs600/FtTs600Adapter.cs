@@ -1,9 +1,11 @@
 ﻿using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Panels.Controls.Backlight;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600

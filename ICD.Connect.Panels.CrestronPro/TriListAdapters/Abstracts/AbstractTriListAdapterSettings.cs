@@ -3,7 +3,7 @@ using ICD.Common.Utils.Xml;
 using ICD.Connect.Panels.Devices;
 using ICD.Connect.Settings.Attributes.SettingsProperties;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 {
 	public abstract class AbstractTriListAdapterSettings : AbstractPanelDeviceSettings, ITriListAdapterSettings
 	{

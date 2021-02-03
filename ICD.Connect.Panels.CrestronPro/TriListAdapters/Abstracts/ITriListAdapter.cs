@@ -3,7 +3,7 @@
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 {
 #if SIMPLSHARP
 	public delegate void PanelChangeCallback(ITriListAdapter sender, BasicTriListWithSmartObject panel);

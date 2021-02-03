@@ -6,7 +6,7 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
 #if SIMPLSHARP
 	public abstract class AbstractTswFt5ButtonSystemAdapter<TPanel, TSettings> :

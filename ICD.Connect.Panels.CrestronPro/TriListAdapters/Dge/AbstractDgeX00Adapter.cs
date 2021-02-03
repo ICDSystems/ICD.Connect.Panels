@@ -1,6 +1,7 @@
 ﻿using System;
 using ICD.Connect.Misc.CrestronPro.Devices;
 using ICD.Connect.Panels.Crestron.Devices.Dge;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;

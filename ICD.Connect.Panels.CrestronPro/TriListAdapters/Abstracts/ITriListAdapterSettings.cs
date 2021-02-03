@@ -1,6 +1,6 @@
 ﻿using ICD.Connect.Panels.Devices;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 {
 	public interface ITriListAdapterSettings : IPanelDeviceSettings
 	{

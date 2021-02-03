@@ -13,6 +13,7 @@ using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Misc.CrestronPro;
 using ICD.Connect.Misc.CrestronPro.Sigs;
 using ICD.Connect.Misc.CrestronPro.Extensions;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.SmartObjects;
 using ICD.Common.Properties;
 using ICD.Common.Utils;
 using ICD.Common.Utils.Services.Logging;
@@ -20,7 +21,7 @@ using ICD.Common.Utils.Services.Logging;
 using System;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 {
 	/// <summary>
 	/// TriListAdapter wraps a TriList to provide IPanelDevice features.

@@ -1,5 +1,7 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+#if SIMPLSHARP
 using Crestron.SimplSharpPro;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw550

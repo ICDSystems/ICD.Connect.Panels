@@ -1,3 +1,5 @@
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {
 #if SIMPLSHARP

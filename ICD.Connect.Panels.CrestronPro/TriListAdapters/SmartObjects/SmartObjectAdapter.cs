@@ -12,7 +12,7 @@ using ICD.Connect.Panels.SmartObjects;
 using ICD.Connect.Protocol.Sigs;
 using eSigType = ICD.Connect.Protocol.Sigs.eSigType;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.SmartObjects
 {
 	public sealed class SmartObjectAdapter : AbstractSmartObject, IDisposable
 	{

@@ -2,7 +2,7 @@
 using Crestron.SimplSharpPro.UI;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
 #if SIMPLSHARP
 	public abstract class AbstractFt5ButtonAdapter<TPanel, TSettings> : AbstractTswFt5ButtonAdapter<TPanel, TSettings>,

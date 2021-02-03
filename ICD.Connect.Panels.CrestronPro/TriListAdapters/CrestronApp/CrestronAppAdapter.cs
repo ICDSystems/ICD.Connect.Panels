@@ -1,4 +1,5 @@
 ﻿using ICD.Connect.API.Nodes;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Settings;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
