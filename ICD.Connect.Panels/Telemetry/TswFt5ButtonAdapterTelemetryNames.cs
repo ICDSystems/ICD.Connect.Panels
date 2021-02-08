@@ -1,4 +1,4 @@
-﻿namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons.Telemetry
+﻿namespace ICD.Connect.Panels.Telemetry
 {
 	public static class TswFt5ButtonAdapterTelemetryNames
 	{
