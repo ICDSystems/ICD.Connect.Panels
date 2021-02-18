@@ -2,6 +2,7 @@
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
+using ICD.Connect.API.Nodes;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
@@ -34,6 +35,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 		#region Constants
 
+		private const string MONITORED_DEVICE_INFO_MAKE = "Crestron";
 		private const int VOIP_DIALER_CONTROL_ID = 1;
 		private const int BACKLIGHT_CONTROL_ID = 2;
 		protected const int HARD_BUTTON_CONTROL_ID = 3;
@@ -187,6 +189,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		{
 			// Do the first poll immediately, after that poll after every 10 minutes.
 			m_ProjectInfoUpdateTimer = new SafeTimer(() => m_ProjectInfo.UpdateAllInfo(), 10 * 60000);
+
+			// These are all Crestron panels
+			MonitoredDeviceInfo.Make = MONITORED_DEVICE_INFO_MAKE;
 		}
 
 		private void Subscribe(ICrestronProjectInfo projectInfo)
@@ -375,5 +380,17 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		protected abstract IBacklightDeviceControl InstantiateBacklightControl(int id);
 
 		#endregion
+
+		/// <summary>
+		/// Calls the delegate for each console status item.
+		/// </summary>
+		/// <param name="addRow"></param>
+		public override void BuildConsoleStatus(AddStatusRowDelegate addRow)
+		{
+			base.BuildConsoleStatus(addRow);
+
+			addRow("AppMode", AppMode);
+			addRow("DisplayProject", DisplayProject);
+		}
 	}
 }
