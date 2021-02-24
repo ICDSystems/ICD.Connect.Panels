@@ -1,6 +1,4 @@
-﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
-
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
+﻿namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 {
 #if SIMPLSHARP
 	public abstract class AbstractDgeAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, IDgeAdapter

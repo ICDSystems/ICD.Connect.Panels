@@ -2,7 +2,7 @@
 using Crestron.SimplSharpPro.UI;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 {
 #if SIMPLSHARP
 	public abstract class AbstractDge2BaseAdapter<TPanel, TSettings> : AbstractDgeAdapter<TPanel, TSettings>,

@@ -1,4 +1,5 @@
-﻿using ICD.Connect.Settings.Attributes;
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge;
+using ICD.Connect.Settings.Attributes;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {

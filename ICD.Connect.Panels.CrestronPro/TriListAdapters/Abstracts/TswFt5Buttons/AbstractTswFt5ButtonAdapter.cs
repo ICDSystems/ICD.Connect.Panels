@@ -7,7 +7,7 @@ using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 using ICD.Connect.Panels.Controls.Backlight;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons.Telemetry;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry;
 using ICD.Connect.Protocol.Network.Settings;
 using ICD.Connect.Settings;
 #if SIMPLSHARP

@@ -112,7 +112,7 @@
     <Compile Include="SmartObjects\ISmartObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EventArguments\SigInfoEventArgs.cs" />
-    <Compile Include="Telemetry\TswFt5ButtonAdapterTelemetryNames.cs" />
+    <Compile Include="Telemetry\CrestronPanelTelemetryNames.cs" />
     <None Include="Properties\ControlSystem.cfg" />
   </ItemGroup>
   <ItemGroup>

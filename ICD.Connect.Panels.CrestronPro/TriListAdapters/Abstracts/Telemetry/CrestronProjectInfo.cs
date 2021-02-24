@@ -1,9 +1,10 @@
 ﻿using System;
 using ICD.Common.Utils.EventArguments;
+using ICD.Connect.Misc.Ethernet;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 using ICD.Connect.Misc.CrestronPro.Utils;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons.Telemetry
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 {
 	public sealed class CrestronProjectInfo : ICrestronProjectInfo
 	{

@@ -107,8 +107,8 @@
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\AbstractTswFt5ButtonAdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapterSettings.cs" />
-    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\Telemetry\CrestronProjectInfo.cs" />
-    <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\Telemetry\ICrestronProjectInfo.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Telemetry\CrestronProjectInfo.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Telemetry\ICrestronProjectInfo.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\AbstractFt5ButtonBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswFt5ButtonBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswFt5ButtonSystemBacklightControl.cs" />
@@ -122,10 +122,10 @@
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\AbstractTswFt5ButtonSystemAdapter.cs" />
     <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapter.cs" />
     <Compile Include="TriListAdapters\CrestronApp\CrestronAppAdapterSettings.cs" />
-    <Compile Include="TriListAdapters\Dge\AbstractDgeX00Adapter.cs" />
-    <Compile Include="TriListAdapters\Dge\AbstractDge1BaseAdapter.cs" />
-    <Compile Include="TriListAdapters\Dge\AbstractDgeAdapter.cs" />
-    <Compile Include="TriListAdapters\Dge\AbstractDge2BaseAdapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDgeX00Adapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDge1BaseAdapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDgeAdapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDge2BaseAdapter.cs" />
     <Compile Include="TriListAdapters\Dge\Dge100Adapter.cs" />
     <Compile Include="TriListAdapters\Dge\Dge100AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Dge\Dge2Adapter.cs" />

@@ -1,14 +1,13 @@
-﻿using System;
-using ICD.Connect.Misc.CrestronPro.Devices;
-using ICD.Connect.Panels.Crestron.Devices.Dge;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+﻿using ICD.Connect.Panels.Crestron.Devices.Dge;
 #if SIMPLSHARP
+using System;
 using Crestron.SimplSharpPro;
-using Crestron.SimplSharpPro.UI;
 using Crestron.SimplSharpPro.DM;
+using Crestron.SimplSharpPro.UI;
+using ICD.Connect.Misc.CrestronPro.Devices;
 #endif
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 {
 #if SIMPLSHARP
 	public abstract class AbstractDgeX00Adapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, IDgeX00Adapter<TPanel>
@@ -128,8 +127,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 	public abstract class AbstractDgeX00AdapterSettings : AbstractTriListAdapterSettings, IDgeX00AdapterSettings
 	{
 	}
-
-
 
 #if SIMPLSHARP
 	public interface IDgeX00Adapter<TPanel> : IDgeX00Adapter, ITriListAdapter, IPortParent

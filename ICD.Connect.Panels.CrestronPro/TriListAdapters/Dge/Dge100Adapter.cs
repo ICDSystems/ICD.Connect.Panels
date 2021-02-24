@@ -1,4 +1,5 @@
-﻿#if SIMPLSHARP
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge;
+#if SIMPLSHARP
 using System;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings;

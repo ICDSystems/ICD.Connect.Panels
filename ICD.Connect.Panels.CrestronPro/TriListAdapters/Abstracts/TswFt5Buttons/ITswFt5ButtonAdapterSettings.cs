@@ -1,4 +1,4 @@
-﻿using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
+﻿using ICD.Connect.Misc.Ethernet;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {

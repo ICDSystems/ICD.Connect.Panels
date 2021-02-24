@@ -3,7 +3,7 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 
-namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons.Telemetry
+namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 {
 	public interface ICrestronProjectInfo
 	{
