@@ -107,6 +107,10 @@
     <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDgeX00AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00Adapter.cs" />
     <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00AdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Ts1542\AbstractTs1542Adapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Ts1542\AbstractTs1542AdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Ts1542\ITs1542Adapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Ts1542\ITs1542AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\AbstractTswFt5ButtonAdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapterSettings.cs" />
@@ -139,7 +143,6 @@
     <Compile Include="TriListAdapters\Abstracts\ITriListAdapterSettings.cs" />
     <Compile Include="TriListAdapters\FtTs600\FtTs600Adapter.cs" />
     <Compile Include="TriListAdapters\FtTs600\FtTs600AdapterSettings.cs" />
-    <Compile Include="TriListAdapters\Ts1542\AbstractTs1542Adapter.cs" />
     <Compile Include="TriListAdapters\Ts1542\Ts1542Adapter.cs" />
     <Compile Include="TriListAdapters\Ts1542\Ts1542CAdapter.cs" />
     <Compile Include="TriListAdapters\Ts1542\Ts1542CRouteDestinationControl.cs" />

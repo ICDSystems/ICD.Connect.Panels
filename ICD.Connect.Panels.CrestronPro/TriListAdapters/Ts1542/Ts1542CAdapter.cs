@@ -1,5 +1,6 @@
 using System;
 using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542;
 using ICD.Connect.Settings;
 using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP

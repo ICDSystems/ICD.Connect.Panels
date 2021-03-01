@@ -1,4 +1,5 @@
-﻿using ICD.Connect.Settings.Attributes;
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542;
+using ICD.Connect.Settings.Attributes;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif
