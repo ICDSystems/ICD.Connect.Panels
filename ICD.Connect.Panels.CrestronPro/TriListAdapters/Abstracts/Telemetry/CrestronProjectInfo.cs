@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Linq;
+using ICD.Common.Utils;
 using ICD.Common.Utils.EventArguments;
+using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.Ethernet;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 using ICD.Connect.Misc.CrestronPro.Utils;
@@ -102,12 +105,28 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		/// <summary>
 		/// Queries the parent adapter and updates this instance with the adapter's information.
 		/// </summary>
-		public void UpdateAllInfo()
+		public void UpdateInfo()
 		{
-			CrestronEthernetDeviceUtils.UpdateNetworkInfo(m_ParentAdapter, n => NetworkInfo = n);
-			CrestronEthernetDeviceUtils.UpdateVersionInfo(m_ParentAdapter, v => VersionInfo = v);
-			CrestronEthernetDeviceUtils.UpdateProjectInfo(m_ParentAdapter, p => ProjectInfo = p);
-			CrestronEthernetDeviceUtils.UpdateAppMode(m_ParentAdapter, a => AppMode = a);
+			UpdateInfo(EnumUtils.GetFlagsExceptNone<eCrestronProjectInfoUpdateComponents>().Aggregate((c, n) => c | n));
+		}
+
+		/// <summary>
+		/// Queries the parent adapter based on the set flag.
+		/// </summary>
+		/// <param name="flag"></param>
+		public void UpdateInfo(eCrestronProjectInfoUpdateComponents flag)
+		{
+			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.NetworkInfo))
+				CrestronEthernetDeviceUtils.UpdateNetworkInfo(m_ParentAdapter, n => NetworkInfo = n);
+
+			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.VersionInfo))
+				CrestronEthernetDeviceUtils.UpdateVersionInfo(m_ParentAdapter, v => VersionInfo = v);
+
+			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.ProjectInfo))
+				CrestronEthernetDeviceUtils.UpdateProjectInfo(m_ParentAdapter, p => ProjectInfo = p);
+
+			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.AppMode))
+				CrestronEthernetDeviceUtils.UpdateAppMode(m_ParentAdapter, a => AppMode = a);
 		}
 
 		/// <summary>
@@ -118,5 +137,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		}
 
 		#endregion
+	}
+
+	[Flags]
+	public enum eCrestronProjectInfoUpdateComponents
+	{
+		None = 0,
+		NetworkInfo = 1,
+		VersionInfo = 2,
+		ProjectInfo = 4,
+		AppMode = 8
 	}
 }
