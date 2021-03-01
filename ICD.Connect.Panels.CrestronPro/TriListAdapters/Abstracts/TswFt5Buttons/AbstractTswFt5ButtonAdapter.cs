@@ -187,9 +187,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 		private void InitializeProjectInfoPolling()
 		{
-			// Do the first poll immediately, after that poll after every 10 minutes.
-			// TODO - change polling frequency, see if polling flag can be set here.
-			m_ProjectInfoUpdateTimer = new SafeTimer(() => ProjectInfo.UpdateInfo(), 10 * 60000);
+			// Do the first poll immediately, after that poll after every 120 minutes.
+			// TODO - see if polling flag can be set here.
+			m_ProjectInfoUpdateTimer = new SafeTimer(() => ProjectInfo.UpdateInfo(), 120 * 60000);
 
 			// These are all Crestron panels
 			MonitoredDeviceInfo.Make = MONITORED_DEVICE_INFO_MAKE;

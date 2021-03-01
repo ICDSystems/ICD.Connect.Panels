@@ -90,12 +90,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542
 
 		private void InitializeProjectInfoPolling()
 		{
-			// Do the first poll immediately, after that poll after every 10 minutes.
-			// TODO - change polling frequency
+			// Do the first poll immediately, after that poll after every 120 minutes.
 			m_ProjectInfoUpdateTimer =
 				new SafeTimer(() => ProjectInfo.UpdateInfo(eCrestronProjectInfoUpdateComponents.NetworkInfo |
 				                                           eCrestronProjectInfoUpdateComponents.VersionInfo |
-				                                           eCrestronProjectInfoUpdateComponents.ProjectInfo), 10 * 60000);
+				                                           eCrestronProjectInfoUpdateComponents.ProjectInfo), 120 * 60000);
 
 			// These are all Crestron panels
 			MonitoredDeviceInfo.Make = MONITORED_DEVICE_INFO_MAKE;
