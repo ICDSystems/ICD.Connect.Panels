@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
  - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractTswFt5ButtonAdapter
+ - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractDgeX00Adapter
+ - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractTs1542Adapter
 
 ### Changed
  - Refactored CrestronPro TriListAdapter directory, moved abstractions and smart objects to new subdirectories
