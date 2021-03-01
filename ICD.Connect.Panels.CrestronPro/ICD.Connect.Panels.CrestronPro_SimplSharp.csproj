@@ -104,6 +104,9 @@
     <Compile Include="Controls\Streaming\Dge\DmDge200CStreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\AbstractThreeSeriesTouchScreenControl.cs" />
     <Compile Include="KrangPlugin.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDgeX00AdapterSettings.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00Adapter.cs" />
+    <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\AbstractTswFt5ButtonAdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapter.cs" />
     <Compile Include="TriListAdapters\Abstracts\TswFt5Buttons\ITswFt5ButtonAdapterSettings.cs" />

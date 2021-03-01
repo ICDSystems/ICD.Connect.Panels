@@ -40,7 +40,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		/// <summary>
 		/// Queries the parent adapter and updates this instance with the adapter's information.
 		/// </summary>
-		void UpdateAllInfo();
+		void UpdateInfo();
 
 		#endregion
 	}
