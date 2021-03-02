@@ -1,5 +1,6 @@
 ﻿using ICD.Common.Utils.Xml;
 using ICD.Connect.Protocol.Network.Settings;
+using ICD.Connect.Settings.Attributes.SettingsProperties;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542
 {
@@ -16,6 +17,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542
 		/// <summary>
 		/// Gets/sets the configurable network address.
 		/// </summary>
+		[IpAddressSettingsProperty]
 		public string NetworkAddress
 		{
 			get { return m_NetworkProperties.NetworkAddress; }
