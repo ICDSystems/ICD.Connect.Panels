@@ -272,8 +272,6 @@ namespace ICD.Connect.Panels.Server
 		/// </summary>
 		protected override void DisposeFinal(bool disposing)
 		{
-			base.DisposeFinal(disposing);
-
 			Unsubscribe(m_SmartObjects);
 
 			Unsubscribe(m_Buffers);
@@ -281,6 +279,8 @@ namespace ICD.Connect.Panels.Server
 
 			Unsubscribe(m_Server);
 			m_Server.Dispose();
+
+			base.DisposeFinal(disposing);
 		}
 
 		/// <summary>
