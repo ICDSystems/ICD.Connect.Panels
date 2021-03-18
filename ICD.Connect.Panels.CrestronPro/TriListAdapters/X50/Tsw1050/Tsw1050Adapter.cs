@@ -1,7 +1,6 @@
-﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw1050
@@ -22,7 +21,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw1050
 		}
 	}
 #else
-    public sealed class Tsw1050Adapter : AbstractTriListAdapter<Tsw1050AdapterSettings>
+    public sealed class Tsw1050Adapter : AbstractTswFt5ButtonSystemAdapter<Tsw1050AdapterSettings>
     {
     }
 #endif

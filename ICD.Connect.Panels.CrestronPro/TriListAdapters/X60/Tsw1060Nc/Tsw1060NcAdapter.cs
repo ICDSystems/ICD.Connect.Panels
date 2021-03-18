@@ -1,5 +1,4 @@
-﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
-#if SIMPLSHARP
+﻿#if SIMPLSHARP
 using Crestron.SimplSharpPro;
 #endif
 
@@ -22,7 +21,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw1060Nc
 		}
 	}
 #else
-    public sealed class Tsw1060NcAdapter : AbstractTriListAdapter<Tsw1060NcAdapterSettings>
+    public sealed class Tsw1060NcAdapter : AbstractTswX60BaseClassAdapter<Tsw1060NcAdapterSettings>
     {
     }
 #endif

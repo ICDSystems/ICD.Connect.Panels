@@ -1,11 +1,10 @@
-﻿using ICD.Connect.Conferencing.Controls.Dialing;
-using ICD.Connect.Panels.Controls.Backlight;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
+﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #if SIMPLSHARP
 using Crestron.SimplSharpPro;
+using ICD.Connect.Conferencing.Controls.Dialing;
+using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
@@ -48,7 +47,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 		}
 	}
 #else
-    public sealed class FtTs600Adapter : AbstractTriListAdapter<FtTs600AdapterSettings>
+    public sealed class FtTs600Adapter : AbstractFt5ButtonAdapter<FtTs600AdapterSettings>
     {
     }
 #endif

@@ -3,14 +3,14 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
 using ICD.Connect.API.Nodes;
-using ICD.Connect.Conferencing.Controls.Dialing;
-using ICD.Connect.Devices.Controls;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
-using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry;
 using ICD.Connect.Protocol.Network.Settings;
 using ICD.Connect.Settings;
 #if SIMPLSHARP
+using ICD.Connect.Conferencing.Controls.Dialing;
+using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.Controls.Backlight;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
@@ -292,6 +292,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			m_NetworkProperties.Copy(settings);
 		}
 
+#if SIMPLSHARP
 		/// <summary>
 		/// Override to add controls to the device.
 		/// </summary>
@@ -308,7 +309,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 				addControl(InstantiateDialingControl(VOIP_DIALER_CONTROL_ID));
 		}
 
-#if SIMPLSHARP
 		/// <summary>
 		/// Called before registration.
 		/// Override to control which extenders are used with the panel.
@@ -362,7 +362,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		{
 			panel.ExtenderEthernetReservedSigs.Use();
 		}
-#endif
 
 		/// <summary>
 		/// Called from constructor.
@@ -379,6 +378,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		/// <param name="id"></param>
 		/// <returns></returns>
 		protected abstract IBacklightDeviceControl InstantiateBacklightControl(int id);
+#endif
 
 		#endregion
 
