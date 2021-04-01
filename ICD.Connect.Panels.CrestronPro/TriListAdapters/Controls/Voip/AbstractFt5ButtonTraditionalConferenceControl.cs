@@ -137,7 +137,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// <summary>
 		/// Sets the camera mute state.
 		/// </summary>
-		/// <param name="enabled"></param>
+		/// <param name="mute"></param>
 		public override void SetCameraMute(bool mute)
 		{
 			throw new NotSupportedException();
