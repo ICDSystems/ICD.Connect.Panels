@@ -91,11 +91,15 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542
 
 		private void InitializeProjectInfoPolling()
 		{
+			// Only poll if there is a configured username.
 			// Do the first poll immediately, after that poll after every 120 minutes.
-			m_ProjectInfoUpdateTimer =
-				new SafeTimer(() => ProjectInfo.UpdateInfo(eCrestronProjectInfoUpdateComponents.NetworkInfo |
-				                                           eCrestronProjectInfoUpdateComponents.VersionInfo |
-				                                           eCrestronProjectInfoUpdateComponents.ProjectInfo), 120 * 60000);
+			if (!string.IsNullOrEmpty(NetworkProperties.NetworkUsername))
+			{
+				m_ProjectInfoUpdateTimer =
+					new SafeTimer(() => ProjectInfo.UpdateInfo(eCrestronProjectInfoUpdateComponents.NetworkInfo |
+					                                           eCrestronProjectInfoUpdateComponents.VersionInfo |
+					                                           eCrestronProjectInfoUpdateComponents.ProjectInfo), 120 * 60000);
+			}
 
 			// These are all Crestron panels
 			MonitoredDeviceInfo.Make = MONITORED_DEVICE_INFO_MAKE;

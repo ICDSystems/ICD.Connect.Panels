@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
  - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractTs1542Adapter
 
 ### Changed
+ - Crestron panels will no longer poll for telemetry if there is no configured network username.
  - Refactored CrestronPro TriListAdapter namespace
  - Fixed a bug where panel servers would resume listening after being disposed 
 
