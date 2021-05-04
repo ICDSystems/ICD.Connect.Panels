@@ -23,7 +23,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		public TswFt5ButtonTraditionalConferenceControl(ITswFt5ButtonAdapter parent, int id)
 			: base(parent, id)
 		{
-			SupportedConferenceFeatures |= eConferenceFeatures.PrivacyMute;
+			SupportedConferenceControlFeatures |= eConferenceControlFeatures.PrivacyMute;
 		}
 
 		/// <summary>

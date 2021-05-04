@@ -28,8 +28,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		public TswX52ButtonVoiceControlConferenceControl(ITswX52ButtonVoiceControlAdapter parent, int id)
 			: base(parent, id)
 		{
-			SupportedConferenceFeatures |= eConferenceFeatures.AutoAnswer;
-			SupportedConferenceFeatures |= eConferenceFeatures.PrivacyMute;
+			SupportedConferenceControlFeatures |= eConferenceControlFeatures.AutoAnswer;
+			SupportedConferenceControlFeatures |= eConferenceControlFeatures.PrivacyMute;
 		}
 
 		/// <summary>

@@ -32,7 +32,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
 
-		private ThinTraditionalParticipant m_ActiveParticipant;
+		private ThinParticipant m_ActiveParticipant;
 		private TraditionalIncomingCall m_IncomingCall;
 
 		#region Properties
@@ -68,7 +68,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 
 			SetPanel(parent.Panel as TPanel);
 
-			SupportedConferenceFeatures |= eConferenceFeatures.DoNotDisturb;
+			SupportedConferenceControlFeatures |= eConferenceControlFeatures.DoNotDisturb;
 		}
 
 		/// <summary>
@@ -411,7 +411,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		{
 			if (m_ActiveParticipant == null)
 			{
-				m_ActiveParticipant = new ThinTraditionalParticipant();
+				m_ActiveParticipant = new ThinParticipant();
 				m_ActiveParticipant.SetCallType(eCallType.Audio);
 				AddParticipant(m_ActiveParticipant);
 				Subscribe(m_ActiveParticipant);
@@ -442,7 +442,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// Subscribe to the participant callbacks.
 		/// </summary>
 		/// <param name="participant"></param>
-		private void Subscribe(ThinTraditionalParticipant participant)
+		private void Subscribe(ThinParticipant participant)
 		{
 			participant.HoldCallback += HoldCallback;
 			participant.ResumeCallback += ResumeCallback;
@@ -454,7 +454,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// Unsubscribe from the participant callbacks.
 		/// </summary>
 		/// <param name="source"></param>
-		private void Unsubscribe(ThinTraditionalParticipant source)
+		private void Unsubscribe(ThinParticipant source)
 		{
 			source.HoldCallback = null;
 			source.ResumeCallback = null;
@@ -462,25 +462,25 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			source.HangupCallback = null;
 		}
 
-		private void HoldCallback(ThinTraditionalParticipant sender)
+		private void HoldCallback(ThinParticipant sender)
 		{
 			// Is this possible?
 			Logger.Log(eSeverity.Warning, "Hold is unsupported");
 		}
 
-		private void ResumeCallback(ThinTraditionalParticipant sender)
+		private void ResumeCallback(ThinParticipant sender)
 		{
 			// Is this possible?
 			Logger.Log(eSeverity.Warning, "Resume is unsupported");
 		}
 
-		private void SendDtmfCallback(ThinTraditionalParticipant sender, string data)
+		private void SendDtmfCallback(ThinParticipant sender, string data)
 		{
 			foreach (char item in data)
 				SendDtmfCallback(item);
 		}
 
-		private void HangupCallback(ThinTraditionalParticipant sender)
+		private void HangupCallback(ThinParticipant sender)
 		{
 			if (Sigs == null)
 				throw new InvalidOperationException("No VoIP extender");
