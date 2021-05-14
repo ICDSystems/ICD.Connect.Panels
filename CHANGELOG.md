@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [9.2.0] - 2021-05-14
 ### Added
  - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractTswFt5ButtonAdapter
  - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractDgeX00Adapter
