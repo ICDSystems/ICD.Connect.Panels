@@ -17,6 +17,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterVersionInfo?>> OnVersionInfoChanged;
 		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterProjectInfo?>> OnProjectInfoChanged;
 		public event EventHandler<StringEventArgs> OnAppModeChanged;
+		public event EventHandler<StringEventArgs> OnHostNameChanged;
 
 		#endregion
 
@@ -26,6 +27,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		private CrestronEthernetDeviceAdapterVersionInfo? m_VersionInfo;
 		private CrestronEthernetDeviceAdapterProjectInfo? m_ProjectInfo;
 		private string m_AppMode;
+		private string m_HostName;
 
 		private readonly ICrestronEthernetDeviceAdapter m_ParentAdapter;
 
@@ -85,6 +87,19 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 			}
 		}
 
+		public string HostName
+		{
+			get { return m_HostName; }
+			private set
+			{
+				if (m_HostName == value)
+					return;
+
+				m_HostName = value;
+				OnHostNameChanged.Raise(this, m_HostName);
+			}
+		}
+
 		#endregion
 
 		#region Constructor
@@ -127,6 +142,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 
 			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.AppMode))
 				CrestronEthernetDeviceUtils.UpdateAppMode(m_ParentAdapter, a => AppMode = a);
+
+			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.HostName))
+				CrestronEthernetDeviceUtils.UpdateHostName(m_ParentAdapter, h => HostName = h);
 		}
 
 		/// <summary>
@@ -146,6 +164,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		NetworkInfo = 1,
 		VersionInfo = 2,
 		ProjectInfo = 4,
-		AppMode = 8
+		AppMode = 8,
+		HostName = 16
 	}
 }

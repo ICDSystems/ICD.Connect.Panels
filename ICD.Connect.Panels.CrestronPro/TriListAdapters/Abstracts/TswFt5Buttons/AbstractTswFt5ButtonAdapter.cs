@@ -216,6 +216,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			projectInfo.OnVersionInfoChanged += ProjectInfoOnVersionInfoChanged;
 			projectInfo.OnProjectInfoChanged += ProjectInfoOnProjectInfoChanged;
 			projectInfo.OnAppModeChanged += ProjectInfoOnAppModeChanged;
+			projectInfo.OnHostNameChanged += ProjectInfoOnHostNameChanged;
 		}
 
 		private void Unsubscribe(ICrestronProjectInfo projectInfo)
@@ -227,6 +228,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			projectInfo.OnVersionInfoChanged -= ProjectInfoOnVersionInfoChanged;
 			projectInfo.OnProjectInfoChanged -= ProjectInfoOnProjectInfoChanged;
 			projectInfo.OnAppModeChanged -= ProjectInfoOnAppModeChanged;
+			projectInfo.OnHostNameChanged -= ProjectInfoOnHostNameChanged;
 		}
 
 		private void ProjectInfoOnNetworkInfoChanged(object sender, GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?> args)
@@ -235,7 +237,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 			// Update device information.
 			MonitoredDeviceInfo.NetworkInfo.Dns = args.Data.HasValue ? args.Data.Value.DnsServer : null;
-			MonitoredDeviceInfo.NetworkInfo.Hostname = args.Data.HasValue ? args.Data.Value.IpAddress : null;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Address = args.Data.HasValue ? args.Data.Value.IpAddress : null;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Dhcp = args.Data.HasValue && args.Data.Value.Dhcp;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Gateway = args.Data.HasValue ? args.Data.Value.DefaultGateway : null;
@@ -260,6 +261,11 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		private void ProjectInfoOnAppModeChanged(object sender, StringEventArgs args)
 		{
 			AppMode = args.Data;
+		}
+
+		private void ProjectInfoOnHostNameChanged(object sender, StringEventArgs args)
+		{
+			MonitoredDeviceInfo.NetworkInfo.Hostname = args.Data;
 		}
 
 		#endregion

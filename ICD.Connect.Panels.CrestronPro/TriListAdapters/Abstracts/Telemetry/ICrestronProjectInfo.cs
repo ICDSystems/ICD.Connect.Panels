@@ -17,6 +17,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 
 		event EventHandler<StringEventArgs> OnAppModeChanged;
 
+		event EventHandler<StringEventArgs> OnHostNameChanged;
+
 		#endregion
 
 		#region Properties
@@ -32,6 +34,9 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 
 		[CanBeNull]
 		string AppMode { get; }
+
+		[CanBeNull]
+		string HostName { get; }
 
 		#endregion
 
