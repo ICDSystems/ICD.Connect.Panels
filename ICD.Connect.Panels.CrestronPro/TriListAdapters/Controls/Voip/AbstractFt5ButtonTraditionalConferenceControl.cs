@@ -23,7 +23,7 @@ using ICD.Connect.Misc.CrestronPro.Extensions;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public abstract class AbstractFt5ButtonTraditionalConferenceControl<TParent, TPanel, TVoIpSigs> :
-		AbstractConferenceDeviceControl<TParent, Conference>
+		AbstractConferenceDeviceControl<TParent, ThinConference>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
@@ -149,7 +149,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// Gets the active conference sources.
 		/// </summary>
 		/// <returns></returns>
-		public override IEnumerable<Conference> GetConferences()
+		public override IEnumerable<ThinConference> GetConferences()
 		{
 			yield break;
 		}
