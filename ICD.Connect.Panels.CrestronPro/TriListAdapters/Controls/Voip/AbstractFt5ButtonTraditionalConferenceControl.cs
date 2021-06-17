@@ -465,30 +465,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 			m_ActiveParticipant = null;
 		}
 
-		/// <summary>
-		/// Subscribe to the participant callbacks.
-		/// </summary>
-		/// <param name="participant"></param>
-		private void Subscribe(ThinParticipant participant)
-		{
-			participant.HoldCallback += HoldCallback;
-			participant.ResumeCallback += ResumeCallback;
-			participant.SendDtmfCallback += SendDtmfCallback;
-			participant.HangupCallback += HangupCallback;
-		}
-
-		/// <summary>
-		/// Unsubscribe from the participant callbacks.
-		/// </summary>
-		/// <param name="source"></param>
-		private void Unsubscribe(ThinParticipant source)
-		{
-			source.HoldCallback = null;
-			source.ResumeCallback = null;
-			source.SendDtmfCallback = null;
-			source.HangupCallback = null;
-		}
-
 		private void HoldCallback(ThinParticipant sender)
 		{
 			// Is this possible?
