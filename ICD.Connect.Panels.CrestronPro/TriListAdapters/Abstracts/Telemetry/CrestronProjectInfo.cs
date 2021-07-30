@@ -131,20 +131,23 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		/// <param name="flag"></param>
 		public void UpdateInfo(eCrestronProjectInfoUpdateComponents flag)
 		{
-			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.NetworkInfo))
-				CrestronEthernetDeviceUtils.UpdateNetworkInfo(m_ParentAdapter, n => NetworkInfo = n);
+			ThreadingUtils.SafeInvoke(() =>
+			{
+				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.NetworkInfo))
+					CrestronEthernetDeviceUtils.UpdateNetworkInfo(m_ParentAdapter, n => NetworkInfo = n);
 
-			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.VersionInfo))
-				CrestronEthernetDeviceUtils.UpdateVersionInfo(m_ParentAdapter, v => VersionInfo = v);
+				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.VersionInfo))
+					CrestronEthernetDeviceUtils.UpdateVersionInfo(m_ParentAdapter, v => VersionInfo = v);
 
-			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.ProjectInfo))
-				CrestronEthernetDeviceUtils.UpdateProjectInfo(m_ParentAdapter, p => ProjectInfo = p);
+				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.ProjectInfo))
+					CrestronEthernetDeviceUtils.UpdateProjectInfo(m_ParentAdapter, p => ProjectInfo = p);
 
-			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.AppMode))
-				CrestronEthernetDeviceUtils.UpdateAppMode(m_ParentAdapter, a => AppMode = a);
+				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.AppMode))
+					CrestronEthernetDeviceUtils.UpdateAppMode(m_ParentAdapter, a => AppMode = a);
 
-			if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.HostName))
-				CrestronEthernetDeviceUtils.UpdateHostName(m_ParentAdapter, h => HostName = h);
+				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.HostName))
+					CrestronEthernetDeviceUtils.UpdateHostName(m_ParentAdapter, h => HostName = h);
+			});
 		}
 
 		/// <summary>
