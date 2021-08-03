@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.2.1] - 2021-08-03
+### Changed
+ - CrestronProjectInfo - Gather all info in a thread, since CrestronEthernetDeviceUtils doesn't start threads any more
+
 ## [9.2.0] - 2021-05-14
 ### Added
  - Device telemetry gathering and touchpanel telemetry gathering and reporting to AbstractTswFt5ButtonAdapter
