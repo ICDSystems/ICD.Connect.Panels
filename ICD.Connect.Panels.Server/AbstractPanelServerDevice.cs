@@ -1,4 +1,10 @@
-﻿using System;
+﻿#if NETFRAMEWORK
+extern alias RealNewtonsoft;
+using RealNewtonsoft.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using ICD.Common.Properties;
@@ -19,7 +25,6 @@ using ICD.Connect.Protocol.Network.Servers;
 using ICD.Connect.Protocol.SerialBuffers;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
-using Newtonsoft.Json;
 
 namespace ICD.Connect.Panels.Server
 {
