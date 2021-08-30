@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Panels.Controls.Backlight;
@@ -9,7 +9,7 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.FtTs600
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class FtTs600Adapter :
 		AbstractFt5ButtonAdapter<global::Crestron.SimplSharpPro.UI.FtTs600, FtTs600AdapterSettings>
 	{

@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using System;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Settings;
@@ -12,7 +12,7 @@ using Crestron.SimplSharpPro.DM;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class DmDge200CAdapter : AbstractDgeX00Adapter<DmDge200C, DmDge200CAdapterSettings>
 	{
 		/// <summary>

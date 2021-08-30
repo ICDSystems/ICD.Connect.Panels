@@ -1,13 +1,13 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge;
 using ICD.Connect.Settings.Attributes;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class Dge2Adapter : AbstractDge2BaseAdapter<Dge2, Dge2AdapterSettings>
 	{
 		/// <summary>

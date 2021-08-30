@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
@@ -7,7 +7,7 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractTswX52ButtonVoiceControlAdapter<TPanel, TSettings> :
 		AbstractTswFt5ButtonSystemAdapter<TPanel, TSettings>, ITswX52ButtonVoiceControlAdapter
 		where TPanel : Tswx52ButtonVoiceControl
@@ -17,7 +17,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52
 #endif
 		where TSettings : ITswX52ButtonVoiceControlAdapterSettings, new()
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Called from constructor.
 		/// Override to control the type of dialing control to instantiate.

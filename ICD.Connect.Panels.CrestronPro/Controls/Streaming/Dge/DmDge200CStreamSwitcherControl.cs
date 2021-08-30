@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using System.Collections.Generic;
 using Crestron.SimplSharpPro.DM.Endpoints;
 using Crestron.SimplSharpPro.UI;

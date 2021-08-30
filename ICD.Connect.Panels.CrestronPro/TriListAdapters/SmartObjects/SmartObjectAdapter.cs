@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Panels.EventArguments;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using System;
 using Crestron.SimplSharpPro;
 using ICD.Common.Utils.Extensions;

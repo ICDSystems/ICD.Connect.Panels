@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
@@ -8,7 +8,7 @@ using ICD.Connect.Panels.Controls.Backlight;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractTswFt5ButtonSystemAdapter<TPanel, TSettings> :
 		AbstractTswFt5ButtonAdapter<TPanel, TSettings>, ITswFt5ButtonSystemAdapter
 		where TPanel : TswFt5ButtonSystem
@@ -18,7 +18,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 #endif
 		where TSettings : ITswFt5ButtonSystemAdapterSettings, new()
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Called from constructor.
 		/// Override to control the type of dialing control to instantiate.

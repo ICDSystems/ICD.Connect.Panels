@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 #endif
 
@@ -8,7 +8,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X50.Tsw550
 	/// <summary>
 	/// Tsw550Adapter wraps a Tsw550 for use with the UIPro library.
 	/// </summary>
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class Tsw550Adapter :
 		AbstractTswFt5ButtonSystemAdapter<global::Crestron.SimplSharpPro.UI.Tsw550, Tsw550AdapterSettings>
 	{

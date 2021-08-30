@@ -8,7 +8,7 @@ using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry;
 using ICD.Connect.Protocol.Network.Settings;
 using ICD.Connect.Settings;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.Controls.Backlight;
@@ -18,7 +18,7 @@ using Crestron.SimplSharpPro.DeviceSupport;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractTswFt5ButtonAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>,
 	                                                                       ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
@@ -115,7 +115,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 
 		#endregion
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 
 		#region Panel Callbacks
 
@@ -312,7 +312,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			m_NetworkProperties.Copy(settings);
 		}
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Override to add controls to the device.
 		/// </summary>

@@ -1,18 +1,18 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Xpanel
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class XpanelForSmartGraphicsAdapter : AbstractTriListAdapter<XpanelForSmartGraphics, XpanelForSmartGraphicsAdapterSettings>
 #else
 	public sealed class XpanelForSmartGraphicsAdapter : AbstractTriListAdapter<XpanelForSmartGraphicsAdapterSettings>
 #endif
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Gets the current online status of the panel.
 		/// </summary>

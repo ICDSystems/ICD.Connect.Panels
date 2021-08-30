@@ -1,5 +1,5 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro.DeviceSupport;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight

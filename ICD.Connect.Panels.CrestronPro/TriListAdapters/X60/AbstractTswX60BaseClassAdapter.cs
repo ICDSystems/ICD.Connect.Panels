@@ -1,7 +1,7 @@
 ﻿using System;
 using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Settings;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro.UI;
 using ICD.Connect.Devices.Controls;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
@@ -11,7 +11,7 @@ using ICD.Connect.Panels.CrestronPro.TriListAdapters.X52;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractTswX60BaseClassAdapter<TPanel, TSettings> :
 		AbstractTswX52ButtonVoiceControlAdapter<TPanel, TSettings>, ITswX60BaseClassAdapter
 		where TPanel : TswX60BaseClass
@@ -21,7 +21,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60
 #endif
 		where TSettings : ITswX60BaseClassAdapterSettings, new()
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Called before registration.
 		/// Override to control which extenders are used with the panel.

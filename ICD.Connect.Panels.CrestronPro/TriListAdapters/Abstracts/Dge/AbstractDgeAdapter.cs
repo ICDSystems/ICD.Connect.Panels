@@ -1,6 +1,6 @@
 ﻿namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractDgeAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, IDgeAdapter
 		where TPanel : global::Crestron.SimplSharpPro.UI.Dge
 #else

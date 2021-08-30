@@ -1,10 +1,10 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharpPro.UI;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractFt5ButtonAdapter<TPanel, TSettings> : AbstractTswFt5ButtonAdapter<TPanel, TSettings>,
 	                                                                    IFt5ButtonAdapter
 		where TPanel : Ft5Button

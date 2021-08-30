@@ -1,13 +1,13 @@
 ﻿using ICD.Connect.API.Nodes;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Settings;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.CrestronApp
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class CrestronAppAdapter :
 		AbstractTriListAdapter<global::Crestron.SimplSharpPro.UI.CrestronApp, CrestronAppAdapterSettings>
 	{

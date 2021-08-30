@@ -1,10 +1,10 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52.Tsw752
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class Tsw752Adapter :
 		AbstractTswX52ButtonVoiceControlAdapter<global::Crestron.SimplSharpPro.UI.Tsw752, Tsw752AdapterSettings>
 	{

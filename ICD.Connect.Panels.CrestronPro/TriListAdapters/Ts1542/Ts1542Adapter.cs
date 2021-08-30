@@ -1,12 +1,12 @@
 ﻿using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Ts1542;
 using ICD.Connect.Settings.Attributes;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Ts1542
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class Ts1542Adapter : AbstractTs1542Adapter<global::Crestron.SimplSharpPro.UI.Ts1542, Ts1542AdapterSettings>
 	{
 		/// <summary>

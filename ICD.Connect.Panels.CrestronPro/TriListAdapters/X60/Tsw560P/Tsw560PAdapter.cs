@@ -1,10 +1,10 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X60.Tsw560P
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public sealed class Tsw560PAdapter :
 		AbstractTswX60BaseClassAdapter<global::Crestron.SimplSharpPro.UI.Tsw560P, Tsw560PAdapterSettings>
 	{

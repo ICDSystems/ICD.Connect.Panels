@@ -8,7 +8,7 @@ using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry;
 using ICD.Connect.Protocol.Network.Settings;
 using ICD.Connect.Settings;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DM;
 using Crestron.SimplSharpPro.UI;
@@ -19,7 +19,7 @@ using ICD.Connect.Panels.Crestron.Devices.Dge;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 {
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractDgeX00Adapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>, IDgeX00Adapter<TPanel>
 		where TPanel : Dge100
 #else
@@ -50,7 +50,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 		#endregion
 
 		#region Properties
-#if SIMPLSHARP
+#if !NETSTANDARD
 		public TPanel Dge { get { return Panel; } }
 #endif
 
@@ -99,8 +99,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 
 		#region Port Parent
 
-
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Gets the port at the given address.
 		/// </summary>
@@ -176,7 +175,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Dge
 		/// <returns></returns>
 		public virtual Cec GetCecPort(eInputOuptut io, int address)
 		{
-
 			if (Dge == null)
 				throw new InvalidOperationException("No device instantiated");
 

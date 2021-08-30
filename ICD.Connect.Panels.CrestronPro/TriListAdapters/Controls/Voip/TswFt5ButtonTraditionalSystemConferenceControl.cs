@@ -1,6 +1,6 @@
 ﻿using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;

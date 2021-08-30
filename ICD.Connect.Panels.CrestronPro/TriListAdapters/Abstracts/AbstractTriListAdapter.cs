@@ -7,7 +7,7 @@ using ICD.Connect.Panels.SmartObjectCollections;
 using ICD.Connect.Protocol.Sigs;
 using ICD.Connect.Settings;
 using ISmartObject = ICD.Connect.Panels.SmartObjects.ISmartObject;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
 using ICD.Connect.Misc.CrestronPro;
@@ -26,7 +26,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 	/// <summary>
 	/// TriListAdapter wraps a TriList to provide IPanelDevice features.
 	/// </summary>
-#if SIMPLSHARP
+#if !NETSTANDARD
 	public abstract class AbstractTriListAdapter<TPanel, TSettings> : AbstractPanelDevice<TSettings>, ITriListAdapter
 		where TPanel : BasicTriListWithSmartObject
 #else
@@ -34,7 +34,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 #endif
 		where TSettings : ITriListAdapterSettings, new()
 	{
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Raised when the internal wrapped panel changes.
 		/// </summary>
@@ -53,7 +53,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 
 		#region Properties
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Gets the wrapped panel instance.
 		/// </summary>
@@ -74,7 +74,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_BooleanInput;
 #else
 				throw new NotSupportedException();
@@ -89,7 +89,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_UShortInput;
 #else
 				throw new NotSupportedException();
@@ -104,7 +104,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_StringInput;
 #else
 				throw new NotSupportedException();
@@ -119,7 +119,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_BooleanOutput;
 #else
 				throw new NotSupportedException();
@@ -134,7 +134,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_UShortOutput;
 #else
 				throw new NotSupportedException();
@@ -149,7 +149,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_StringOutput;
 #else
 				throw new NotSupportedException();
@@ -164,7 +164,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			get
 			{
-#if SIMPLSHARP
+#if !NETSTANDARD
 				return m_SmartObjects;
 #else
 				throw new NotSupportedException();
@@ -179,7 +179,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		/// </summary>
 		protected AbstractTriListAdapter()
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			m_SmartObjects = new SmartObjectCollectionAdapter();
 			m_BooleanInput = new DeviceBooleanInputCollectionAdapter();
 			m_UShortInput = new DeviceUShortInputCollectionAdapter();
@@ -201,14 +201,14 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			base.DisposeFinal(disposing);
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			// Unsubscribe and unregister
 			Unsubscribe(m_SmartObjects);
 			SetPanel(null);
 #endif
 		}
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Sets the wrapped panel device.
 		/// </summary>
@@ -270,7 +270,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		/// <returns></returns>
 		protected override bool GetIsOnlineStatus()
 		{
-#if SIMPLSHARP
+#if !NETSTANDARD
 			return Panel != null && Panel.IsOnline;
 #else
             return false;
@@ -288,7 +288,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			base.ClearSettingsFinal();
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			SetPanel(null);
 #endif
 		}
@@ -301,7 +301,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			base.CopySettingsFinal(settings);
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			settings.Ipid = Panel == null ? (byte)0 : (byte)Panel.ID;
 #else
 			settings.Ipid = 0;
@@ -317,7 +317,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			base.ApplySettingsFinal(settings, factory);
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			TPanel triList = settings.Ipid == null
 							 ? null 
 							 : InstantiateTriList(settings.Ipid.Value, ProgramInfo.ControlSystem);
@@ -327,7 +327,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 #endif
 		}
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Creates an instance of the wrapped trilist.
 		/// </summary>
@@ -341,7 +341,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 
 		#region Panel Callbacks
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 		/// <summary>
 		/// Subscribe to the panel events.
 		/// </summary>
@@ -449,7 +449,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts
 		{
 			base.BuildConsoleStatus(addRow);
 
-#if SIMPLSHARP
+#if !NETSTANDARD
 			addRow("IPID", m_Panel == null ? null : StringUtils.ToIpIdString((byte)m_Panel.ID));
 #endif
 		}

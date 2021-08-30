@@ -1,4 +1,4 @@
-﻿#if SIMPLSHARP
+﻿#if !NETSTANDARD
 using Crestron.SimplSharpPro.UI;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Dge;
 

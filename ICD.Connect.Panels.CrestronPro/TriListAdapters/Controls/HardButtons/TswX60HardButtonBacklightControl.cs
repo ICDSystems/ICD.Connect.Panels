@@ -2,7 +2,7 @@
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Devices.EventArguments;
 using ICD.Connect.Panels.Controls.HardButtons;
-#if SIMPLSHARP
+#if !NETSTANDARD
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro.UI;
