@@ -389,7 +389,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected abstract ITraditionalConferenceDeviceControl InstantiateDialingControl(int id);
+		protected abstract IConferenceDeviceControl InstantiateDialingControl(int id);
 
 		/// <summary>
 		/// Called from constructor.

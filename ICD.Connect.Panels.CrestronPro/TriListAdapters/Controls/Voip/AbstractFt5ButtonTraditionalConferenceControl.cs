@@ -1,4 +1,5 @@
-﻿#if !NETSTANDARD
+﻿﻿#if !NETSTANDARD
+﻿using ICD.Connect.Conferencing.Conferences;
 using ICD.Connect.Conferencing.Participants.Enums;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
@@ -22,7 +23,7 @@ using ICD.Connect.Misc.CrestronPro.Extensions;
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
 	public abstract class AbstractFt5ButtonTraditionalConferenceControl<TParent, TPanel, TVoIpSigs> :
-		AbstractTraditionalConferenceDeviceControl<TParent>
+		AbstractConferenceDeviceControl<TParent, Conference>
 		where TParent : ITswFt5ButtonAdapter
 		where TPanel : TswFt5Button
 		where TVoIpSigs : VOIPReservedCues
@@ -140,6 +141,32 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 		/// </summary>
 		/// <param name="mute"></param>
 		public override void SetCameraMute(bool mute)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Gets the active conference sources.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<Conference> GetConferences()
+		{
+			yield break;
+		}
+
+		/// <summary>
+		/// Starts a personal meeting.
+		/// </summary>
+		public override void StartPersonalMeeting()
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Locks the current active conference so no more participants may join.
+		/// </summary>
+		/// <param name="enabled"></param>
+		public override void EnableCallLock(bool enabled)
 		{
 			throw new NotSupportedException();
 		}

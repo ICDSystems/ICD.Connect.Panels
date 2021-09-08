@@ -24,7 +24,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.X52
 		/// </summary>
 		/// <param name="id"></param>
 		/// <returns></returns>
-		protected override ITraditionalConferenceDeviceControl InstantiateDialingControl(int id)
+		protected override IConferenceDeviceControl InstantiateDialingControl(int id)
 		{
 			return new TswX52ButtonVoiceControlConferenceControl(this, id);
 		}
