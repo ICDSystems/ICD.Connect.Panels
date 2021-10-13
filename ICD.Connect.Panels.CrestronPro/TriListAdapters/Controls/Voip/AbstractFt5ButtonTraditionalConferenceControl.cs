@@ -1,12 +1,12 @@
-﻿﻿﻿#if !NETSTANDARD
+﻿#if !NETSTANDARD﻿﻿
+using ICD.Common.Utils.Extensions;
+using ICD.Connect.Misc.CrestronPro.Extensions;
 ﻿using ICD.Connect.Conferencing.Conferences;
-using ICD.Connect.Conferencing.Conferences;
 using ICD.Connect.Conferencing.Participants.Enums;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
 using ICD.Connect.Conferencing.IncomingCalls;
 using ICD.Common.Utils.EventArguments;
-using ICD.Common.Utils.Extensions;
 using ICD.Connect.Conferencing.DialContexts;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,6 @@ using ICD.Common.Utils;
 using ICD.Connect.Conferencing.Controls.Dialing;
 using ICD.Connect.Conferencing.EventArguments;
 using ICD.Connect.Conferencing.Utils;
-using ICD.Connect.Misc.CrestronPro.Extensions;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip
 {
