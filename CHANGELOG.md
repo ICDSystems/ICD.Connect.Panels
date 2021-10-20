@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+ - Add device classes for new Crestron 70 series touch panels
+	- Ts570
+	- Tsw570
+	- Tsw570P
+	- Ts770
+	- Ts770Gv
+	- Tsw770
+	- Tsw770P
+	- Tsw770Gv
+	- Ts1070
+	- Ts1070Gv
+	- Tsw1070
+	- Tsw1070P
+	- Tsw1070Gv
 
 ## [9.2.1] - 2021-08-03
 ### Changed

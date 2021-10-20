@@ -3,18 +3,18 @@ using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.DeviceSupport;
+using Crestron.SimplSharpPro.UI;
 using ICD.Common.Properties;
 using ICD.Connect.Misc.CrestronPro.Extensions;
 using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
-using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.XX70;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 {
-	public abstract class AbstractFt5ButtonBacklightControl<TParent, TPanel, TSystemSigs> :
-		AbstractBacklightDeviceControl<TParent>
-		where TParent : ITswFt5ButtonAdapter
-		where TPanel : TswFt5Button
+	public abstract class AbstractTswXX70BaseBacklightControl<TParent, TPanel, TSystemSigs> : AbstractBacklightDeviceControl<TParent>
+		where TParent : ITswXX70BaseAdapter
+		where TPanel : TswXX70Base
 		where TSystemSigs : TsxSystemReservedSigs
 	{
 		private readonly Dictionary<Sig, Action<Sig>> m_SigCallbackMap;
@@ -40,7 +40,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="id"></param>
-		protected AbstractFt5ButtonBacklightControl(TParent parent, int id)
+		protected AbstractTswXX70BaseBacklightControl(TParent parent, int id)
 			: base(parent, id)
 		{
 			m_SigCallbackMap = new Dictionary<Sig, Action<Sig>>();
@@ -235,5 +235,4 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight
 		#endregion
 	}
 }
-
 #endif
