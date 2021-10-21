@@ -1,7 +1,7 @@
-﻿#if !NETSTANDARD﻿﻿
+﻿#if !NETSTANDARD
 using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.Extensions;
-﻿using ICD.Connect.Conferencing.Conferences;
+using ICD.Connect.Conferencing.Conferences;
 using ICD.Connect.Conferencing.Participants.Enums;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons;
