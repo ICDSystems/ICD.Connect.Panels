@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
@@ -231,16 +232,22 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.TswFt5Buttons
 			projectInfo.OnHostNameChanged -= ProjectInfoOnHostNameChanged;
 		}
 
-		private void ProjectInfoOnNetworkInfoChanged(object sender, GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?> args)
+		private void ProjectInfoOnNetworkInfoChanged(object sender, GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo[]> args)
 		{
-			IcdPhysicalAddress mac = args.Data == null ? null : args.Data.Value.MacAddress;
+			if (!args.Data.Any())
+				return;
+
+			CrestronEthernetDeviceAdapterNetworkInfo network = args.Data[0];
+
+			IcdPhysicalAddress mac = network.MacAddress;
 
 			// Update device information.
-			MonitoredDeviceInfo.NetworkInfo.Dns = args.Data.HasValue ? args.Data.Value.DnsServer : null;
-			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Address = args.Data.HasValue ? args.Data.Value.IpAddress : null;
-			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Dhcp = args.Data.HasValue && args.Data.Value.Dhcp;
-			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Gateway = args.Data.HasValue ? args.Data.Value.DefaultGateway : null;
-			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4SubnetMask = args.Data.HasValue ? args.Data.Value.SubnetMask : null;
+			MonitoredDeviceInfo.NetworkInfo.Dns = network.DnsServer;
+			MonitoredDeviceInfo.NetworkInfo.Hostname = network.IpAddress;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Address = network.IpAddress;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Dhcp = network.Dhcp;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Gateway = network.DefaultGateway;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4SubnetMask = network.SubnetMask;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).MacAddress = mac == null ? null : mac.Clone();
 		}
 

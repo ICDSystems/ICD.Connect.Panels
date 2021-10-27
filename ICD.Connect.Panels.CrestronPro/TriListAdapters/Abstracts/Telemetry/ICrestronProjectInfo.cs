@@ -9,7 +9,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 	{
 		#region Events
 
-		event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?>> OnNetworkInfoChanged;
+		event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo[]>> OnNetworkInfoChanged;
 
 		event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterVersionInfo?>> OnVersionInfoChanged;
 
@@ -24,7 +24,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 		#region Properties
 
 		[CanBeNull]
-		CrestronEthernetDeviceAdapterNetworkInfo? NetworkInfo { get; }
+		CrestronEthernetDeviceAdapterNetworkInfo[] NetworkInfo { get; }
 
 		[CanBeNull]
 		CrestronEthernetDeviceAdapterVersionInfo? VersionInfo { get; }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
@@ -237,21 +238,41 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.XX70
 		}
 
 		private void ProjectInfoOnNetworkInfoChanged(object sender,
-		                                             GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?> args)
+		                                             GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo[]> args)
 		{
-			IcdPhysicalAddress mac = args.Data == null ? null : args.Data.Value.MacAddress;
+			CrestronEthernetDeviceAdapterNetworkInfo? network1 =
+				args.Data.Any(n => n.AdapterName.Equals("FEC1", StringComparison.InvariantCultureIgnoreCase))
+					? args.Data.First(n => n.AdapterName.Equals("FEC1", StringComparison.InvariantCultureIgnoreCase))
+					: (CrestronEthernetDeviceAdapterNetworkInfo?)null;
+
+			IcdPhysicalAddress mac1 = network1 == null ? null : network1.Value.MacAddress;
 
 			// Update device information.
-			MonitoredDeviceInfo.NetworkInfo.Dns = args.Data.HasValue ? args.Data.Value.DnsServer : null;
+			MonitoredDeviceInfo.NetworkInfo.Dns = network1.HasValue ? network1.Value.DnsServer : null;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Address =
-				args.Data.HasValue ? args.Data.Value.IpAddress : null;
+				network1.HasValue ? network1.Value.IpAddress : null;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Dhcp =
-				args.Data.HasValue && args.Data.Value.Dhcp;
+				network1.HasValue && network1.Value.Dhcp;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4Gateway =
-				args.Data.HasValue ? args.Data.Value.DefaultGateway : null;
+				network1.HasValue ? network1.Value.DefaultGateway : null;
 			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).Ipv4SubnetMask =
-				args.Data.HasValue ? args.Data.Value.SubnetMask : null;
-			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).MacAddress = mac == null ? null : mac.Clone();
+				network1.HasValue ? network1.Value.SubnetMask : null;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(1).MacAddress = mac1 == null ? null : mac1.Clone();
+
+			CrestronEthernetDeviceAdapterNetworkInfo? network2 =
+				args.Data.Any(n => n.AdapterName.Equals("WLAN0", StringComparison.InvariantCultureIgnoreCase))
+					? args.Data.First(n => n.AdapterName.Equals("WLAN0", StringComparison.InvariantCultureIgnoreCase))
+					: (CrestronEthernetDeviceAdapterNetworkInfo?)null;
+
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(2).Ipv4Address =
+				network2.HasValue ? network2.Value.IpAddress : null;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(2).Dhcp =
+				network2.HasValue && network2.Value.Dhcp;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(2).Ipv4Gateway =
+				network2.HasValue ? network2.Value.DefaultGateway : null;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(2).Ipv4SubnetMask =
+				network2.HasValue ? network2.Value.SubnetMask : null;
+			MonitoredDeviceInfo.NetworkInfo.Adapters.GetOrAddAdapter(2).MacAddress = mac1 == null ? null : mac1.Clone();
 		}
 
 		private void ProjectInfoOnVersionInfoChanged(object sender,

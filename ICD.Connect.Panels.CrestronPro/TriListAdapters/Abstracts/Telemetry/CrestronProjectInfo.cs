@@ -13,7 +13,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 	{
 		#region Events
 
-		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo?>> OnNetworkInfoChanged;
+		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterNetworkInfo[]>> OnNetworkInfoChanged;
 		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterVersionInfo?>> OnVersionInfoChanged;
 		public event EventHandler<GenericEventArgs<CrestronEthernetDeviceAdapterProjectInfo?>> OnProjectInfoChanged;
 		public event EventHandler<StringEventArgs> OnAppModeChanged;
@@ -23,7 +23,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 
 		#region Fields
 
-		private CrestronEthernetDeviceAdapterNetworkInfo? m_NetworkInfo;
+		private CrestronEthernetDeviceAdapterNetworkInfo[] m_NetworkInfo;
 		private CrestronEthernetDeviceAdapterVersionInfo? m_VersionInfo;
 		private CrestronEthernetDeviceAdapterProjectInfo? m_ProjectInfo;
 		private string m_AppMode;
@@ -35,7 +35,7 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 
 		#region Properties
 
-		public CrestronEthernetDeviceAdapterNetworkInfo? NetworkInfo
+		public CrestronEthernetDeviceAdapterNetworkInfo[] NetworkInfo
 		{
 			get { return m_NetworkInfo; }
 			private set
@@ -148,13 +148,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry
 				if (flag.HasFlag(eCrestronProjectInfoUpdateComponents.HostName))
 					CrestronEthernetDeviceUtils.UpdateHostName(m_ParentAdapter, h => HostName = h);
 			});
-		}
-
-		/// <summary>
-		/// Initializes the current telemetry state.
-		/// </summary>
-		public void InitializeTelemetry()
-		{
 		}
 
 		#endregion
