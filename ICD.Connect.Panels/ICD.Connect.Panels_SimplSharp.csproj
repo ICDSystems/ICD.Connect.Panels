@@ -90,11 +90,13 @@
     <Compile Include="Devices\PanelDeviceConsole.cs" />
     <Compile Include="Devices\SigDeviceConsole.cs" />
     <Compile Include="EventArguments\BacklightDeviceControlBacklightStateApiEventArgs.cs" />
+    <Compile Include="EventArguments\ButtonActionEventArgs.cs" />
     <Compile Include="Extensions\DeviceFactoryExtensions.cs" />
     <Compile Include="Devices\AbstractPanelDevice.cs" />
     <Compile Include="Devices\IPanelDevice.cs" />
     <Compile Include="Devices\IPanelDeviceSettings.cs" />
     <Compile Include="Devices\ISigDevice.cs" />
+    <Compile Include="HardButtons\IHardButtonDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
     <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Proxies\Controls\Backlight\BacklightDeviceControlApi.cs" />

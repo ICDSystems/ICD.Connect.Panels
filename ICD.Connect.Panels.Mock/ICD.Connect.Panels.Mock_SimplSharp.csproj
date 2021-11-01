@@ -72,6 +72,8 @@
     <Compile Include="AbstractMockSig.cs" />
     <Compile Include="AbstractMockSigCollection.cs" />
     <Compile Include="KrangPlugin.cs" />
+    <Compile Include="MockHrRemoteDevice.cs" />
+    <Compile Include="MockHrRemoteDeviceSettings.cs" />
     <Compile Include="MockPanelDevice.cs" />
     <Compile Include="MockPanelDeviceSettings.cs" />
     <Compile Include="MockSigCollections.cs" />
@@ -98,6 +100,10 @@
     <ProjectReference Include="..\..\ICD.Connect.Telemetry\ICD.Connect.Telemetry\ICD.Connect.Telemetry_SimplSharp.csproj">
       <Project>{9512C0A5-F966-4AC6-9668-62C6F343B0CD}</Project>
       <Name>ICD.Connect.Telemetry_SimplSharp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ICD.Connect.Panels.Crestron\ICD.Connect.Panels.Crestron_SimplSharp.csproj">
+      <Project>{EF71F157-ED75-4B30-ABC9-1E7811615528}</Project>
+      <Name>ICD.Connect.Panels.Crestron_SimplSharp</Name>
     </ProjectReference>
     <ProjectReference Include="..\ICD.Connect.Panels\ICD.Connect.Panels_SimplSharp.csproj">
       <Project>{A441FE98-6A8E-4EF3-98F0-D17041D2E118}</Project>

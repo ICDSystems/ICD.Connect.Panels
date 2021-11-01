@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 	- Tsw1070
 	- Tsw1070P
 	- Tsw1070Gv
+ - Added HR-100, HR-150, and HR-310 remote classes
 
 ## [9.2.1] - 2021-08-03
 ### Changed

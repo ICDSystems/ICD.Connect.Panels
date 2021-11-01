@@ -61,6 +61,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.GeneralIO.dll</HintPath>
     </Reference>
+    <Reference Include="Crestron.SimplSharpPro.Remotes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.Remotes.dll</HintPath>
+    </Reference>
     <Reference Include="Crestron.SimplSharpPro.ThreeSeriesCards, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1099c178b3b54c3b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\Crestron\SDK\SSPDevices\Crestron.SimplSharpPro.ThreeSeriesCards.dll</HintPath>
@@ -104,6 +108,15 @@
     <Compile Include="Controls\Streaming\Dge\DmDge200CStreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\AbstractThreeSeriesTouchScreenControl.cs" />
     <Compile Include="KrangPlugin.cs" />
+    <Compile Include="Remotes\HrRemotes\Abstracts\AbstractHrRemoteAdapter.cs" />
+    <Compile Include="Remotes\HrRemotes\Abstracts\AbstractHrRemoteAdapterSettings.cs" />
+    <Compile Include="Remotes\CrestronRemoteUtils.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr100\Hr100Adapter.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr100\Hr100AdapterSettings.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr150\Hr150Adapter.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr150\Hr150AdapterSettings.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr310\Hr310Adapter.cs" />
+    <Compile Include="Remotes\HrRemotes\Hr310\Hr310AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\Dge\AbstractDgeX00AdapterSettings.cs" />
     <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00Adapter.cs" />
     <Compile Include="TriListAdapters\Abstracts\Dge\IDgeX00AdapterSettings.cs" />
