@@ -1,4 +1,6 @@
-﻿using Crestron.SimplSharpPro;
+﻿#if !NETSTANDARD
+using Crestron.SimplSharpPro;
+#endif
 using ICD.Connect.Panels.CrestronPro.Remotes.HrRemotes.Abstracts;
 
 namespace ICD.Connect.Panels.CrestronPro.Remotes.HrRemotes.Hr310
@@ -9,13 +11,11 @@ namespace ICD.Connect.Panels.CrestronPro.Remotes.HrRemotes.Hr310
 	public sealed class Hr310Adapter : AbstractHrRemoteAdapter<Hr310AdapterSettings>
 #endif
 	{
-
 #if !NETSTANDARD
 		protected override global::Crestron.SimplSharpPro.Remotes.Hr310 InstantiateDevice(byte rfid, GatewayBase gateway)
 		{
 			return new global::Crestron.SimplSharpPro.Remotes.Hr310(rfid, gateway);
 		}
 #endif
-
 	}
 }
