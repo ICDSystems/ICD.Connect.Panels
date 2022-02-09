@@ -200,8 +200,6 @@
     <Compile Include="TriListAdapters\XX70\AbstractTswXX70BaseAdapterSettings.cs" />
     <Compile Include="TriListAdapters\XX70\ITswXX70BaseAdapter.cs" />
     <Compile Include="TriListAdapters\XX70\ITswXX70BaseAdapterSettings.cs" />
-    <Compile Include="TriListAdapters\XX70\Ts570\Ts570Adapter.cs" />
-    <Compile Include="TriListAdapters\XX70\Ts570\Ts570AdapterSettings.cs" />
     <Compile Include="TriListAdapters\XX70\Tsw570P\Tsw570PAdapter.cs" />
     <Compile Include="TriListAdapters\XX70\Tsw570P\Tsw570PAdapterSettings.cs" />
     <Compile Include="TriListAdapters\XX70\Tsw570\Tsw570Adapter.cs" />
@@ -211,11 +209,6 @@
     <Compile Include="TriListAdapters\XX70\TswX70Gv\Tsw1070Gv\Tsw1070GvAdapterSettings.cs" />
     <Compile Include="TriListAdapters\XX70\TswX70Gv\Tsw770Gv\Tsw770GvAdapter.cs" />
     <Compile Include="TriListAdapters\XX70\TswX70Gv\Tsw770Gv\Tsw770GvAdapterSettings.cs" />
-    <Compile Include="TriListAdapters\XX70\TswX70P\AbstractTswX70PBaseAdapter.cs" />
-    <Compile Include="TriListAdapters\XX70\TswX70P\Tsw1070P\Tsw1070PAdapter.cs" />
-    <Compile Include="TriListAdapters\XX70\TswX70P\Tsw1070P\Tsw1070PAdapterSettings.cs" />
-    <Compile Include="TriListAdapters\XX70\TswX70P\Tsw770P\Tsw770PAdapter.cs" />
-    <Compile Include="TriListAdapters\XX70\TswX70P\Tsw770P\Tsw770PAdapterSettings.cs" />
     <Compile Include="TriListAdapters\XX70\TswX70\AbstractTswX70BaseAdapter.cs" />
     <Compile Include="TriListAdapters\XX70\AbstractTswXX70BaseAdapter.cs" />
     <Compile Include="TriListAdapters\XX70\TswX70\Tsw1070\Tsw1070Adapter.cs" />

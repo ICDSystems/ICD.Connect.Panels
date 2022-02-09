@@ -7,18 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
  - Add device classes for new Crestron 70 series touch panels
-	- Ts570
 	- Tsw570
 	- Tsw570P
 	- Ts770
 	- Ts770Gv
 	- Tsw770
-	- Tsw770P
 	- Tsw770Gv
 	- Ts1070
 	- Ts1070Gv
 	- Tsw1070
-	- Tsw1070P
 	- Tsw1070Gv
  - Added HR-100, HR-150, and HR-310 remote classes
 
