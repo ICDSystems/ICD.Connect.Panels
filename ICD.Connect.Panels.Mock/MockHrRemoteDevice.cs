@@ -5,7 +5,7 @@ using ICD.Connect.API.Commands;
 using ICD.Connect.Devices.Mock;
 using ICD.Connect.Panels.Crestron.Devices.Hr;
 using ICD.Connect.Panels.EventArguments;
-using ICD.Connect.Panels.HardButtons;
+using ICD.Connect.Protocol.HardButtons;
 
 namespace ICD.Connect.Panels.Mock
 {

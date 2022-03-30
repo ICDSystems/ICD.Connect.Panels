@@ -9,7 +9,7 @@ using ICD.Common.Utils.Extensions;
 using ICD.Connect.Misc.CrestronPro.InfinetEx;
 using ICD.Connect.Panels.Crestron.Devices.Hr;
 using ICD.Connect.Panels.EventArguments;
-using ICD.Connect.Panels.HardButtons;
+using ICD.Connect.Protocol.HardButtons;
 
 namespace ICD.Connect.Panels.CrestronPro.Remotes.HrRemotes.Abstracts
 {

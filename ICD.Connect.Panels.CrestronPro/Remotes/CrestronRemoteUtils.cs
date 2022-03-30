@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ICD.Connect.Panels.HardButtons;
+using ICD.Connect.Protocol.HardButtons;
 #if !NETSTANDARD
 using Crestron.SimplSharpPro.DeviceSupport;
 #endif
