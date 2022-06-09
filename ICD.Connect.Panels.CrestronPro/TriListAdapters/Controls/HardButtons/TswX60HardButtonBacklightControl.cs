@@ -1,12 +1,11 @@
-﻿using ICD.Common.Utils;
+﻿#if !NETSTANDARD
+using ICD.Common.Utils;
 using ICD.Common.Utils.Services.Logging;
 using ICD.Connect.Devices.EventArguments;
 using ICD.Connect.Panels.Controls.HardButtons;
-#if !NETSTANDARD
 using System;
 using System.Collections.Generic;
 using Crestron.SimplSharpPro.UI;
-using ICD.Connect.API.Commands;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.X60;
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
@@ -141,33 +140,6 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons
 				m_CriticalSection.Leave();
 			}
 		}
-
-		#region Console
-
-		/// <summary>
-		/// Gets the child console commands.
-		/// </summary>
-		/// <returns></returns>
-		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
-		{
-			foreach (IConsoleCommand command in GetBaseConsoleCommands())
-				yield return command;
-
-			yield return
-				new GenericConsoleCommand<int, bool>("SetBacklightEnabled", "SetBacklightEnabled <ADDRESS> <true/false>",
-				                                     (i, s) => SetBacklightEnabled(i, s));
-		}
-
-		/// <summary>
-		/// Workaround for "unverifiable code" warning.
-		/// </summary>
-		/// <returns></returns>
-		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
-		{
-			return base.GetConsoleCommands();
-		}
-
-		#endregion
 	}
 }
 

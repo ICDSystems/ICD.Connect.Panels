@@ -4,11 +4,8 @@ using ICD.Common.Properties;
 using ICD.Common.Utils.EventArguments;
 using ICD.Common.Utils.Timers;
 using ICD.Connect.API.Nodes;
-using ICD.Connect.Conferencing.Controls.Dialing;
-using ICD.Connect.Devices.Controls;
 using ICD.Connect.Devices.Telemetry.DeviceInfo;
 using ICD.Connect.Misc.CrestronPro.Devices.Ethernet;
-using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Abstracts.Telemetry;
 using ICD.Connect.Protocol.Network.Settings;
@@ -16,13 +13,18 @@ using ICD.Connect.Settings;
 #if !NETSTANDARD
 using Crestron.SimplSharpPro;
 using Crestron.SimplSharpPro.UI;
+using ICD.Connect.Conferencing.Controls.Dialing;
+using ICD.Connect.Devices.Controls;
+using ICD.Connect.Panels.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Backlight;
 using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.Voip;
+using ICD.Connect.Panels.CrestronPro.TriListAdapters.Controls.HardButtons;
 #endif
 
 namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.XX70
 {
 #if !NETSTANDARD
+// ReSharper disable once InconsistentNaming
 	public abstract class AbstractTswXX70BaseAdapter<TPanel, TSettings> : AbstractTriListAdapter<TPanel, TSettings>,
 	                                                                      ITswXX70BaseAdapter
 		where TPanel : TswXX70Base
@@ -356,6 +358,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.XX70
 		{
 			base.AddControls(settings, factory, addControl);
 
+			addControl(new TswXX70HardButtonBacklightControl(this, HARD_BUTTON_CONTROL_ID));
+
 			addControl(InstantiateBacklightControl(BACKLIGHT_CONTROL_ID));
 
 			if (m_EnableVoip)
@@ -373,6 +377,8 @@ namespace ICD.Connect.Panels.CrestronPro.TriListAdapters.XX70
 
 			if (panel == null)
 				return;
+
+			panel.ExtenderButtonToolbarReservedSigs.Use();
 
 			RegisterSystemExtender(panel);
 			RegisterEthernetExtender(panel);

@@ -1,4 +1,6 @@
-﻿using ICD.Connect.Devices;
+﻿using System.Collections.Generic;
+using ICD.Connect.API.Commands;
+using ICD.Connect.Devices;
 using ICD.Connect.Devices.Controls;
 
 namespace ICD.Connect.Panels.Controls.HardButtons
@@ -23,5 +25,32 @@ namespace ICD.Connect.Panels.Controls.HardButtons
 		/// <param name="address"></param>
 		/// <param name="enabled"></param>
 		public abstract void SetBacklightEnabled(int address, bool enabled);
+
+		#region Console
+
+		/// <summary>
+		/// Gets the child console commands.
+		/// </summary>
+		/// <returns></returns>
+		public override IEnumerable<IConsoleCommand> GetConsoleCommands()
+		{
+			foreach (IConsoleCommand command in GetBaseConsoleCommands())
+				yield return command;
+
+			yield return
+				new GenericConsoleCommand<int, bool>("SetBacklightEnabled", "SetBacklightEnabled <ADDRESS> <true/false>",
+													 (i, s) => SetBacklightEnabled(i, s));
+		}
+
+		/// <summary>
+		/// Workaround for "unverifiable code" warning.
+		/// </summary>
+		/// <returns></returns>
+		private IEnumerable<IConsoleCommand> GetBaseConsoleCommands()
+		{
+			return base.GetConsoleCommands();
+		}
+
+		#endregion
 	}
 }

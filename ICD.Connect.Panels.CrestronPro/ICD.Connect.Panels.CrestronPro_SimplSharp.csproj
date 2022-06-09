@@ -136,6 +136,7 @@
     <Compile Include="TriListAdapters\Controls\Backlight\TswX60BaseBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Backlight\TswXX70BaseBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\HardButtons\TswX60HardButtonBacklightControl.cs" />
+    <Compile Include="TriListAdapters\Controls\HardButtons\TswXX70HardButtonBacklightControl.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\AbstractFt5ButtonTraditionalConferenceControl.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\AbstractTswXX70BaseConferenceControl.cs" />
     <Compile Include="TriListAdapters\Controls\Voip\TswFt5ButtonTraditionalConferenceControl.cs" />
