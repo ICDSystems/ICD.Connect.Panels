@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="Devices\Hr\IHrRemoteAdapter.cs" />
     <Compile Include="Devices\Hr\IHrRemoteAdapterSettings.cs" />
-    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Controls\Streaming\Dge\IDgeX00StreamSwitcherControl.cs" />
     <Compile Include="Controls\TouchScreens\IFTTouchScreenControl.cs" />
     <Compile Include="Controls\TouchScreens\IMPC3BasicTouchScreenControl.cs" />

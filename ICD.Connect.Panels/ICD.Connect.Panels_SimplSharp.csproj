@@ -98,7 +98,6 @@
     <Compile Include="Devices\ISigDevice.cs" />
     <Compile Include="HardButtons\IHardButtonDevice.cs" />
     <Compile Include="ISigInputOutput.cs" />
-    <Compile Include="ObfuscationSettings.cs" />
     <Compile Include="Proxies\Controls\Backlight\BacklightDeviceControlApi.cs" />
     <Compile Include="Proxies\Controls\Backlight\ProxyBacklightDeviceControl.cs" />
     <Compile Include="SigCallbackManager.cs" />
