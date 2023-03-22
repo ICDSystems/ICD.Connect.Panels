@@ -4,4 +4,4 @@ using System.Reflection;
 [assembly: AssemblyCompany("ICD Systems")]
 [assembly: AssemblyProduct("ICD.Common.Panels.CrestronPro")]
 [assembly: AssemblyCopyright("Copyright © ICD Systems 2023")]
-[assembly: AssemblyVersion("10.0.0.0")]
+[assembly: AssemblyVersion("10.0.1.0")]
